@@ -6,7 +6,7 @@ import path from 'path';
 
 
 // routes
-import authRouter from './resources/auth/router';
+// import authRouter from './resources/auth/router';
 import userRouter from './resources/user/router';
 import globalErrorHandler from './middleware/error.middleware';
 
@@ -17,6 +17,8 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(helmet());
 app.use(cors());
@@ -31,7 +33,7 @@ app.get("/", (req, res, next) => {
 });
 
 
-app.use('/api/v1/auth', authRouter);
+// app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 
 // handling all (get,post,update,delete.....) unhandled routes

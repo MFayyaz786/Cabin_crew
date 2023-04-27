@@ -1,7 +1,10 @@
-import 'dotenv/config';
-import colors from 'colors';
-import {DBConnect} from './utils/dbConnect';
-import app from 'app';
+const dotenv = require('dotenv');
+const colors = require('colors');
+const { DBConnect } = require('./config/ormConfig');
+// const app = require('./app');
+const express=require('express')
+const app = express();
+
 
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err.message);
@@ -9,9 +12,8 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-
 DBConnect.initialize().then(() => {
-  const port = process.env.PORT || 7000;
+  const port = process.env.PORT || 7001;
   const server = app.listen(port, () => {
     console.log(colors.yellow.bold(`App is running on port ${port}`));
   });
