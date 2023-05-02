@@ -1,19 +1,14 @@
-import express from 'express';
-import cors from 'cors';
-import morgan from 'morgan';
-import helmet from 'helmet';
-import path from 'path';
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const helmet = require('helmet');
+const path = require('path');
 
+// const userRouter = require('./resources/user/router');
+// const globalErrorHandler = require('./middleware/error.middleware');
+// const AppError = require('./utils/helpers/appError');
 
-// routes
-// import authRouter from './resources/auth/router';
-import userRouter from './resources/user/router';
-import globalErrorHandler from './middleware/error.middleware';
-
-import AppError from './utils/helpers/appError';
-
-
-const app = express();
+const app= express();
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -28,21 +23,19 @@ app.use(express.urlencoded({ extended: false }));
 
 // Add your controllers here
 
-app.get("/", (req, res, next) => {
-  res.status(200).send({ msg: "Welcome To Ais-Project-Invoicing" });
+app.get("/", (req:any, res:any) => {
+  res.status(200).send({ msg: "Welcome To Airport_Cabin_Crew  " });
 });
-
 
 // app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users', userRouter);
+// app.use('/api/v1/users', userRouter);
 
 // handling all (get,post,update,delete.....) unhandled routes
-app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on the server`, 404));
-});
-
+// app.all('*', (req:any, res:any, next:any) => {
+//   next(new AppError(`Can't find ${req.originalUrl} on the server`, 404));
+// });
 
 // error handling middleware
-app.use(globalErrorHandler);
+// app.use(globalErrorHandler); 
 
-export default app;
+module.exports = app;
