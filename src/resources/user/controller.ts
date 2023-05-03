@@ -1,75 +1,74 @@
-// import { Request, Response, NextFunction } from 'express';
-// import catchAsync from '../../utils/helpers/catchAsync';
-// import UserServices from './service';
-// import { updateValidation } from './validation';
-// import AppError from '../../utils/helpers/appError';
-// import { RequestHandler } from 'express';
+import { Request,Response,NextFunction } from 'express';
+import catchAsync = require('../../utils/helpers/catchAsync');
+const UserServices = require('./service');
+const { updateValidation } = require('./validation');
+const AppError = require('../../utils/helpers/appError');
 
-// export const createUser: RequestHandler = catchAsync(async (req, res, next) => {
-//   const newUser = await UserServices.create(req.body);
-//   res.status(201).json(newUser);
-// });
+export const createUser = catchAsync(async (req:Request, res:Response, next:NextFunction) => {
+  const newUser = await UserServices.create(req.body);
+  res.status(201).json({ newUser });
+});
 
-// export const getAllUsers: RequestHandler = catchAsync(async (req, res) => {
-//   const { users } = await UserServices.Users();
+export const getAllUsers = catchAsync(async (req:Request, res:Response) => {
+  const { users } = await UserServices.Users();
 
-//   res.status(200).json({
-//     status: 'success',
-//     results: users.length,
-//     users,
-//   });
-// });
+  res.status(200).json({
+    status: 'success',
+    results: users.length,
+    users,
+  });
+});
 
-// export const getUser: RequestHandler = catchAsync(async (req, res, next) => {
-//   const { user } = await UserServices.User(req.params.id, next);
+export const getUser = catchAsync(async (req:Request, res:Response, next:NextFunction) => {
+  const { user } = await UserServices.User(req.params.id, next);
 
-//   res.status(200).json({
-//     status: 'success',
-//     user,
-//   });
-// });
+  res.status(200).json({
+    status: 'success',
+    user,
+  });
+});
 
-// export const updateMe: RequestHandler = catchAsync(async (req, res, next) => {
-//   const validate = updateValidation.validate(req.body);
-//   if (validate.error) {
-//     return next(new AppError(validate.error.message, 400));
-//   }
+export const updateMe = catchAsync(async (req:Request, res:Response, next:NextFunction) => {
+  const validate = updateValidation.validate(req.body);
+  if (validate.error) {
+    return next(new AppError(validate.error.message, 400));
+  }
 
-//   const { updatedUser } = await UserServices.UpdateMe(
-//     req.params._id,
-//     req.body,
-//     next
-//   );
+  const { updatedUser } = await UserServices.UpdateMe(
+    req.params._id,
+    req.body,
+    next
+  );
 
-//   res.status(200).json({
-//     status: 'success',
-//     user: updatedUser,
-//   });
-// });
+  res.status(200).json({
+    status: 'success',
+    user: updatedUser,
+  });
+});
 
-// export const updateUser: RequestHandler = catchAsync(async (req, res, next) => {
-//   const validate = updateValidation.validate(req.body);
-//   if (validate.error) {
-//     return next(new AppError(validate.error.message, 400));
-//   }
+export const updateUser = catchAsync(async (req:Request, res:Response, next:NextFunction) => {
+  const validate = updateValidation.validate(req.body);
+  if (validate.error) {
+    return next(new AppError(validate.error.message, 400));
+  }
 
-//   const { updatedUser } = await UserServices.UpdateMe(
-//     req.params._id,
-//     req.body,
-//     next
-//   );
+  const { updatedUser } = await UserServices.UpdateMe(
+    req.params._id,
+    req.body,
+    next
+  );
 
-//   res.status(200).json({
-//     status: 'success',
-//     user: updatedUser,
-//   });
-// });
+  res.status(200).json({
+    status: 'success',
+    user: updatedUser,
+  });
+});
 
-// export const deleteUser: RequestHandler = catchAsync(async (req, res, next) => {
-//   const { deletedUser } = await UserServices.DeleteUser(req.params._id, next);
+export const deleteUser = catchAsync(async (req:Request, res:Response, next:NextFunction) => {
+  const { deletedUser } = await UserServices.DeleteUser(req.params._id, next);
 
-//   res.status(200).json({
-//     status: 'success',
-//     user: deletedUser,
-//   });
-// });
+  res.status(200).json({
+    status: 'success',
+    user: deletedUser,
+  });
+});
