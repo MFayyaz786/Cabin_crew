@@ -1,72 +1,64 @@
-// import { getRepository } from 'typeorm';
-// import { User } from '../../entities/User';
+import { NextFunction } from 'express';
+const {getConnection, getRepository } = require('typeorm');
+const { User } = require('./userEntity');
+const AppError = require('../../utils/helpers/appError');
+const { v1: uuidv1 } = require('uuid');
 
-// import AppError from '../../utils/helpers/appError';
-// import { v1 as uuidv1 } from 'uuid';
+class UserServices {
+  //* CREATE
+  static async create(user:any) {
+    const connection = getConnection(); // Get the connection
+    const userRepository =connection.getRepository(User);
+    return await userRepository.save(user);
+  }
 
-// interface IUser {
-//   _id: string;
-//   // Add other fields as needed
-// }
+  //* USERS
+  static async Users() {
+    const userRepository = getRepository(User);
+    const users = await userRepository.find();
+    return { users };
+  }
 
-// class UserServices {
-//   //* CREATE
-//   static async create(user: Partial<User>): Promise<User> {
-//     const userRepository = getRepository(User);
-//     return await userRepository.save(user);
-//   }
+  //* USER
+  static async User(userId:any, next:NextFunction) {
+    const userRepository = getRepository(User);
+    const user = await userRepository.findOne({ where: { id: userId } });
 
-//   //* USERS
-//   static async Users(): Promise<{ users: User[] }> {
-//     const userRepository = getRepository(User);
-//     const users = await userRepository.find();
-//     return { users };
-//   }
+    if (!user) {
+      next(new AppError(`No User found against id ${userId}`, 404));
+      return { user: undefined };
+    }
 
-//   //* USER
-// //* USER
-// static async User(userId: string, next: (error: AppError) => void): Promise<{ user: User | undefined }> {
-//   const userRepository = getRepository(User);
-//   const user = await userRepository.findOne({ where: { id: userId } });
+    return { user };
+  }
 
-//   if (!user) {
-//     next(new AppError(`No User found against id ${userId}`, 404));
-//     return { user: undefined };
-//   }
+  //* UPDATEME
+  static async UpdateMe(userId:any, body:any, next:NextFunction) {
+    const userRepository = getRepository(User);
+    const userToUpdate = await userRepository.findOne({ where: { id: userId } });
 
-//   return { user };
-// }
+    if (!userToUpdate) {
+      next(new AppError(`Can't find any user with id ${userId}`, 404));
+      return { updatedUser: undefined };
+    }
 
+    const updatedUser = await userRepository.save({ ...userToUpdate, ...body });
+    return { updatedUser };
+  }
 
-// //* UPDATEME
-// static async UpdateMe(userId: string, body: Partial<User>, next: (error: AppError) => void): Promise<{ updatedUser: User | undefined }> {
-//   const userRepository = getRepository(User);
-//   const userToUpdate = await userRepository.findOne({ where: { id: userId } });
+  //* DELETEME
+  static async DeleteUser(userId:any, next:NextFunction) {
+    const userRepository = getRepository(User);
+    const userToDelete = await userRepository.findOne({ where: { id: userId } });
 
-//   if (!userToUpdate) {
-//     next(new AppError(`Can't find any user with id ${userId}`, 404));
-//     return { updatedUser: undefined };
-//   }
+    if (!userToDelete) {
+      next(new AppError(`No User found against id ${userId}`, 404));
+      return { deletedUser: undefined };
+    }
 
-//   const updatedUser = await userRepository.save({ ...userToUpdate, ...body });
-//   return { updatedUser };
-// }
+    const deletedUser = await userRepository.remove(userToDelete);
+    return { deletedUser };
+  }
+}
 
-//   //* DELETEME
-// //* DELETEME
-// static async DeleteUser(userId: string, next: (error: AppError) => void): Promise<{ deletedUser: User | undefined }> {
-//   const userRepository = getRepository(User);
-//   const userToDelete = await userRepository.findOne({ where: { id: userId } });
-
-//   if (!userToDelete) {
-//     next(new AppError(`No User found against id ${userId}`, 404));
-//     return { deletedUser: undefined };
-//   }
-
-//   const deletedUser = await userRepository.remove(userToDelete);
-//   return { deletedUser };
-// }
-
-// }
-
-// export default UserServices;
+module.exports = UserServices;

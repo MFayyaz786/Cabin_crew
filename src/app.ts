@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const path = require('path');
 
-// const userRouter = require('./resources/user/router');
+const userRouter = require('./resources/user/router');
 // const globalErrorHandler = require('./middleware/error.middleware');
 // const AppError = require('./utils/helpers/appError');
 
@@ -28,7 +28,7 @@ app.get("/", (req:any, res:any) => {
 });
 
 // app.use('/api/v1/auth', authRouter);
-// app.use('/api/v1/users', userRouter);
+app.use('/api/v1/users', userRouter);
 
 // handling all (get,post,update,delete.....) unhandled routes
 // app.all('*', (req:any, res:any, next:any) => {

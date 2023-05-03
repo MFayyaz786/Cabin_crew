@@ -4,10 +4,11 @@
   "description": "airport cabin crew",
   "main": "dist/server.js",
   "scripts": {
-    "start": "tsc && node ./dist/server.js",
-    "dev": "tsc --watch & nodemon ./dist/server.js",
+    "start": "node ./dist/server.js",
+    "dev": "concurrently \"tsc --watch\" \"nodemon ./dist/server.js\"",
+    "prebuild": "rimraf ./dist",
     "build": "tsc"
-  },  
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -25,9 +26,11 @@
     "@types/node": "^18.15.11",
     "@types/uuid": "^9.0.1",
     "@types/validator": "^13.7.14",
+    "concurrently": "^8.0.1",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "rimraf": "^5.0.0",
     "ts-node": "^10.9.1",
     "tsc-watch": "^6.0.0",
     "typescript": "^5.0.3"

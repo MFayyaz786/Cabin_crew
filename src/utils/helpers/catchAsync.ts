@@ -1,16 +1,15 @@
-// import { Request, Response, NextFunction } from 'express';
-import { Request, Response, NextFunction } from 'express-serve-static-core';
+import { Request, Response, NextFunction } from 'express';
 
-function catchAsync<T extends (req: Request, res: Response, next: NextFunction) => Promise<any>>(
-  fn: T
-): T {
-  return ((
+interface CatchAsyncFn {
+  (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>): (
     req: Request,
     res: Response,
     next: NextFunction
-  ) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
-  }) as T;
+  ) => void;
 }
 
-export default catchAsync;
+const catchAsync: CatchAsyncFn = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
+
+export = catchAsync;
