@@ -1,6 +1,7 @@
+// const connectDB = require('./config/ormConfig');
+import './config/ormConfig'
 const dotenv = require('dotenv');
 const colors = require('colors');
-const connectDB = require('./config/ormConfig');
 const appp = require('./app');
 
 dotenv.config();
@@ -11,7 +12,7 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-connectDB;
+// connectDB;
 
 const port = process.env.PORT || 7001;
 const server = appp.listen(port, () => {
