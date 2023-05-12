@@ -1,34 +1,20 @@
-// const connectDB = require('./config/ormConfig');
-import './config/ormConfig'
-const dotenv = require('dotenv');
-const colors = require('colors');
-const appp = require('./app');
+import express from "express";
+import dotenv from "dotenv";
+import ErrorHandler from "./middleware/errorHandler";
+import "./db/index"
 
-dotenv.config();
+dotenv.config()
+import userRouter from "./resources/user/router"
 
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err.message);
-  console.error(err.stack);
-  process.exit(1);
-});
+const app=express();
+const port=process.env.PORT|| 4500;
+app.use(express.json())
+app.use("/api/user",userRouter)
+app.get("/",(req,res)=>{
+res.status(200).send({msg:"welcome to Air port facilitate system"});
+})
 
-// connectDB;
-
-const port = process.env.PORT || 7001;
-const server = appp.listen(port, () => {
-  console.log(colors.yellow.bold(`App is running on port ${port}`));
-});
-
-process.on('unhandledRejection', (error:any) => {
-  console.log('Unhandled Rejection => shutting down..... ');
-  console.log(error.name, error.message);
-  server.close(() => {
-    process.exit(1);
-  });
-});
-
-if (process.env.NODE_ENV === 'production') {
-  console.log = () => {};
-  console.error = () => {};
-  console.warn = () => {};
-}
+app.use(ErrorHandler)
+app.listen(port,()=>{
+console.log(`server is running... ${port}`);
+})
