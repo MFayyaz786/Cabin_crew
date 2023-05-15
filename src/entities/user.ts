@@ -12,6 +12,7 @@ import crypto from 'crypto';
 
 @Entity()
 @Unique(['email', 'phone'])
+
 class User extends BaseEntity{
   @PrimaryGeneratedColumn('uuid')
   id: string;
