@@ -19,20 +19,21 @@
 //   process.exit(1);
 // });
 // export default DBConnect
+
 require('dotenv').config();
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 
 export default createConnection({
   type: "postgres",
-  host: process.env.HOST,
+  host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT || '5432'),
-  username: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
   entities: ["src/entities/*{.ts,.js}"],
   synchronize: true,
-  logging: true,
+  logging: false,
 }).then(connection => {
   console.log('Connected to the database');
 }).catch(error => {

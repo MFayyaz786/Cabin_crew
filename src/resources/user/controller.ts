@@ -73,4 +73,5 @@ const deleteUser=asyncHandler(async(req:Request,res:Response,next:Function)=>{
   }
   return next()
 });
+
 export default {create,getAll,getOne,update,deleteUser}
