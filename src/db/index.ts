@@ -23,6 +23,7 @@
 require('dotenv').config();
 import "reflect-metadata";
 import { createConnection } from "typeorm";
+import colors from 'colors'
 
 export default createConnection({
   type: "postgres",
@@ -35,7 +36,8 @@ export default createConnection({
   synchronize: true,
   logging: false,
 }).then(connection => {
-  console.log('Connected to the database');
+  console.log(colors.yellow.bold('Connected to the database'));
+  console.log(colors.yellow.bold(`--------------------------------------------------------`));
 }).catch(error => {
   console.error('Error connecting to the database:', error);
   process.exit(1);

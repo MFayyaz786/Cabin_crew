@@ -1,6 +1,9 @@
+import { NextFunction } from 'express';
 import User from '../../entities/user';
 import {getConnection,getRepository} from 'typeorm';
 const userRepo = getRepository(User);
+import { FindManyOptions  } from 'typeorm';
+import AppError from '../../utils/appError';
 
 // export  const service=  {
 //   create:async(userData: User) => {
@@ -30,7 +33,7 @@ const userRepo = getRepository(User);
 // };
 
 class UserService {
-  
+
   static async create(userData: User) {
       const userRepo = getRepository(User);
       const user = userRepo.create(userData);
@@ -38,22 +41,22 @@ class UserService {
       return user;
   }
 
-  static async getAll() {
+  static async getAll(query:any) {
       const userRepo = getRepository(User);
-      const result = await userRepo.find();
+      const result = await userRepo.find({where:query});
       return result;
   }
 
   static async getOne(id: any) {
       const userRepo = getRepository(User);
-      const user = await userRepo.findOne(id);
+      const user = await userRepo.findOneBy({id});
       return user;
   }
 
-  static async update(id: any, userData: User) {
+  static async update(id: any, userData: User,next:NextFunction) {
       const userRepo = getRepository(User);
       await userRepo.update(id, userData);
-      const updatedUser = await userRepo.findOne(id);
+      const updatedUser = await userRepo.findOneBy({id});
       return updatedUser;
   }
 

@@ -25,8 +25,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Joi = __importStar(require("joi"));
 const userSchema = Joi.object({
-    name: Joi.string().required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
     email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
+    phone: Joi.string().required(),
+    password: Joi.string().required(),
+    passwordConfirm: Joi.string().required(),
 });
 exports.default = userSchema;

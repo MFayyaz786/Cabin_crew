@@ -12,32 +12,74 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.service = void 0;
 const user_1 = __importDefault(require("../../entities/user"));
 const typeorm_1 = require("typeorm");
 const userRepo = (0, typeorm_1.getRepository)(user_1.default);
-exports.service = {
-    create: (userData) => __awaiter(void 0, void 0, void 0, function* () {
-        const users = userRepo.create(userData);
-        yield userRepo.save(users);
-        return users;
-    }),
-    getAll: () => __awaiter(void 0, void 0, void 0, function* () {
-        const result = yield userRepo.find();
-        return result;
-    }),
-    getOne: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        const user = yield userRepo.findOne({ where: { id: id } });
-        return user;
-    }),
-    update: (id, userData) => __awaiter(void 0, void 0, void 0, function* () {
-        const result = yield userRepo.update({ id }, userData);
-        return result;
-    }),
-    delete: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        const result = yield userRepo.delete({ id });
-        console.log("result is", result);
-        return result;
-    })
-};
-exports.default = exports.service;
+// export  const service=  {
+//   create:async(userData: User) => {
+//     const users =  userRepo.create(userData);
+//     await userRepo.save(users);
+//     return  users;
+//   },
+//   getAll:async ()=>{
+//     const result=await userRepo.find();
+//     return result
+//   },
+//   getOne: async (id: any) => {
+//   const user = await userRepo.findOne({where:{id:id}});
+//   return user;
+//   },
+//   update:async(id:any,userData:User)=>{
+//   const result=await userRepo.update({id},userData);
+//   return result;
+//   },
+//   delete:async(id:any)=>{
+//     const result=await userRepo.delete({id});
+//     console.log("result is",result);
+//     return result
+//   }
+// };
+class UserService {
+    static create(userData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userRepo = (0, typeorm_1.getRepository)(user_1.default);
+            const user = userRepo.create(userData);
+            yield userRepo.save(user);
+            return user;
+        });
+    }
+    static getAll(query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userRepo = (0, typeorm_1.getRepository)(user_1.default);
+            const result = yield userRepo.find({ where: query });
+            return result;
+        });
+    }
+    static getOne(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userRepo = (0, typeorm_1.getRepository)(user_1.default);
+            const user = yield userRepo.findOneBy({ id });
+            return user;
+        });
+    }
+    static update(id, userData, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userRepo = (0, typeorm_1.getRepository)(user_1.default);
+            yield userRepo.update(id, userData);
+            const updatedUser = yield userRepo.findOneBy({ id });
+            return updatedUser;
+        });
+    }
+    static delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userRepository = (0, typeorm_1.getRepository)(user_1.default);
+            const userToDelete = yield userRepository.findOne({ where: { id } });
+            if (!userToDelete) {
+                return false;
+            }
+            yield userRepository.remove(userToDelete);
+            return true;
+        });
+    }
+}
+exports.default = UserService;
