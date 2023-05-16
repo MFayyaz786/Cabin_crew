@@ -1,11 +1,15 @@
 import * as Joi from 'joi';
+
 const userSchema = Joi.object({
-  name: Joi.string().required(),
+  
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
   email: Joi.string().email().required(),
+  phone: Joi.string().required(),
   password: Joi.string().required(),
-  contact:Joi.string().required(),
-  address:Joi.string().required(),
-  image:Joi.string()
+  passwordConfirm: Joi.string().required(),
+  
+
 });
 
 export default userSchema;

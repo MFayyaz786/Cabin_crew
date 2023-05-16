@@ -13,77 +13,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
+const validator_1 = __importDefault(require("./validator"));
 const service_1 = __importDefault(require("./service"));
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const appError_1 = __importDefault(require("../../utils/appError"));
+//* createUser
 const create = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.body) {
-        return res.status(400).send({ msg: "Bad request" });
+    const { error } = validator_1.default.validate(req.body);
+    if (error) {
+        return res.status(400).json({ error: error.details[0].message });
     }
-    // const user = new User();
-    //   user.name = req.body.name;
-    //   user.email = req.body.email;
-    //   user.password = req.body.password;
-    // const error=await validate(user);
-    // if(error.length>0){
-    // const errorMessages = error.map((error) => Object.values(error.constraints || {})).flat();
-    //   console.log(error);
-    // return res.status(400).send({msg:"Validation Failed!",errors:errorMessages})
-    // }
-    //     const {name ,email}=req.body;
-    //     console.log(name,email)
-    const result = yield service_1.default.create(req.body);
-    if (result) {
-        res.status(201).send({ msg: "User registered successfully" });
-    }
-    else {
-        res.status(200).send({ msg: "Failed" });
-    }
-    return next();
+    const user = yield service_1.default.create(req.body);
+    return user ? res.status(201).json(user) : res.status(500).json({ error: "User creation failed" });
 }));
-const getAll = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield service_1.default.getAll();
-    res.status(200).send({ msg: "list", data: result });
-    return next();
+//* getAll
+const getAll = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield service_1.default.getAll(req.query);
+    return res.status(200).json(users);
 }));
-const getOne = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // const number :id=req.query
-    // const id = parseInt(req.query.id as string);
-    const result = yield service_1.default.getOne(Number(req.query.id));
-    if (result) {
-        res.status(200).send({ msg: "user", data: result });
-    }
-    else {
-        res.status(404).send({ msg: "Not Found" });
-    }
-    return next();
+//* getOne
+const getOne = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield service_1.default.getOne(req.params.id);
+    return user ? res.status(200).json(user) : res.status(404).json({ error: "User not found" });
 }));
-const update = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    //     if (!req.body) {
-    //     return res.status(400).send({ msg: "Bad request" });
-    //   }
-    const { name, email } = req.body;
-    console.log(name, email);
-    const result = yield service_1.default.update(Number(req.body.id), req.body);
-    if (result) {
-        res.status(200).send({ msg: "success" });
+//* update
+const update = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield service_1.default.update(req.params.id, req.body, next);
+    if (!user) {
+        throw next(new appError_1.default("User update failed", 500, true));
     }
-    else {
-        res.status(200).send({ msg: "success" });
-    }
-    return next();
+    return user ? res.status(200).json(user) : res.status(500).json({ error: "User update failed" });
 }));
+//* delete
 const deleteUser = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield service_1.default.delete(Number(req.query.id));
-    if (result.affected === 0) {
-        return res.status(404).send({ msg: "Not Found!" });
-    }
-    if (result) {
-        return res.status(400).send({
-            msg: "deleted"
-        });
-    }
-    else {
-        return res.status(400).send({ msg: "failed" });
-    }
-    return next();
+    const success = yield service_1.default.delete(req.params.id);
+    return success ? res.status(200).json({ message: "User deleted" }) : res.status(404).json({ error: "User not found" });
 }));
 exports.default = { create, getAll, getOne, update, deleteUser };
