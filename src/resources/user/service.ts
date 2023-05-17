@@ -57,6 +57,9 @@ class UserService {
       const userRepo = getRepository(User);
       await userRepo.update(id, userData);
       const updatedUser = await userRepo.findOneBy({id});
+      if(!updatedUser){
+        return next(new AppError("No user found with that ID",404));
+    }
       return updatedUser;
   }
 
