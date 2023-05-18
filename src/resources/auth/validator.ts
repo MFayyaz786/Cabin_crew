@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-const userSchema = Joi.object({
+export const userSchema = Joi.object({
   
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
@@ -12,4 +12,3 @@ const userSchema = Joi.object({
 
 });
 
-export default userSchema;

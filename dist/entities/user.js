@@ -40,14 +40,31 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "phone", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ select: false }),
+    (0, typeorm_1.Column)(),
     (0, class_validator_1.Length)(8, 32),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "passwordConfirm", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], User.prototype, "tokenVersion", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "phoneNumberVerificationCode", void 0);
+__decorate([
+    (0, typeorm_1.Column)('timestamptz', { nullable: true }),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], User.prototype, "phoneNumberVerificationExpires", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "isPhoneNumberVerified", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: true }),
     __metadata("design:type", Boolean)
@@ -55,15 +72,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ default: true }),
     __metadata("design:type", Boolean)
-], User.prototype, "isEmailVerified", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ default: true }),
-    __metadata("design:type", Boolean)
-], User.prototype, "isPhoneVerified", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], User.prototype, "phoneVerificationCode", void 0);
+], User.prototype, "isOTPVerified", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)

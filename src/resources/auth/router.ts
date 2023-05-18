@@ -2,16 +2,20 @@ import express from "express"
 import controller from "./controller";
 const router=express.Router();
 
-router
-.route('/')
-.get(controller.getAll)
-.post(controller.create)
 
-router
-  .route('/:id')
-  .get(controller.getOne)
-  .patch(controller.update)
-  .delete(controller.deleteUser);
+router.post('/signup',controller.signUp)
+router.post('/signin',controller.signIn)
+router.post('/refreshtoken',controller.refreshToken);
+router.patch('/updatepassword',controller.updatePassword)
+router.patch('/forgotpassword',controller.forgotPassword)
+router.patch('/resetpassword',controller.resetPassword)
+
+router.post('/verifyotp',controller.verifyOTP)
+
+router.post('/generateotp',controller.generateOTP)
+
+
+
 
 
 

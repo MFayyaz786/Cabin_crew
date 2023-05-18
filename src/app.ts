@@ -4,10 +4,13 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import path from 'path';
 
-import userRouter from './resources/user/router';
 import globalErrorHandler from './middleware/errorHandler.middleware';
 import AppError from './utils/appError';
 import ErrorHandler from "./middleware/errorHandler.middleware";
+
+//* Routers
+import userRouter from './resources/user/router';
+import authRouter from './resources/auth/router';
 
 const app = express();
 
@@ -41,7 +44,9 @@ app.get("/", (req, res) => {
   res.status(200).send({ msg: "Welcome To   " });
 });
 
-// app.use('/api/v1/auth', authRouter);
+
+//* Routing 
+app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 
 app.use(ErrorHandler)

@@ -6,9 +6,7 @@ import {
   BeforeInsert,
   Unique,
 } from 'typeorm';
-import { IsEmail, IsNotEmpty, IsPhoneNumber, Length } from 'class-validator';
-import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
+import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length } from 'class-validator';
 
 @Entity()
 @Unique(['email', 'phone'])
@@ -35,27 +33,43 @@ class User extends BaseEntity{
   @IsNotEmpty()
   phone: string;
 
-  @Column({ select: false })
+  @Column()
   @Length(8, 32)
   password: string;
 
-  @Column({ nullable: true })
+  @Column()
   passwordConfirm?: string;
 
   // @Column({ type: 'enum', enum: ['admin', 'user', 'agent', 'driver'], default: 'user' })
   // role: string;
+  @Column({ nullable: true })
+  tokenVersion: number;
+
+  //* phone number verification
+  @Column({ nullable: true })
+  phoneNumberVerificationCode: string;
+
+  @Column('timestamptz', { nullable: true })
+  @IsDate()
+  phoneNumberVerificationExpires: Date;
+  
+  @Column({ default: false })
+  isPhoneNumberVerified: boolean;
+
+  //* email verification
+  @Column({ nullable: true })
+  emailVerificationCode: string;
+
+  @Column('timestamptz', { nullable: true })
+  @IsDate()
+  emailVerificationExpires: Date;
+  
+  @Column({ default: false })
+  isEmailVerified: boolean;
+
 
   @Column({ default: true })
   isActivated: boolean;
-
-  @Column({ default: true })
-  isEmailVerified: boolean;
-
-  @Column({ default: true })
-  isPhoneVerified: boolean;
-
-  @Column({ nullable: true })
-  phoneVerificationCode?: string;
 
   @Column({ nullable: true })
   activationCode?: string;
@@ -65,6 +79,7 @@ class User extends BaseEntity{
 
   @Column({ nullable: true })
   passwordResetExpires?: Date;
+
 
   // // Lifecycle hooks
   // @BeforeInsert()
