@@ -1,42 +1,68 @@
 import { Request,Response ,NextFunction} from "express";
 import asyncHandler from "express-async-handler"
-import userSchema  from './validator';
-import UserService from "./service"
-import  User  from "../../entities/user";
+import {userSchema}  from './validator';
+import AuthService from "./service"
+import  User  from "../../entities/User";
 import catchAsync from "../../utils/catchAsync";
-//* createUser
-const create = asyncHandler(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
-  const { error } = userSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({ error: error.details[0].message });
+import AppError from "../../utils/appError";
+
+
+//* REFRESH TOKEN
+const refreshToken = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
+  const {token}=req.body;
+  if (!token) {
+    return next(new AppError('Access denied, token missing!', 403));
   }
-  const user: User = await UserService.create(req.body);
-  return user ? res.status(201).json(user) : res.status(500).json({ error: "User creation failed" });
+  const { accessToken, refreshToken } = await AuthService.refreshToken(token,next);
+  res.status(200).send({ message: 'success', accessToken, refreshToken });
 });
 
-//* getAll
-const getAll = asyncHandler(async (req: Request, res: Response):Promise<any> => {
-  const users: User[] = await UserService.getAll(req.query);
-  return res.status(200).json(users);
+//* SIGNUP
+const signUp = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
+  const {user,accessToken, refreshToken} = await AuthService.signUp(req.body);
+  res.send({user, accessToken, refreshToken });
 });
 
-  //* getOne
-  const getOne =asyncHandler(async (req: Request, res: Response):Promise<any> => {
-    const user = await UserService.getOne(req.params.id);
-    return user ? res.status(200).json(user) : res.status(404).json({ error: "User not found" });
-  });
+//* SIGNIN
+const signIn = catchAsync(async (req: Request, res: Response):Promise<any> => {
+  console.log('req.body :>> ', req.body);
 
-
-//* update
-const update =catchAsync(async (req: Request, res: Response,next:NextFunction):Promise<any>=> {
-  const user = await UserService.update(req.params.id, req.body,next);
-  return user ? res.status(200).json(user) : res.status(500).json({ error: "User update failed" });
+  const {email,password} = req.body;
+  const { accessToken, refreshToken } = await AuthService.signIn(email,password);
+  res.send({ accessToken, refreshToken });
 });
 
-//* delete
-const deleteUser=asyncHandler(async(req:Request,res:Response,next:Function):Promise<any>=>{
-  const success: boolean = await UserService.delete(req.params.id);
-  return success ? res.status(200).json({ message: "User deleted" }) : res.status(404).json({ error: "User not found" });
+  //* UPDATE PASSWORD
+const updatePassword =catchAsync(async (req: Request, res: Response):Promise<any> => {
+  await AuthService.updatePassword(req.body.userId, req.body.newPassword);
+  res.send({ message: 'Password updated successfully' });
 });
 
-export default {create,getAll,getOne,update,deleteUser}
+
+//* FORGOT PASSWORD
+const forgotPassword =catchAsync(async (req: Request, res: Response,next:NextFunction):Promise<any>=> {
+  await AuthService.forgotPassword(req.body.email);
+  res.send({ message: 'Password reset link has been sent to your email' });
+});
+
+//* VERIFy OTP
+const verifyOTP=catchAsync(async(req:Request,res:Response,next:Function):Promise<any>=>{
+  const {userId,code} = req.body;
+  await AuthService.verifyOTP(userId,code);
+  res.send({ message: 'OTP confirmed' });
+});
+
+//* GENERATE OTP
+const generateOTP=catchAsync(async(req:Request,res:Response,next:Function):Promise<any>=>{
+  const {phone} = req.body;
+  await AuthService.generateOTP(phone);
+  res.send({ message: 'OTP sent to your Number' });
+});
+
+//* RESET PASSWORD
+const resetPassword=catchAsync(async(req:Request,res:Response,next:Function):Promise<any>=>{
+  await AuthService.resetPassword(req.body.userId, req.body.resetToken, req.body.newPassword);
+  res.send({ message: 'Password reset successfully' });
+});
+
+export default {signUp,signIn,updatePassword,forgotPassword,verifyOTP,resetPassword,refreshToken,generateOTP}
