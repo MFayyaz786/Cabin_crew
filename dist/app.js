@@ -8,10 +8,12 @@ const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const helmet_1 = __importDefault(require("helmet"));
 const path_1 = __importDefault(require("path"));
-const router_1 = __importDefault(require("./resources/user/router"));
 const errorHandler_middleware_1 = __importDefault(require("./middleware/errorHandler.middleware"));
 const appError_1 = __importDefault(require("./utils/appError"));
 const errorHandler_middleware_2 = __importDefault(require("./middleware/errorHandler.middleware"));
+//* Routers
+const router_1 = __importDefault(require("./resources/user/router"));
+const router_2 = __importDefault(require("./resources/auth/router"));
 const app = (0, express_1.default)();
 app.set('view engine', 'ejs');
 app.set('views', path_1.default.join(__dirname, 'views'));
@@ -36,7 +38,7 @@ app.use(express_1.default.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
     res.status(200).send({ msg: "Welcome To   " });
 });
-// app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/auth', router_2.default);
 app.use('/api/v1/users', router_1.default);
 app.use(errorHandler_middleware_2.default);
 // handling all (get,post,update,delete.....) unhandled routes
