@@ -1,5 +1,5 @@
 import { NextFunction } from 'express';
-import User from '../../entities/User';
+import User from '../../entities/user';
 import {getConnection,getRepository} from 'typeorm';
 const userRepo = getRepository(User);
 import { FindManyOptions  } from 'typeorm';

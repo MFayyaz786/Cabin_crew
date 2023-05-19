@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { hash, compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
-import User from '../../entities/User';
+import User from '../../entities/user';
 import { verifyToken,createAccessToken, createRefreshToken } from '../../utils/token';
 import AppError from '../../utils/appError';
 import bcrypt from 'bcryptjs';

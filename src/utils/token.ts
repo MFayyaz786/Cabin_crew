@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from '../entities/User';
+import User from '../entities/user';
 
 
 console.log('process.env.JWT_SECRET',process.env.JWT_SECRET)
