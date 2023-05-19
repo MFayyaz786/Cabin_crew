@@ -3,6 +3,7 @@ import { upperCaseFirst } from 'upper-case-first';
 import AppError from '../utils/appError'
 import { QueryFailedError } from 'typeorm';
 
+
 export default async (err: any, req: Request, res: Response, next: NextFunction) => {
 
   console.log('ERR CAUGHT IN GLOBAL MIDDLEWARE'.red.bold);

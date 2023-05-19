@@ -2,7 +2,7 @@ import { Request,Response ,NextFunction} from "express";
 import asyncHandler from "express-async-handler"
 import userSchema  from './validator';
 import UserService from "./service"
-import  User  from "../../entities/User";
+import  User  from "../../entities/user";
 import catchAsync from "../../utils/catchAsync";
 
 //* createUser

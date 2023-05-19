@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 import AppError from '../utils/appError';
 import catchAsync from '../utils/catchAsync';
-import User from '../entities/User';
+import User from '../entities/user';
 import { verifyToken } from '../utils/token';
 import { getRepository } from 'typeorm';
 
@@ -47,7 +47,7 @@ declare module 'express-serve-static-core' {
   }
 }
 
-module.exports = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export default  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   // Get the token if it exists
   let token;
   if (
