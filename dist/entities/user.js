@@ -9,82 +9,67 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserRole = void 0;
 const typeorm_1 = require("typeorm");
 const class_validator_1 = require("class-validator");
-let User = class User extends typeorm_1.BaseEntity {
+var UserRole;
+(function (UserRole) {
+    UserRole["super_admin"] = "super_admin";
+    UserRole["admin"] = "admin";
+    UserRole["staff"] = "staff";
+})(UserRole = exports.UserRole || (exports.UserRole = {}));
+let User = class User {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", String)
 ], User.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ type: String, nullable: false }),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], User.prototype, "firstName", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ type: String, nullable: false }),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], User.prototype, "lastName", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    (0, class_validator_1.IsEmail)(),
+    (0, typeorm_1.Column)({ type: String, nullable: false, enum: UserRole }),
     (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], User.prototype, "role", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: String, nullable: false, unique: true }),
+    (0, class_validator_1.IsEmail)({}, { message: "Please enter a valid email" }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    (0, class_validator_1.IsPhoneNumber)(),
+    (0, typeorm_1.Column)({ type: String, nullable: false }),
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], User.prototype, "phone", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    (0, class_validator_1.Length)(8, 32),
+    (0, class_validator_1.Matches)(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+        message: 'Password must contain at least one letter, one number, and be at least 8 characters long.',
+    }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ type: String, nullable: false }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsMobilePhone)("en-US", {}, { message: "Please enter a valid phone number" }),
     __metadata("design:type", String)
-], User.prototype, "passwordConfirm", void 0);
+], User.prototype, "phone", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Number)
-], User.prototype, "tokenVersion", void 0);
+    (0, typeorm_1.Column)({ type: Number, nullable: true, default: null }),
+    __metadata("design:type", Object)
+], User.prototype, "otp", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], User.prototype, "phoneNumberVerificationCode", void 0);
+    (0, typeorm_1.Column)({ type: Date, default: null, nullable: true }),
+    __metadata("design:type", Object)
+], User.prototype, "otpExpire", void 0);
 __decorate([
-    (0, typeorm_1.Column)('timestamptz', { nullable: true }),
-    (0, class_validator_1.IsDate)(),
-    __metadata("design:type", Date)
-], User.prototype, "phoneNumberVerificationExpires", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ default: false }),
-    __metadata("design:type", Boolean)
-], User.prototype, "isPhoneNumberVerified", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ default: true }),
-    __metadata("design:type", Boolean)
-], User.prototype, "isActivated", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ default: true }),
-    __metadata("design:type", Boolean)
-], User.prototype, "isOTPVerified", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], User.prototype, "activationCode", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], User.prototype, "passwordResetCode", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
-], User.prototype, "passwordResetExpires", void 0);
+    (0, typeorm_1.Column)({ type: String, nullable: true, default: null }),
+    __metadata("design:type", Object)
+], User.prototype, "token", void 0);
 User = __decorate([
     (0, typeorm_1.Entity)(),
     (0, typeorm_1.Unique)(['email', 'phone'])

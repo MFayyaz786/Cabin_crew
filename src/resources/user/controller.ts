@@ -4,12 +4,14 @@ import userSchema  from './validator';
 import UserService from "./service"
 import  User  from "../../entities/user";
 import catchAsync from "../../utils/catchAsync";
+import AppError from "../../utils/appError";
 
 //* createUser
 const create = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
   const { error } = userSchema.validate(req.body);
   if (error) {
-    return res.status(400).json({ error: error.details[0].message });
+    // return res.status(400).json({ error: error.details[0].message });
+    return next(new AppError(error.details[0].message,400));
   }
   const user: User = await UserService.create(req.body);
   return user ? res.status(201).json(user) : res.status(500).json({ error: "User creation failed" });

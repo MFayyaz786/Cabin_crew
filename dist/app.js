@@ -38,6 +38,7 @@ app.use(express_1.default.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
     res.status(200).send({ msg: "Welcome To   " });
 });
+//* Routing 
 app.use('/api/v1/auth', router_2.default);
 app.use('/api/v1/users', router_1.default);
 app.use(errorHandler_middleware_2.default);

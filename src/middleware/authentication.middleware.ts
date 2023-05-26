@@ -6,6 +6,7 @@ import catchAsync from '../utils/catchAsync';
 import User from '../entities/user';
 import { verifyToken } from '../utils/token';
 import { getRepository } from 'typeorm';
+const userRepo = getRepository(User);
 
 
 // // Protecting Routes
@@ -69,7 +70,7 @@ export default  catchAsync(async (req: Request, res: Response, next: NextFunctio
   }
 
   // Check if user exists
-  const currentUser = await getRepository(User).findOne(payload.id);
+  const currentUser = await userRepo.findOne(payload.id);
   if (!currentUser) {
     return next(
       new AppError('User belong to this token does not exists ', 401)

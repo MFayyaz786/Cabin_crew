@@ -15,11 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const validator_1 = __importDefault(require("./validator"));
 const service_1 = __importDefault(require("./service"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const appError_1 = __importDefault(require("../../utils/appError"));
 //* createUser
 const create = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { error } = validator_1.default.validate(req.body);
     if (error) {
-        return res.status(400).json({ error: error.details[0].message });
+        // return res.status(400).json({ error: error.details[0].message });
+        return next(new appError_1.default(error.details[0].message, 400));
     }
     const user = yield service_1.default.create(req.body);
     return user ? res.status(201).json(user) : res.status(500).json({ error: "User creation failed" });
