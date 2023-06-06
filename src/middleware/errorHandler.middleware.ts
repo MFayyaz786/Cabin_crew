@@ -86,13 +86,13 @@ export default async (err: any, req: Request, res: Response, next: NextFunction)
   else  err = new AppError(err.message, err.statusCode, false);
 
   if (process.env.NODE_ENV === 'development') {
-    res.status(err.statusCode).json({
+  return  res.status(err.statusCode).json({
       status: 'error',
       message: err.message,
       stack: err.stack
     });
   } else {
-    res.status(err.statusCode).json({
+  return  res.status(err.statusCode).json({
       status: 'error',
       message: err.message
     });
