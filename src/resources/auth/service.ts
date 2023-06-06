@@ -1,158 +1,121 @@
-import { getRepository } from 'typeorm';
-import { hash, compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
+import { string } from 'joi';
 import User from '../../entities/user';
-import { verifyToken,createAccessToken, createRefreshToken } from '../../utils/token';
-import AppError from '../../utils/appError';
-import bcrypt from 'bcryptjs';
+import Auth from "../../entities/auth";
+import bcrypt from "bcrypt"
+import {getConnection,getRepository,MoreThanOrEqual,UpdateResult} from 'typeorm';
+const authRepo = getRepository(Auth);
+import jwtServices from "../../utils/jwtServices";
+import { v4 as uuidv4 } from 'uuid';
+import authIdService from "../auth/service"
 import smsServices from '../../utils/smsService';
-class AuthService {
-
-  async refreshToken(token: string,next: any) {
-    let payload: any = null;
-
-    try {
-      payload = await verifyToken(token, true);
-    } catch (err) {
-      throw new AppError('Invalid token!', 401);
+const userRepo = getRepository(User);
+export  const service=  {
+  create:async(userData: User) => {
+    const salt = await bcrypt.genSalt(10);
+    userData.password = await bcrypt.hash(userData.password, salt);
+    const users =  userRepo.create(userData);
+    await userRepo.save(users);
+    return  users;
+  },
+   login: async (email:string) => {
+    let user = await userRepo.findOne({where:{ email },select:["phone","id","role","firstName","lastName","password"]});
+    if (user) {
+      const uuid = uuidv4();
+      console.log("uuid",uuid)
+      const refreshToken =await jwtServices.create({ uuid, type: user.role });
+      const accessToken =await jwtServices.create(
+        { userId: user.id, type: user.role },
+        "5m"
+      );
+      await service.add(user.id, String(uuid));
+      await userRepo.update(
+        { id: user.id },
+        { token: String(accessToken) }
+      );
+        user=Object.assign({},user,{accessToken,refreshToken});
     }
-
-    const user = await getRepository(User).findOne(payload.id);
-
-    if (!user || user.tokenVersion !== payload.tokenVersion) {
-      throw new AppError('Invalid token!', 401);
-    }
-
-    const accessToken = createAccessToken(user);
-    const refreshToken = createRefreshToken(user);
-
-    return { accessToken, refreshToken };
-  }
-
-  async signUp(data: any) {
-    const hashedPassword = await hash(data.password, 10);
-    // create user instance
-    let user : any = getRepository(User).create({ ...data, password: hashedPassword });
-  
-    // save the user and wait for it to complete
-    user = await getRepository(User).save(user);
-
-
-    //* Create otp
-    const verificationCode = Math.floor(100000 + Math.random() * 900000); // generate 6-digit code
-    user.phoneNumberVerificationCode  = verificationCode.toString();
-
-    
-    //* code is valid for next 1 minutes
-    user.phoneNumberVerificationExpires = new Date(Date.now() + 1*60*1000);
-    await getRepository(User).save(user);
-
-    //* send Message
-    const message = `Your verification code is ${verificationCode}`;
-    await smsServices.sendSMS(message, user.phone, new Date());
-    
-    const accessToken = createAccessToken(user);
-    const refreshToken = createRefreshToken(user);
-  
-    return {user,accessToken, refreshToken };
-
-  }
-
-  async signIn(email: string, password: string) {
-
-    const user = await getRepository(User).findOne({ where: { email }});
-    if (!user) {
-      throw new AppError('No user found with this email', 404);
-    }
-    
-    const isValidPassword = await bcrypt.compare(password, user.password);
-
-    if (!isValidPassword) {
-      throw new AppError('Invalid username or password', 400);
-    }
-
-    if(!user.isPhoneNumberVerified){
-      throw new AppError('Please verify your phone number', 400);
-    }
-
-    const accessToken = createAccessToken(user);
-    const refreshToken = createRefreshToken(user);
-
-    return { accessToken, refreshToken };
-  }
-
-  async updatePassword(userId: string, newPassword: string) {
-    // const hashedPassword = await hash(newPassword, 10);
-    // await getRepository(User).update(userId, { password: hashedPassword });
-  }
-
-  async forgotPassword(email: string) {
-    // const user = await getRepository(User).findOne({ where: { email } });
-    // if (!user) {
-    //   throw new Error('User not found');
-    // }
-    // const resetToken = crypto.randomBytes(32).toString('hex');
-    // user.passwordResetCode = crypto.createHash('sha256').update(resetToken).digest('hex');
-    // user.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes to reset password
-    // await getRepository(User).save(user);
-    // Send resetToken to user's email
-  }
-
-  async verifyOTP(id: string, code: string) {
-    const user : any = await getRepository(User).findOneBy({id});
-    if (!user) {
-      throw new AppError('User not found', 404);
-    }
-    
-
-    if (user.phoneNumberVerificationCode !== code || 
-        new Date() > user.phoneNumberVerificationExpires) {
-      throw new AppError('Invalid or expired verification code', 400);
-    }
-    
-    user.isPhoneNumberVerified = true;
-    user.phoneNumberVerificationCode = null; // clear the code
-    user.phoneNumberVerificationExpires = null; // clear expiration time
-    await getRepository(User).save(user);
-    
-    return { message: 'Phone number verified successfully' };
-  }
-
-  async generateOTP(phone: string) {
-    const user : any = await getRepository(User).findOneBy({phone});
-    if (!user) {
-      throw new AppError('User not found', 404);
-    }
-
-    //* Create otp
-    const verificationCode = Math.floor(100000 + Math.random() * 900000); // generate 6-digit code
-    user.phoneNumberVerificationCode  = verificationCode.toString();
-    
-    //* code is valid for next 1 minutes
-    user.phoneNumberVerificationExpires = new Date(Date.now() + 1*60*1000);
-    await getRepository(User).save(user);
-
-    //* send Message
-    const message = `Your verification code is ${verificationCode}`;
-    await smsServices.sendSMS(message, user.phone, new Date());
-
-    return 
-  }
-
-  async resetPassword(userId: string, resetToken: string, newPassword: string) {
-    // const user = await getRepository(User).findOne(userId);
-    // if (!user) {
-    //   throw new Error('User not found');
-    // }
-    // const hashedResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-    // if (user.passwordResetCode !== hashedResetToken || new Date() > user.passwordResetExpires) {
-    //   throw new Error('Invalid or expired password reset token');
-    // }
-    // user.password = await hash(newPassword, 10);
-    // user.passwordResetCode = null;
-    // user.passwordResetExpires = null;
-    // await getRepository(User).save(user);
-  }
+    return user
+   },
+   validatePassword: async (password:string, realPassword:string) => {
+    console.log(password, realPassword);
+    const valid = await bcrypt.compare(password, realPassword);
+    return valid;
+  },
+  getAll:async ()=>{
+    const result=await userRepo.find({select:["firstName","lastName","email","phone","id",]});
+    //,relations:["role"]});
+    return result
+  },
+getOne: async (id: string) => {
+  const user = await userRepo.findOne({where:{id:id},select:["id","firstName","lastName","email","phone"]});
+  return user;
+},
+update:async(id:string,userData:User)=>{
+const result=await userRepo.
+// .createQueryBuilder()
+//   .update(User)
+//   .set(userData)
+//   .where( { id: id })
+//   .returning("*") // Specify the columns you want to retrieve
+//   .execute();
+update({id},userData);
+return result;
+},
+requestOtp:async(otp:number,email:string)=>{
+const otpExpire=new Date(new Date().getTime() + 5 * 60000);
+const result=await userRepo
+  .createQueryBuilder()
+  .update(User)
+  .set({ otp, otpExpire })
+  .where({ email }).returning("*")
+  .execute();
+//.update({email},{otp,otpExpire})
+if(result.affected){
+await smsServices.sendSMS(String(`Your otp is ${otp}`),String(result.raw[0].phone))
 }
+return result.raw[0]
+},
+otpExpiryValidation:async(email:string)=>{
+  const result =await userRepo.findOne({where:{email,otpExpire:MoreThanOrEqual(new Date())}});
+  return result
+},
+isValidOtp:async(otp:number,email:string)=>{
+  const result =await userRepo.update({email:email,otp:otp},{otp:null});
+  return result
+},
+resetPassword:async(id:string,password:string)=>{
+ const salt = await bcrypt.genSalt(10);
+     password =await  bcrypt.hash(password, salt);
+    const result=await userRepo.update({id},{password})
+    return result
+},
+forgotPassword: async (email:string, password:string) => {
+    console.log(email, password);
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
+    const result = await userRepo.update({ email },{ password });
+    return result;
+  },
+delete:async(id:string)=>{
+  const result=await userRepo.delete({id});
+  console.log("result is",result);
+  
+  return result
+},
+add: async (userId:string, uuid:string) => {
+    const result:UpdateResult = await authRepo.update({ userId }, {uuid});
+    if (result.affected) {
+      return result;
+    }
+    const newAuthId = await authRepo.create({ userId, uuid });
+    await authRepo.save(newAuthId)
+    console.log(newAuthId)
+    return newAuthId;
+  },
 
-export default new AuthService();
+findByUUID: async (uuid:string) => {
+    const result = await authRepo.findOne({where:{ uuid }});
+    return result;
+  },
+};
+export default service

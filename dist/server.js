@@ -16,8 +16,8 @@ process.on('uncaughtException', (err) => {
 const port = process.env.PORT || 6001;
 const server = app_1.default.listen(port, () => {
     console.log(colors_1.default.yellow.bold(`--------------------------------------------------------`));
-    console.log(colors_1.default.yellow.bold(`App is running on port ${port}`));
-    console.log(colors_1.default.yellow.bold(`Current Environment: ${process.env.NODE_ENV}`));
+    console.log(colors_1.default.yellow.bold(`App is running on port : ${port}`));
+    console.log(colors_1.default.yellow.bold(`Current Environment : ${process.env.NODE_ENV}`));
     console.log(colors_1.default.yellow.bold(`--------------------------------------------------------`));
 });
 process.on('unhandledRejection', (error) => {

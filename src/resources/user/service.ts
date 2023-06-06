@@ -35,26 +35,22 @@ import AppError from '../../utils/appError';
 class UserService {
 
   static async create(userData: User) {
-      const userRepo = getRepository(User);
       const user = userRepo.create(userData);
       await userRepo.save(user);
       return user;
   }
 
   static async getAll(query:any) {
-      const userRepo = getRepository(User);
       const result = await userRepo.find({where:query});
       return result;
   }
 
   static async getOne(id: any) {
-      const userRepo = getRepository(User);
       const user = await userRepo.findOneBy({id});
       return user;
   }
 
   static async update(id: any, userData: User,next:NextFunction) {
-      const userRepo = getRepository(User);
       await userRepo.update(id, userData);
       const updatedUser = await userRepo.findOneBy({id});
       if(!updatedUser){
@@ -64,14 +60,13 @@ class UserService {
   }
 
   static async delete(id: any) {
-    const userRepository = getRepository(User);
-    const userToDelete = await userRepository.findOne({ where: { id } });
+    const userToDelete = await userRepo.findOne({ where: { id } });
 
     if (!userToDelete) {
         return false;
     }
 
-    await userRepository.remove(userToDelete);
+    await userRepo.remove(userToDelete);
     return true;
   }
 }

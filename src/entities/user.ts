@@ -6,79 +6,55 @@ import {
   BeforeInsert,
   Unique,
 } from 'typeorm';
-import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length } from 'class-validator';
-
+import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePhone } from 'class-validator';
+export enum UserRole {
+  super_admin = 'super_admin',
+  admin = 'admin',
+  staff = 'staff',
+}
 @Entity()
 @Unique(['email', 'phone'])
-
-class User extends BaseEntity{
+class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type:String,nullable:false})
   @IsNotEmpty()
   firstName: string;
 
-  @Column()
+  @Column({type:String,nullable:false})
   @IsNotEmpty()
   lastName: string;
 
-  @Column()
-  @IsEmail()
+  @Column({type:String,nullable:false,enum:UserRole})
   @IsNotEmpty()
+  role:UserRole
+
+  @Column({type:String,nullable:false,unique:true})
+  @IsEmail({}, { message: "Please enter a valid email" })
   email: string;
 
-  @Column()
-  @IsPhoneNumber()
+  @Column({type:String,nullable:false})
   @IsNotEmpty()
-  phone: string;
-
-  @Column()
-  @Length(8, 32)
+  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,{
+    message: 'Password must contain at least one letter, one number, and be at least 8 characters long.',
+  })
   password: string;
 
-  @Column()
-  passwordConfirm?: string;
+  @Column({type:String,nullable:false})
+  @IsNotEmpty()
+  @IsMobilePhone("en-US", {}, { message: "Please enter a valid phone number" })
+  phone:string;
 
-  // @Column({ type: 'enum', enum: ['admin', 'user', 'agent', 'driver'], default: 'user' })
-  // role: string;
-  @Column({ nullable: true })
-  tokenVersion: number;
-
-  //* phone number verification
-  @Column({ nullable: true })
-  phoneNumberVerificationCode: string;
-
-  @Column('timestamptz', { nullable: true })
-  @IsDate()
-  phoneNumberVerificationExpires: Date;
+  @Column({type:Number ,nullable:true ,default:null}) 
+  otp:number | null
   
-  @Column({ default: false })
-  isPhoneNumberVerified: boolean;
+   @Column({type:Date,default:null,nullable:true})
+   otpExpire:Date|null
 
-  //* email verification
-  @Column({ nullable: true })
-  emailVerificationCode: string;
+  @Column({type:String,nullable :true,default:null})
+  token:string|null
 
-  @Column('timestamptz', { nullable: true })
-  @IsDate()
-  emailVerificationExpires: Date;
-  
-  @Column({ default: false })
-  isEmailVerified: boolean;
-
-
-  @Column({ default: true })
-  isActivated: boolean;
-
-  @Column({ nullable: true })
-  activationCode?: string;
-
-  @Column({ nullable: true })
-  passwordResetCode?: string;
-
-  @Column({ nullable: true })
-  passwordResetExpires?: Date;
 
 
   // // Lifecycle hooks

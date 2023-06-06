@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const User_1 = __importDefault(require("../../entities/User"));
+const user_1 = __importDefault(require("../../entities/user"));
 const typeorm_1 = require("typeorm");
-const userRepo = (0, typeorm_1.getRepository)(User_1.default);
+const userRepo = (0, typeorm_1.getRepository)(user_1.default);
 const appError_1 = __importDefault(require("../../utils/appError"));
 // export  const service=  {
 //   create:async(userData: User) => {
@@ -43,7 +43,6 @@ const appError_1 = __importDefault(require("../../utils/appError"));
 class UserService {
     static create(userData) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userRepo = (0, typeorm_1.getRepository)(User_1.default);
             const user = userRepo.create(userData);
             yield userRepo.save(user);
             return user;
@@ -51,21 +50,18 @@ class UserService {
     }
     static getAll(query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userRepo = (0, typeorm_1.getRepository)(User_1.default);
             const result = yield userRepo.find({ where: query });
             return result;
         });
     }
     static getOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userRepo = (0, typeorm_1.getRepository)(User_1.default);
             const user = yield userRepo.findOneBy({ id });
             return user;
         });
     }
     static update(id, userData, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userRepo = (0, typeorm_1.getRepository)(User_1.default);
             yield userRepo.update(id, userData);
             const updatedUser = yield userRepo.findOneBy({ id });
             if (!updatedUser) {
@@ -76,12 +72,11 @@ class UserService {
     }
     static delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userRepository = (0, typeorm_1.getRepository)(User_1.default);
-            const userToDelete = yield userRepository.findOne({ where: { id } });
+            const userToDelete = yield userRepo.findOne({ where: { id } });
             if (!userToDelete) {
                 return false;
             }
-            yield userRepository.remove(userToDelete);
+            yield userRepo.remove(userToDelete);
             return true;
         });
     }

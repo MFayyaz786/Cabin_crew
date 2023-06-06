@@ -11,6 +11,8 @@ import ErrorHandler from "./middleware/errorHandler.middleware";
 //* Routers
 import userRouter from './resources/user/router';
 import authRouter from './resources/auth/router';
+import airlineTypeRouter from "./resources/airlineType/router";
+
 
 const app = express();
 
@@ -48,6 +50,9 @@ app.get("/", (req, res) => {
 //* Routing 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/airline', airlineTypeRouter);
+
+
 
 app.use(ErrorHandler)
 

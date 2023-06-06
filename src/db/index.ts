@@ -1,3 +1,4 @@
+//import { dotenv } from 'dotenv';
 // require('dotenv').config();
 // import  "reflect-metadata";
 // import {DataSource} from "typeorm";
@@ -24,7 +25,6 @@ require('dotenv').config();
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import colors from 'colors'
-
 export default createConnection({
   type: "postgres",
   host: process.env.DB_HOST,
@@ -36,9 +36,55 @@ export default createConnection({
   synchronize: true,
   logging: false,
 }).then(connection => {
-  console.log(colors.yellow.bold('Connected to the database'));
+  console.log(colors.yellow.bold('Connected to the database :) '));
   console.log(colors.yellow.bold(`--------------------------------------------------------`));
 }).catch(error => {
   console.error('Error connecting to the database:', error);
   process.exit(1);
 });
+// import "reflect-metadata";
+// import { createConnection, ConnectionOptions } from "typeorm";
+// import colors from 'colors';
+// import * as dotenv from "dotenv";
+
+// dotenv.config();
+
+// const connectionOptions: ConnectionOptions = {
+//   type: "postgres",
+//   host: process.env.DB_HOST,
+//   port: Number(process.env.DB_PORT || '5432'),
+//   username: process.env.DB_USERNAME,
+//   password: process.env.DB_PASSWORD,
+//   database: 'Airport_Cabin_Crew_dev', // Set the database name directly
+//   entities: ["src/entities/*{.ts,.js}"],
+//   synchronize: true,
+//   logging: false,
+// };
+
+// async function createDatabaseIfNotExists() {
+//   const connection = await createConnection(connectionOptions);
+
+//   // Check if the database exists
+//   const queryRunner = connection.createQueryRunner();
+//   const dbExists = await queryRunner.hasDatabase(connectionOptions.database);
+
+//   if (!dbExists) {
+//     // Create the database
+//     await queryRunner.createDatabase(connectionOptions.database, true);
+//     console.log(colors.yellow.bold('Database created successfully.'));
+//   } else {
+//     console.log(colors.yellow.bold('Database already exists.'));
+//   }
+
+//   await connection.close();
+// }
+
+// createDatabaseIfNotExists()
+//   .then(() => {
+//     console.log(colors.yellow.bold('Connected to the database'));
+//     console.log(colors.yellow.bold(`--------------------------------------------------------`));
+//   })
+//   .catch(error => {
+//     console.error('Error connecting to the database:', error);
+//     process.exit(1);
+//   });

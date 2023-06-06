@@ -7,13 +7,13 @@ console.log('process.env.JWT_REFRESH_SECRET',process.env.JWT_REFRESH_SECRET)
 
 interface JWTPayload {
   id: string;
-  tokenVersion: number;
+  token: string;
 }
 
 export const createAccessToken = (user: any): string => {
   const payload: JWTPayload = {
     id: user.id,
-    tokenVersion: user.tokenVersion
+    token: user.token
   };
   
   return jwt.sign(payload, process.env.JWT_SECRET as jwt.Secret, {
@@ -24,7 +24,7 @@ export const createAccessToken = (user: any): string => {
 export const createRefreshToken = (user: any): string => {
   const payload: JWTPayload = {
     id: user.id,
-    tokenVersion: user.tokenVersion
+    token: user.token
   };
   
   return jwt.sign(payload, process.env.JWT_REFRESH_SECRET as jwt.Secret, {
