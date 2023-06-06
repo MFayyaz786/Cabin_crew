@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import colors from 'colors'
+
 import "./db/index"
 
 import app from './app'
@@ -13,7 +14,6 @@ process.on('uncaughtException', (err) => {
     process.exit(1);
 });
 
-  
 const port=process.env.PORT|| 6001;
 const server=app.listen(port,()=>{
     console.log(colors.yellow.bold(`--------------------------------------------------------`));
