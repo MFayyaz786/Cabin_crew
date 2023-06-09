@@ -32,7 +32,7 @@ const registered = Joi.object({
 const updateProfile = Joi.object({
   firstName: Joi.string().required(),
   lastName:Joi.string().required(),
-  role:Joi.string().valid("Air Port Manager","Air Line Manager","Staff Manager").optional(),
+  role:Joi.string().valid("Air Port Manager","Air Line Manager","Staff").optional(),
   phone:Joi.string().when("name", {
     is: Joi.exist(),
     then: Joi.string()
