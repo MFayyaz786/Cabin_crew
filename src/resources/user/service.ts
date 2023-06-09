@@ -18,18 +18,18 @@ class UserService {
   }
 
   static async getAll() {
-      const result = await userRepo.find({select:["id","firstName","lastName","email","phone","role"],relations: ['booth']});
+      const result = await userRepo.find({select:["id","firstName","lastName","email","phone","role"],relations: ['booth',"airLine"]});
       return result;
   }
    static async getAirLineManagers() {
       const result = await userRepo.find({where:{role: "Air Line Manager" as UserRole},
       select:["id","firstName","lastName","email","phone","role"],
-      relations: ['booth']});
+      relations: ['booth','airLine']});
       return result;
   }
 
   static async getOne(id: string) {
-      const user = await userRepo.findOne({where:{id:id},select:["id","firstName","lastName","email","phone","role"],relations: ['booth']});
+      const user = await userRepo.findOne({where:{id:id},select:["id","firstName","lastName","email","phone","role"],relations: ['booth','airLine']});
       return user;
   }
 

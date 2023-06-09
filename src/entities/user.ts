@@ -14,6 +14,7 @@ export enum UserRole {
   Staff = 'Staff',
 }
 import Booth from './booth';
+import AirlineType from './airlineType';
 @Entity()
 @Unique(['email', 'phone'])
 class User {
@@ -22,6 +23,9 @@ class User {
   
   @ManyToOne(() =>Booth,{nullable:true,})
   booth: Booth;
+
+  @ManyToOne(() =>AirlineType,{nullable:true,})
+  airLine: AirlineType;
 
   @Column({type:String,nullable:false})
   @IsNotEmpty()
