@@ -5,41 +5,69 @@ import UserService from "./service"
 import  User  from "../../entities/user";
 import catchAsync from "../../utils/catchAsync";
 import AppError from "../../utils/appError";
-
+import validator from "./validator";
+const {registered,updateProfile}=validator
 //* createUser
 const create = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
-  const { error } = userSchema.validate(req.body);
+  const { error } = registered.validate(req.body);
   if (error) {
-    // return res.status(400).json({ error: error.details[0].message });
     return next(new AppError(error.details[0].message,400));
   }
-  const user: User = await UserService.create(req.body);
-  return user ? res.status(201).json(user) : res.status(500).json({ error: "User creation failed" });
+  const user = await UserService.create(req.body);
+  if(user){
+  return res.status(201).send({msg:"Created"})
+   }else{ 
+    return res.status(400).send({ msg: "Failed!" });
+  }
 });
 
 //* getAll
 const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
-  const users= await UserService.getAll(req.query);
+  const users= await UserService.getAll();
   return res.status(200).json(users);
 });
-
+// get air manager list
+const getAirLineManagers = catchAsync(async (req: Request, res: Response):Promise<any> => {
+  const users= await UserService.getAirLineManagers();
+  return res.status(200).json(users);
+});
   //* getOne
   const getOne =catchAsync(async (req: Request, res: Response):Promise<any> => {
     const user = await UserService.getOne(req.params.id);
-    return user ? res.status(200).json(user) : res.status(404).json({ error: "User not found" });
+    if(user){
+    return  res.status(200).send({msg:"User",data:user}) 
+     }
+     else{
+      return res.status(404).send({ msg: "User not found" });
+    }
   });
 
 
 //* update
-const update =catchAsync(async (req: Request, res: Response,next:NextFunction):Promise<any>=> {
-  const user = await UserService.update(req.params.id, req.body,next);
-  return user ? res.status(200).json(user) : res.status(500).json({ error: "User update failed" });
+const update = asyncHandler(async (req:Request, res:Response, next:Function):Promise<any> => {
+  const { error } = updateProfile.validate(req.body);
+  if (error) {
+    return next(new AppError(error.details[0].message,400));
+  }
+    const result = await UserService.update(String(req.params.id),req.body);
+    if (result.affected) {
+       return  res.status(200).send({ msg: "Profile Updated" })
+    } else {
+      return  res.status(400).send({ msg: "Failed!" })
+    }
+   // return next();
 });
-
-//* delete
-const deleteUser=catchAsync(async(req:Request,res:Response,next:Function):Promise<any>=>{
-  const success: boolean = await UserService.delete(req.params.id);
-  return success ? res.status(200).json({ message: "User deleted" }) : res.status(404).json({ error: "User not found" });
+const deleteUser=asyncHandler(async(req:Request,res:Response,next:Function):Promise<any>=>{
+  const result =await UserService.delete(String(req.params.id));
+  if(result.affected===0){
+   return res.status(404).send({msg:"Not Found!"})
+  }
+  if(result){
+   return res.status(200).send({
+      msg:"deleted"
+    })
+  }else{
+ return res.status(400).send({msg:"failed"})
+  }
 });
-
-export default {create,getAll,getOne,update,deleteUser}
+export default {create,getAll,getOne,update,deleteUser,getAirLineManagers}

@@ -8,22 +8,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRole = void 0;
 const typeorm_1 = require("typeorm");
 const class_validator_1 = require("class-validator");
 var UserRole;
 (function (UserRole) {
-    UserRole["super_admin"] = "super_admin";
-    UserRole["admin"] = "admin";
-    UserRole["staff"] = "staff";
+    UserRole["Air_Port_Manager"] = "Air_Port_Manager";
+    UserRole["Air_Line_Manager"] = "Air_Line_Manager";
+    UserRole["Staff"] = "Staff";
 })(UserRole = exports.UserRole || (exports.UserRole = {}));
+const booth_1 = __importDefault(require("./booth"));
 let User = class User {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
     __metadata("design:type", String)
 ], User.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => booth_1.default, { nullable: true, }),
+    __metadata("design:type", booth_1.default)
+], User.prototype, "booth", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: String, nullable: false }),
     (0, class_validator_1.IsNotEmpty)(),

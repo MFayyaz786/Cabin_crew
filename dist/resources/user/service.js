@@ -12,34 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserRole = void 0;
 const user_1 = __importDefault(require("../../entities/user"));
 const typeorm_1 = require("typeorm");
 const userRepo = (0, typeorm_1.getRepository)(user_1.default);
-const appError_1 = __importDefault(require("../../utils/appError"));
-// export  const service=  {
-//   create:async(userData: User) => {
-//     const users =  userRepo.create(userData);
-//     await userRepo.save(users);
-//     return  users;
-//   },
-//   getAll:async ()=>{
-//     const result=await userRepo.find();
-//     return result
-//   },
-//   getOne: async (id: any) => {
-//   const user = await userRepo.findOne({where:{id:id}});
-//   return user;
-//   },
-//   update:async(id:any,userData:User)=>{
-//   const result=await userRepo.update({id},userData);
-//   return result;
-//   },
-//   delete:async(id:any)=>{
-//     const result=await userRepo.delete({id});
-//     console.log("result is",result);
-//     return result
-//   }
-// };
+var UserRole;
+(function (UserRole) {
+    UserRole["Air_Port_Manager"] = "Air_Port_Manager";
+    UserRole["Air_Line_Manager"] = "Air_Line_Manager";
+    UserRole["Staff"] = "Staff";
+})(UserRole = exports.UserRole || (exports.UserRole = {}));
 class UserService {
     static create(userData) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -48,36 +30,37 @@ class UserService {
             return user;
         });
     }
-    static getAll(query) {
+    static getAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield userRepo.find({ where: query });
+            const result = yield userRepo.find({ select: ["id", "firstName", "lastName", "email", "phone", "role"], relations: ['booth'] });
+            return result;
+        });
+    }
+    static getAirLineManagers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield userRepo.find({ where: { role: "Air Line Manager" },
+                select: ["id", "firstName", "lastName", "email", "phone", "role"],
+                relations: ['booth'] });
             return result;
         });
     }
     static getOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield userRepo.findOneBy({ id });
+            const user = yield userRepo.findOne({ where: { id: id }, select: ["id", "firstName", "lastName", "email", "phone", "role"], relations: ['booth'] });
             return user;
         });
     }
-    static update(id, userData, next) {
+    static update(id, userData) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield userRepo.update(id, userData);
-            const updatedUser = yield userRepo.findOneBy({ id });
-            if (!updatedUser) {
-                return next(new appError_1.default("No user found with that ID", 404));
-            }
-            return updatedUser;
+            const result = yield userRepo.update({ id }, userData);
+            console.log("result is", result);
+            return result;
         });
     }
     static delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userToDelete = yield userRepo.findOne({ where: { id } });
-            if (!userToDelete) {
-                return false;
-            }
-            yield userRepo.remove(userToDelete);
-            return true;
+            const result = yield userRepo.delete({ id });
+            return result;
         });
     }
 }
