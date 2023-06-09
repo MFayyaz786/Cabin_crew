@@ -17,9 +17,9 @@ const typeorm_1 = require("typeorm");
 const class_validator_1 = require("class-validator");
 var UserRole;
 (function (UserRole) {
-    UserRole["super_admin"] = "Air Port Manager";
-    UserRole["admin"] = "Air Line Manager";
-    UserRole["staff"] = "Staff";
+    UserRole["Air_Port_Manager"] = "Air_Port_Manager";
+    UserRole["Air_Line_Manager"] = "Air_Line_Manager";
+    UserRole["Staff"] = "Staff";
 })(UserRole = exports.UserRole || (exports.UserRole = {}));
 const booth_1 = __importDefault(require("./booth"));
 let User = class User {

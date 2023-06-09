@@ -12,6 +12,7 @@ getOne: async (id: string) => {
   return user;
 },
 add:async(data:AirlineType)=>{
+  console.log(data)
 const result= AirlineTypeRepo.create(data);
 await AirlineTypeRepo.save(result);
 return result;

@@ -1,37 +1,14 @@
 import { NextFunction } from 'express';
 import User from '../../entities/user';
-import {getConnection,getRepository} from 'typeorm';
+import {getConnection,getRepository,Equal} from 'typeorm';
 const userRepo = getRepository(User);
 import { FindManyOptions  } from 'typeorm';
 import AppError from '../../utils/appError';
-
-// export  const service=  {
-//   create:async(userData: User) => {
-//     const users =  userRepo.create(userData);
-//     await userRepo.save(users);
-//     return  users;
-//   },
-//   getAll:async ()=>{
-//     const result=await userRepo.find();
-//     return result
-//   },
-//   getOne: async (id: any) => {
-//   const user = await userRepo.findOne({where:{id:id}});
-//   return user;
-//   },
-//   update:async(id:any,userData:User)=>{
-//   const result=await userRepo.update({id},userData);
-//   return result;
-//   },
-//   delete:async(id:any)=>{
-//     const result=await userRepo.delete({id});
-//     console.log("result is",result);
-    
-//     return result
-//   }
-
-// };
-
+export enum UserRole {
+  Air_Port_Manager = 'Air_Port_Manager',
+  Air_Line_Manager = 'Air_Line_Manager',
+  Staff = 'Staff',
+}
 class UserService {
 
   static async create(userData: User) {
@@ -40,13 +17,19 @@ class UserService {
       return user;
   }
 
-  static async getAll(query:any) {
-      const result = await userRepo.find({where:query,select:["id","firstName","lastName","email","phone"],relations: ['booth']});
+  static async getAll() {
+      const result = await userRepo.find({select:["id","firstName","lastName","email","phone","role"],relations: ['booth']});
+      return result;
+  }
+   static async getAirLineManagers() {
+      const result = await userRepo.find({where:{role: "Air Line Manager" as UserRole},
+      select:["id","firstName","lastName","email","phone","role"],
+      relations: ['booth']});
       return result;
   }
 
   static async getOne(id: string) {
-      const user = await userRepo.findOne({where:{id:id},select:["id","firstName","lastName","email","phone"],relations: ['booth']});
+      const user = await userRepo.findOne({where:{id:id},select:["id","firstName","lastName","email","phone","role"],relations: ['booth']});
       return user;
   }
 

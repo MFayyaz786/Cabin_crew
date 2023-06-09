@@ -15,6 +15,12 @@ const router_2 = __importDefault(require("./resources/auth/router"));
 const router_3 = __importDefault(require("./resources/airlineType/router"));
 const router_4 = __importDefault(require("./resources/booth/router"));
 const app = (0, express_1.default)();
+const corsOption = {
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization", // specify the allowed headers
+};
+app.use((0, cors_1.default)(corsOption));
 app.set('view engine', 'ejs');
 app.set('views', path_1.default.join(__dirname, 'views'));
 app.use((0, morgan_1.default)('dev'));
@@ -23,7 +29,6 @@ app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 //   // Send an appropriate response for the favicon.ico route
 //   res.sendStatus(204); // No Content
 // });
-app.use((0, cors_1.default)());
 // app.ts
 if (process.env.NODE_ENV === 'development') {
     app.use((0, morgan_1.default)('dev'));

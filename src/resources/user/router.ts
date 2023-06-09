@@ -6,6 +6,7 @@ router
 .route('/')
 .get(controller.getAll)
 .post(controller.create)
+router.get("/airLineManager",controller.getAirLineManagers),
 router
   .route('/:id')
   .get(controller.getOne)

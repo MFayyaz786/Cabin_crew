@@ -10,9 +10,10 @@ router
     .route('/')
     .get(controller_1.default.getAll)
     .post(controller_1.default.create);
-router
-    .route('/:id')
-    .get(controller_1.default.getOne)
-    .patch(controller_1.default.update)
-    .delete(controller_1.default.deleteUser);
+router.get("/airLineManager", controller_1.default.getAirLineManagers),
+    router
+        .route('/:id')
+        .get(controller_1.default.getOne)
+        .patch(controller_1.default.update)
+        .delete(controller_1.default.deleteUser);
 exports.default = router;

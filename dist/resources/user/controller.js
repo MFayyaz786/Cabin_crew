@@ -34,7 +34,12 @@ const create = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, v
 }));
 //* getAll
 const getAll = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield service_1.default.getAll(req.query);
+    const users = yield service_1.default.getAll();
+    return res.status(200).json(users);
+}));
+// get air manager list
+const getAirLineManagers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield service_1.default.getAirLineManagers();
     return res.status(200).json(users);
 }));
 //* getOne
@@ -76,4 +81,4 @@ const deleteUser = (0, express_async_handler_1.default)((req, res, next) => __aw
         return res.status(400).send({ msg: "failed" });
     }
 }));
-exports.default = { create, getAll, getOne, update, deleteUser };
+exports.default = { create, getAll, getOne, update, deleteUser, getAirLineManagers };

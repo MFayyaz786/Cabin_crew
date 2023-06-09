@@ -23,10 +23,14 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
 
 //* getAll
 const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
-  const users= await UserService.getAll(req.query);
+  const users= await UserService.getAll();
   return res.status(200).json(users);
 });
-
+// get air manager list
+const getAirLineManagers = catchAsync(async (req: Request, res: Response):Promise<any> => {
+  const users= await UserService.getAirLineManagers();
+  return res.status(200).json(users);
+});
   //* getOne
   const getOne =catchAsync(async (req: Request, res: Response):Promise<any> => {
     const user = await UserService.getOne(req.params.id);
@@ -66,4 +70,4 @@ const deleteUser=asyncHandler(async(req:Request,res:Response,next:Function):Prom
  return res.status(400).send({msg:"failed"})
   }
 });
-export default {create,getAll,getOne,update,deleteUser}
+export default {create,getAll,getOne,update,deleteUser,getAirLineManagers}
