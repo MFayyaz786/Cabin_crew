@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 const registered = Joi.object({
   firstName: Joi.string().required(),
   lastName:Joi.string().required(),
-  role:Joi.string().required().valid("super_admin","admin","staff"),
+  role:Joi.string().required().valid("Air Port Manager","Air Line Manager","Staff"),
   email: Joi.string()
       .email()
       .required()
@@ -28,7 +28,7 @@ const updateProfile = Joi.object({
   id:Joi.number().required(),
   firstName: Joi.string().required(),
   lastName:Joi.string().required(),
-  role:Joi.string().required().valid("super_admin","admin","staff"),
+  role:Joi.string().required().valid("Air Port Manager","Air Line Manager","Staff"),
   phone:Joi.string().when("name", {
     is: Joi.exist(),
     then: Joi.string()

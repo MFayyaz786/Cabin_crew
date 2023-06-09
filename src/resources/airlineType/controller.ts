@@ -16,7 +16,6 @@ const addNew = asyncHandler(async (req:Request, res:Response, next:Function):Pro
     } else {
       return  res.status(400).send({ msg: "Failed!" })
     }
-   // return next();
 });
 const getAll = asyncHandler(async (req:Request, res:Response, next:Function):Promise<any> => {
     const result = await service.getAll();
@@ -30,7 +29,6 @@ const getOne = asyncHandler(async (req: Request, res: Response, next: Function):
   }else{
   return res.status(404).send({ msg: "Not Found" })
   }
-  //return next();
 })
 const updateAirLine = asyncHandler(async (req: Request, res: Response, next: Function):Promise<any> => {
   const result = await service.update(String(req.body.id),req.body);
@@ -39,6 +37,5 @@ const updateAirLine = asyncHandler(async (req: Request, res: Response, next: Fun
   }else{
   return res.status(404).send({ msg: "Failed!" })
   }
-  //return next();
 })
 export default {addNew,getAll,getOne,updateAirLine}

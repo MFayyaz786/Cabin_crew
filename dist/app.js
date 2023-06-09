@@ -13,6 +13,7 @@ const errorHandler_middleware_1 = __importDefault(require("./middleware/errorHan
 const router_1 = __importDefault(require("./resources/user/router"));
 const router_2 = __importDefault(require("./resources/auth/router"));
 const router_3 = __importDefault(require("./resources/airlineType/router"));
+const router_4 = __importDefault(require("./resources/booth/router"));
 const app = (0, express_1.default)();
 app.set('view engine', 'ejs');
 app.set('views', path_1.default.join(__dirname, 'views'));
@@ -43,9 +44,13 @@ app.use(express_1.default.urlencoded({ extended: false }));
 app.use('/api/v1/auth', router_2.default);
 app.use('/api/v1/users', router_1.default);
 app.use('/api/v1/airline', router_3.default);
+app.use('/api/v1/booth', router_4.default);
 app.get("/", (req, res, next) => {
     res.status(200).send({ msg: "Welcome to AIR_PORT_CABIN_CREW" });
     next();
+});
+app.use("/", (req, res) => {
+    res.status(404).send({ msg: "Route not found" });
 });
 app.use((req, res, next) => {
     console.log(`Route called: ${req.originalUrl}`);
