@@ -22,6 +22,7 @@ var UserRole;
     UserRole["Staff"] = "Staff";
 })(UserRole = exports.UserRole || (exports.UserRole = {}));
 const booth_1 = __importDefault(require("./booth"));
+const airlineType_1 = __importDefault(require("./airlineType"));
 let User = class User {
 };
 __decorate([
@@ -32,6 +33,10 @@ __decorate([
     (0, typeorm_1.ManyToOne)(() => booth_1.default, { nullable: true, }),
     __metadata("design:type", booth_1.default)
 ], User.prototype, "booth", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => airlineType_1.default, { nullable: true, }),
+    __metadata("design:type", airlineType_1.default)
+], User.prototype, "airLine", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: String, nullable: false }),
     (0, class_validator_1.IsNotEmpty)(),

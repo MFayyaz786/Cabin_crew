@@ -26,7 +26,12 @@ const registered = Joi.object({
     booth: Joi.when("role", {
     is: "Staff",
     then: Joi.string().required(),
-    otherwise: Joi.string().allow("").optional(),
+    otherwise: Joi.valid(null),
+    }),
+    airLine: Joi.when("role", {
+    is: "Air Line Manager",
+    then: Joi.string().required(),
+    otherwise: Joi.valid(null),
   }),
 });
 const updateProfile = Joi.object({
@@ -39,6 +44,16 @@ const updateProfile = Joi.object({
       .pattern(/^\+[1-9]\d{1,14}$/)
       .required(),
     otherwise: Joi.string().allow("").optional(),
+  }),
+  booth: Joi.when("role", {
+    is: "Staff",
+    then: Joi.string().required(),
+    otherwise: Joi.valid(null),
+    }),
+  airLine: Joi.when("role", {
+    is: "Air Line Manager",
+    then: Joi.string().required(),
+    otherwise: Joi.valid(null),
   }),
 });
 

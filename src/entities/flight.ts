@@ -25,6 +25,6 @@ export class Flight {
   @Column({type:String,nullable:false,enum:FlightStatus})
   status: FlightStatus;
 
-  @ManyToOne(() =>AirlineType)
-  airline: AirlineType;
+  // @ManyToOne(() =>AirlineType)
+  // airline: AirlineType;
 }
