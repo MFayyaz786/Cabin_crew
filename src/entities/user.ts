@@ -5,18 +5,23 @@ import {
   BaseEntity,
   BeforeInsert,
   Unique,
+  ManyToOne
 } from 'typeorm';
 import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePhone } from 'class-validator';
 export enum UserRole {
-  super_admin = 'super_admin',
-  admin = 'admin',
-  staff = 'staff',
+  super_admin = 'Air Port Manager',
+  admin = 'Air Line Manager',
+  staff = 'Staff',
 }
+import Booth from './booth';
 @Entity()
 @Unique(['email', 'phone'])
 class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+  
+  @ManyToOne(() =>Booth,{nullable:true,})
+  booth: Booth;
 
   @Column({type:String,nullable:false})
   @IsNotEmpty()

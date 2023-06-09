@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-
 @Entity()
 export class AirlineType {
   @PrimaryGeneratedColumn('uuid')
@@ -7,5 +6,6 @@ export class AirlineType {
 
   @Column({ unique: true })
   name: string;
+  
 }
 export default AirlineType

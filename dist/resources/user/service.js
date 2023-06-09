@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = __importDefault(require("../../entities/user"));
 const typeorm_1 = require("typeorm");
 const userRepo = (0, typeorm_1.getRepository)(user_1.default);
-const appError_1 = __importDefault(require("../../utils/appError"));
 // export  const service=  {
 //   create:async(userData: User) => {
 //     const users =  userRepo.create(userData);
@@ -50,34 +49,27 @@ class UserService {
     }
     static getAll(query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield userRepo.find({ where: query });
+            const result = yield userRepo.find({ where: query, select: ["id", "firstName", "lastName", "email", "phone"], relations: ['booth'] });
             return result;
         });
     }
     static getOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield userRepo.findOneBy({ id });
+            const user = yield userRepo.findOne({ where: { id: id }, select: ["id", "firstName", "lastName", "email", "phone"], relations: ['booth'] });
             return user;
         });
     }
-    static update(id, userData, next) {
+    static update(id, userData) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield userRepo.update(id, userData);
-            const updatedUser = yield userRepo.findOneBy({ id });
-            if (!updatedUser) {
-                return next(new appError_1.default("No user found with that ID", 404));
-            }
-            return updatedUser;
+            const result = yield userRepo.update({ id }, userData);
+            console.log("result is", result);
+            return result;
         });
     }
     static delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userToDelete = yield userRepo.findOne({ where: { id } });
-            if (!userToDelete) {
-                return false;
-            }
-            yield userRepo.remove(userToDelete);
-            return true;
+            const result = yield userRepo.delete({ id });
+            return result;
         });
     }
 }

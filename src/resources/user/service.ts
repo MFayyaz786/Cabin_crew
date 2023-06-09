@@ -41,34 +41,28 @@ class UserService {
   }
 
   static async getAll(query:any) {
-      const result = await userRepo.find({where:query});
+      const result = await userRepo.find({where:query,select:["id","firstName","lastName","email","phone"],relations: ['booth']});
       return result;
   }
 
-  static async getOne(id: any) {
-      const user = await userRepo.findOneBy({id});
+  static async getOne(id: string) {
+      const user = await userRepo.findOne({where:{id:id},select:["id","firstName","lastName","email","phone"],relations: ['booth']});
       return user;
   }
 
-  static async update(id: any, userData: User,next:NextFunction) {
-      await userRepo.update(id, userData);
-      const updatedUser = await userRepo.findOneBy({id});
-      if(!updatedUser){
-        return next(new AppError("No user found with that ID",404));
-    }
-      return updatedUser;
-  }
+static async update(id:string,userData:User){
+const result=await userRepo.update({id},userData);
+  console.log("result is",result);
 
-  static async delete(id: any) {
-    const userToDelete = await userRepo.findOne({ where: { id } });
+return result;
+}
 
-    if (!userToDelete) {
-        return false;
-    }
+  static async delete(id:string){
+  const result=await userRepo.delete({id});
+  
+  return result
+}
 
-    await userRepo.remove(userToDelete);
-    return true;
-  }
 }
 
 export default UserService

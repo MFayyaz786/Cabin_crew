@@ -14,6 +14,8 @@ import ErrorHandler from "./middleware/errorHandler.middleware";
 import userRouter from './resources/user/router';
 import authRouter from './resources/auth/router';
 import airlineTypeRouter from "./resources/airlineType/router";
+import boothRouter from "./resources/booth/router";
+
 
 
 const app = express();
@@ -55,11 +57,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/airline', airlineTypeRouter);
-
+app.use('/api/v1/booth', boothRouter);
 app.get("/",(req,res,next)=>{
     res.status(200).send({msg:"Welcome to AIR_PORT_CABIN_CREW"})
     next()
 });
+app.use("/",(req,res)=>{
+  res.status(404).send({msg:"Route not found"})
+})
 app.use((req, res, next) => {
   console.log(`Route called: ${req.originalUrl}`);
   next();
