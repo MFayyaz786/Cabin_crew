@@ -14,6 +14,8 @@ import authRouter from './resources/auth/router';
 import airlineTypeRouter from "./resources/airlineType/router";
 import boothRouter from "./resources/booth/router";
 import flightRouter from "./resources/flight/router";
+import crewRouter from "./resources/crew/router";
+
 
 const app = express();
 const corsOption={
@@ -50,6 +52,8 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/airline', airlineTypeRouter);
 app.use('/api/v1/booth', boothRouter);
 app.use('/api/v1/flight', flightRouter);
+app.use('/api/v1/crew', crewRouter);
+
 
 app.use("/",(req,res)=>{
   res.status(404).send({msg:"Route not found"})
