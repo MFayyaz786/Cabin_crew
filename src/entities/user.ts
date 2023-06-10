@@ -5,7 +5,8 @@ import {
   BaseEntity,
   BeforeInsert,
   Unique,
-  ManyToOne
+  ManyToOne,
+  ManyToMany
 } from 'typeorm';
 import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePhone } from 'class-validator';
 export enum UserRole {
@@ -24,7 +25,7 @@ class User {
   @ManyToOne(() =>Booth,{nullable:true,})
   booth: Booth;
 
-  @ManyToOne(() =>AirlineType,{nullable:true,})
+  @ManyToOne(() =>AirlineType,{nullable:true})
   airLine: AirlineType;
 
   @Column({type:String,nullable:false})
@@ -63,5 +64,11 @@ class User {
 
   @Column({type:String,nullable :true,default:null})
   token:string|null
+  
+  @ManyToOne(() =>User)
+  createdBy: User;
+
+  @ManyToOne(() =>User)
+  updatedBy: User;
 }
 export default User;

@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany,Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne,Unique } from 'typeorm';
+import User from "./user"
 @Entity()
  class AirlineType {
   @PrimaryGeneratedColumn('uuid')
@@ -6,6 +7,11 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany,Unique } from 'typeo
 
   @Column({ unique: true })
   name: string;
-  
+   
+  @ManyToOne(() =>User)
+  createdBy: User;
+
+  @ManyToOne(() =>User,)
+  updatedBy: User;
 }
 export default AirlineType

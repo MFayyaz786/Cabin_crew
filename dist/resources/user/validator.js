@@ -47,13 +47,14 @@ const registered = Joi.object({
     booth: Joi.when("role", {
         is: "Staff",
         then: Joi.string().required(),
-        otherwise: Joi.string().allow("").optional(),
+        otherwise: Joi.valid(null),
     }),
     airLine: Joi.when("role", {
         is: "Air Line Manager",
         then: Joi.string().required(),
-        otherwise: Joi.string().allow("").optional(),
+        otherwise: Joi.valid(null),
     }),
+    //createdBy:Joi.string().required()
 });
 const updateProfile = Joi.object({
     firstName: Joi.string().required(),
@@ -66,5 +67,16 @@ const updateProfile = Joi.object({
             .required(),
         otherwise: Joi.string().allow("").optional(),
     }),
+    booth: Joi.when("role", {
+        is: "Staff",
+        then: Joi.string().required(),
+        otherwise: Joi.valid(null),
+    }),
+    airLine: Joi.when("role", {
+        is: "Air Line Manager",
+        then: Joi.string().required(),
+        otherwise: Joi.valid(null),
+    }),
+    // updatedBy:Joi.string().required()
 });
 exports.default = { registered, updateProfile };

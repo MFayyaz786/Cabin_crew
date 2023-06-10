@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column,ManyToMany, ManyToOne } from 'typeorm';
+import User from './user';
 
 @Entity()
 class Booth {
@@ -13,5 +14,11 @@ class Booth {
   
   @Column({type:String,nullable:true})
   type:string
+
+  @ManyToOne(() =>User)
+  createdBy: User;
+
+  @ManyToMany(() =>User)
+  updatedBy: User;
 }
 export default Booth;

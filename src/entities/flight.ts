@@ -1,16 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import AirlineType from './airlineType';
 export enum FlightStatus {
   in_process = 'in_process',
   not_initiated = 'not_initiated',
   closed = 'closed',
 }
+import User from "./user"
 @Entity()
-export class Flight {
-  @PrimaryGeneratedColumn()
-  id: number;
+ class Flight {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column()
+  @Column({unique:true})
   flightNo: string;
 
   @Column()
@@ -19,12 +20,20 @@ export class Flight {
   @Column()
   origin: string;
 
-  @Column()
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   boardingTime: Date;
 
-  @Column({type:String,nullable:false,enum:FlightStatus})
+  @Column({type:String,nullable:false,enum:FlightStatus,default:'in_process'})
   status: FlightStatus;
 
-  // @ManyToOne(() =>AirlineType)
-  // airline: AirlineType;
+  @ManyToOne(() =>AirlineType)
+  airLine: AirlineType;
+
+  @ManyToOne(() =>User)
+  createdBy: User;
+
+  @ManyToOne(() =>User)
+  updatedBy: User;
 }
+export default Flight
+
