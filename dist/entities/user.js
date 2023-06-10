@@ -85,13 +85,23 @@ __decorate([
     __metadata("design:type", Object)
 ], User.prototype, "token", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => User_1),
+    (0, typeorm_1.ManyToOne)(() => User_1),
     __metadata("design:type", User)
 ], User.prototype, "createdBy", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => User_1),
+    (0, typeorm_1.ManyToOne)(() => User_1),
     __metadata("design:type", User)
 ], User.prototype, "updatedBy", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: () => 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", Date
+    // and this!
+    )
+], User.prototype, "createdDate", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: () => 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", Date)
+], User.prototype, "updatedDate", void 0);
 User = User_1 = __decorate([
     (0, typeorm_1.Entity)(),
     (0, typeorm_1.Unique)(['email', 'phone'])

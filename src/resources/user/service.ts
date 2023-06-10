@@ -4,6 +4,8 @@ import {getConnection,getRepository,Equal} from 'typeorm';
 const userRepo = getRepository(User);
 import { FindManyOptions  } from 'typeorm';
 import AppError from '../../utils/appError';
+import AirlineType from '../../entities/airlineType';
+import { resourceUsage } from 'process';
 export enum UserRole {
   Air_Port_Manager = 'Air_Port_Manager',
   Air_Line_Manager = 'Air_Line_Manager',
@@ -45,7 +47,11 @@ return result;
   
   return result
 }
-
+static async isAssignedAirLine(airLine:any){
+  const result=await userRepo.findOne({where:{airLine:airLine}});
+  console.log(result)
+  return  result
+}
 }
 
 export default UserService

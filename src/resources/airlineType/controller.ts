@@ -4,6 +4,7 @@ import { Request,Response } from "express";
 import validator from "./validator";
 const {addNewSchema,updateSchema}=validator
 import AppError from "../../utils/appError";
+import UserService from "../user/service";
 const addNew = asyncHandler(async (req:Request, res:Response, next:Function):Promise<any> => {
   const {error}= addNewSchema.validate(req.body);
   if(error){
@@ -42,4 +43,22 @@ const updateAirLine = asyncHandler(async (req: Request, res: Response, next: Fun
   return res.status(404).send({ msg: "Failed!" })
   }
 })
-export default {addNew,getAll,getOne,updateAirLine}
+
+const deleteAirLine=asyncHandler(async(req:Request,res:Response,next:Function):Promise<any>=>{
+// const isAssigned=await UserService.isAssignedAirLine(req.params.id)
+// if(isAssigned){
+//   return res.status(400).send({msg:"This air line assigned!"})
+// }
+  const result =await service.delete(String(req.params.id));
+  if(result.affected===0){
+   return res.status(404).send({msg:"Not Found!"})
+  }
+  if(result){
+   return res.status(200).send({
+      msg:"deleted"
+    })
+  }else{
+ return res.status(400).send({msg:"failed"})
+  }
+});
+export default {addNew,getAll,getOne,updateAirLine,deleteAirLine}

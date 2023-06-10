@@ -51,6 +51,9 @@ class Crew{
 
   @Column({nullable:true})
   image:string
+   
+  @Column({ nullable: true, default: false })
+  isVerified: boolean;
 
   @ManyToOne(() =>User)
   createdBy: User;
