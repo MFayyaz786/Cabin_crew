@@ -33,6 +33,7 @@ const registered = Joi.object({
     then: Joi.string().required(),
     otherwise: Joi.valid(null),
   }),
+  createdBy:Joi.string().required()
 });
 const updateProfile = Joi.object({
   firstName: Joi.string().required(),
@@ -55,6 +56,8 @@ const updateProfile = Joi.object({
     then: Joi.string().required(),
     otherwise: Joi.valid(null),
   }),
+    updatedBy:Joi.string().required()
+
 });
 
 export default {registered,updateProfile};

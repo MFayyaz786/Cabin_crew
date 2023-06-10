@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var User_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRole = void 0;
 const typeorm_1 = require("typeorm");
@@ -23,7 +24,7 @@ var UserRole;
 })(UserRole = exports.UserRole || (exports.UserRole = {}));
 const booth_1 = __importDefault(require("./booth"));
 const airlineType_1 = __importDefault(require("./airlineType"));
-let User = class User {
+let User = User_1 = class User {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
@@ -34,7 +35,7 @@ __decorate([
     __metadata("design:type", booth_1.default)
 ], User.prototype, "booth", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => airlineType_1.default, { nullable: true, }),
+    (0, typeorm_1.ManyToOne)(() => airlineType_1.default, { nullable: true }),
     __metadata("design:type", airlineType_1.default)
 ], User.prototype, "airLine", void 0);
 __decorate([
@@ -83,7 +84,15 @@ __decorate([
     (0, typeorm_1.Column)({ type: String, nullable: true, default: null }),
     __metadata("design:type", Object)
 ], User.prototype, "token", void 0);
-User = __decorate([
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => User_1),
+    __metadata("design:type", User)
+], User.prototype, "createdBy", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => User_1),
+    __metadata("design:type", User)
+], User.prototype, "updatedBy", void 0);
+User = User_1 = __decorate([
     (0, typeorm_1.Entity)(),
     (0, typeorm_1.Unique)(['email', 'phone'])
 ], User);

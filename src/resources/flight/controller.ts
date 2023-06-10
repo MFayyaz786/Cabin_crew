@@ -13,23 +13,22 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
   }
   const booth = await service.create(req.body);
   if(booth){
-    return res.status(201).send({msg:"Booth Created",data:booth})
+    return res.status(200).send({msg:"Flight Added",data:booth})
   }else{
-        return res.status(400).send({msg:"Failed!"})
-
+    return res.status(400).send({msg:"Failed!"})
   }
 });
 //* getAll
 const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
   const booths= await service.getAll(req.query);
-  return res.status(200).send({msg:"Booths",data:booths});
+  return res.status(200).send({msg:"Flights",data:booths});
 });
 
   //* getOne
   const getOne =catchAsync(async (req: Request, res: Response):Promise<any> => {
     const booth = await service.getOne(req.params.id);
     if(booth){
-        return res.status(200).send({msg:"Booth",data:booth});
+        return res.status(200).send({msg:"Flight",data:booth});
     }else{
         return res.status(404).send({msg:"Not Found!"});
     }
@@ -44,12 +43,12 @@ const update = asyncHandler(async (req:Request, res:Response, next:Function):Pro
   }
     const result = await service.update(String(req.params.id),req.body);
     if (result.affected) {
-       return  res.status(200).send({ msg: "Booth Updated" })
+       return  res.status(200).send({ msg: "Flight Updated" })
     } else {
       return  res.status(400).send({ msg: "Failed!" })
     }
 });
-const deleteBooth=asyncHandler(async(req:Request,res:Response,next:Function):Promise<any>=>{
+const deleteFlight=asyncHandler(async(req:Request,res:Response,next:Function):Promise<any>=>{
 //const isAssigned=await 
   const result =await service.delete(String(req.params.id));
   if(result.affected===0){
@@ -63,4 +62,4 @@ const deleteBooth=asyncHandler(async(req:Request,res:Response,next:Function):Pro
  return res.status(400).send({msg:"failed"})
   }
 });
-export default {create,getAll,getOne,update,deleteBooth}
+export default {create,getAll,getOne,update,deleteFlight}

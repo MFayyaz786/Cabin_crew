@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler"
 import service from "./service"
 import { Request,Response } from "express";
 import validator from "./validator";
-const {addNewSchema}=validator
+const {addNewSchema,updateSchema}=validator
 import AppError from "../../utils/appError";
 const addNew = asyncHandler(async (req:Request, res:Response, next:Function):Promise<any> => {
   const {error}= addNewSchema.validate(req.body);
@@ -31,6 +31,10 @@ const getOne = asyncHandler(async (req: Request, res: Response, next: Function):
   }
 })
 const updateAirLine = asyncHandler(async (req: Request, res: Response, next: Function):Promise<any> => {
+   const {error}= updateSchema.validate(req.body);
+  if(error){
+    return next(new AppError(error.details[0].message,400));
+  }
   const result = await service.update(String(req.body.id),req.body);
   if(result.affected){
    return res.status(200).send({ msg: "Updated" })
