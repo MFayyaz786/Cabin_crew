@@ -13,7 +13,7 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
   }
   const booth = await service.create(req.body);
   if(booth){
-    return res.status(200).send({msg:"Flight Added",data:booth})
+    return res.status(200).send({msg:"Flight Schedule successfully",data:booth})
   }else{
     return res.status(400).send({msg:"Failed!"})
   }

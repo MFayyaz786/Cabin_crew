@@ -13,5 +13,11 @@ import User from "./user"
 
   @ManyToOne(() =>User,)
   updatedBy: User;
+
+  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  createdDate: Date
+  // and this!
+  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  updatedDate: Date
 }
 export default AirlineType
