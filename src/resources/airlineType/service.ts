@@ -20,6 +20,10 @@ return result;
 update:async(id:string,body:AirlineType)=>{
     const result=await AirlineTypeRepo.update({id},body);
     return result
+},
+delete:async(id:string)=>{
+  const result=await AirlineTypeRepo.delete({id});
+  return result
 }
 }
 export default service

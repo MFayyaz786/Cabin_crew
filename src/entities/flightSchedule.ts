@@ -36,7 +36,10 @@ class FlightSchedule{
   @ManyToOne(()=>Flight)
   flight:Flight
 
-   @ManyToOne(() =>User)
+  @Column({default:true})
+  isSchedule:boolean
+
+  @ManyToOne(() =>User)
   createdBy: User;
 
   @ManyToOne(() =>User)
