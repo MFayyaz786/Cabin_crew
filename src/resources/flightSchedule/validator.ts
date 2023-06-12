@@ -1,11 +1,11 @@
+import { FlightStatus } from '../../entities/flight';
 import * as Joi from 'joi';
 const addNew = Joi.object({
-  flightNo: Joi.string().required(),
-  destination:Joi.string().required(),
-  origin:Joi.string().required(),
- // boardingTime:Joi.date().required(),
-  status:Joi.string().valid('in_process','not_initiated','closed').optional(),
+  scheduleDate: Joi.date().iso().required(),
+  departureDate:Joi.date().iso().required(),
+  arrivalDate:Joi.date().iso().required(),
   airLine:Joi.string().required(),
+  flight:Joi.string().required(),
   createdBy:Joi.string().required()
 });
 const updateFlight = Joi.object({

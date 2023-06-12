@@ -11,24 +11,27 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
   if (error) {
     return next(new AppError(error.details[0].message,400));
   }
-  const booth = await service.create(req.body);
-  if(booth){
-    return res.status(200).send({msg:"Flight Added",data:booth})
+  const flight = await service.create(req.body);
+  if(flight){
+    return res.status(200).send({msg:"Flight Added",data:flight})
   }else{
     return res.status(400).send({msg:"Failed!"})
   }
 });
 //* getAll
 const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
-  const booths= await service.getAll(req.query);
-  return res.status(200).send({msg:"Flights",data:booths});
+  const flights= await service.getAll();
+  return res.status(200).send({msg:"Flights",data:flights});
 });
-
+const getAllByAirLine = catchAsync(async (req: Request, res: Response):Promise<any> => {
+  const flights= await service.getFlightByAirLine(req.params.airLine);
+  return res.status(200).send({msg:"Flights",data:flights});
+});
   //* getOne
   const getOne =catchAsync(async (req: Request, res: Response):Promise<any> => {
-    const booth = await service.getOne(req.params.id);
-    if(booth){
-        return res.status(200).send({msg:"Flight",data:booth});
+    const flight = await service.getOne(req.params.id);
+    if(flight){
+        return res.status(200).send({msg:"Flight",data:flight});
     }else{
         return res.status(404).send({msg:"Not Found!"});
     }
@@ -74,4 +77,4 @@ const deleteFlight=asyncHandler(async(req:Request,res:Response,next:Function):Pr
  return res.status(400).send({msg:"failed"})
   }
 });
-export default {create,getAll,getOne,update,deleteFlight,updateStatus}
+export default {create,getAll,getOne,update,deleteFlight,updateStatus,getAllByAirLine}

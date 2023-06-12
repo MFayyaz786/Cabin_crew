@@ -25,6 +25,12 @@ var UserRole;
 const booth_1 = __importDefault(require("./booth"));
 const airlineType_1 = __importDefault(require("./airlineType"));
 let User = User_1 = class User {
+    updateCreatedDate() {
+        this.createdDate = new Date();
+    }
+    updateUpdatedDate() {
+        this.updatedDate = new Date();
+    }
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
@@ -102,6 +108,18 @@ __decorate([
     (0, typeorm_1.Column)({ default: () => 'CURRENT_TIMESTAMP' }),
     __metadata("design:type", Date)
 ], User.prototype, "updatedDate", void 0);
+__decorate([
+    (0, typeorm_1.BeforeInsert)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], User.prototype, "updateCreatedDate", null);
+__decorate([
+    (0, typeorm_1.BeforeUpdate)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], User.prototype, "updateUpdatedDate", null);
 User = User_1 = __decorate([
     (0, typeorm_1.Entity)(),
     (0, typeorm_1.Unique)(['email', 'phone'])

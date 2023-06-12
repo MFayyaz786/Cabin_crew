@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column,ManyToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column,ManyToMany, ManyToOne } from 'typeorm';
 import User from './user';
 
 @Entity()
@@ -26,5 +26,15 @@ class Booth {
   // and this!
   @Column({default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
+
+  @BeforeInsert()
+  updateCreatedDate() {
+    this.createdDate = new Date();
+  }
+
+  @BeforeUpdate()
+  updateUpdatedDate() {
+    this.updatedDate = new Date();
+  }
 }
 export default Booth;

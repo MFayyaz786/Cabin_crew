@@ -12,6 +12,4 @@ router
   .patch(controller.update)
   .delete(controller.deleteFlight);
 router.patch("/updateStatus/:id",controller.updateStatus)
-
-
 export default router

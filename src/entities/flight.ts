@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, OneToMany, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column,BeforeInsert,BeforeUpdate, ManyToOne, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import AirlineType from './airlineType';
 export enum FlightStatus {
   in_process = 'in_process',
@@ -40,6 +40,17 @@ import User from "./user"
   // and this!
   @Column({default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
+
+  @BeforeInsert()
+  updateCreatedDate() {
+    this.createdDate = new Date();
+  }
+
+  @BeforeUpdate()
+  updateUpdatedDate() {
+    this.updatedDate = new Date();
+  }
+
 }
 export default Flight
 

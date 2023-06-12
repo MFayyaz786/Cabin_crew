@@ -10,31 +10,19 @@ import {
   ManyToMany
 } from 'typeorm';
 import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePhone } from 'class-validator';
-import Flight from './flight';
-import AirlineType from './airlineType';
+import Crew from './crew';
 import User from './user';
+import FlightSchedule from './flightSchedule';
 @Entity()
-class FlightSchedule{
+class scheduleFlightCrew{
   @PrimaryGeneratedColumn('uuid')
   id:string
 
-  @Column()
-  scheduleDate:Date
+  @ManyToOne(()=>Crew)
+  crew:Crew
 
-  @Column({})
-  departureDate:Date
-
-  @Column()
-  arrivalDate:Date
-
-  @ManyToOne(()=>AirlineType)
-  airLine:AirlineType
-
-  @ManyToOne(()=>Flight)
-  flight:Flight
-
-  @Column({default:true})
-  isSchedule:boolean
+  @ManyToOne(()=>FlightSchedule)
+  scheduleFlight:FlightSchedule
 
   @Column({default:false})
   isLand:boolean
@@ -57,9 +45,9 @@ class FlightSchedule{
   }
 
   @BeforeUpdate()
-  updateUpdatedDate() { 
+  updateUpdatedDate() {
     this.updatedDate = new Date();
   }
 
 }
-export default  FlightSchedule
+export default  scheduleFlightCrew

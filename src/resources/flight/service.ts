@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { getRepository,FindManyOptions } from 'typeorm';
 import AirlineType from '../../entities/airlineType';
 import Flight from '../../entities/flight';
 import User from '../../entities/user';
@@ -9,8 +9,16 @@ const  service= {
       await flightRepo.save(user);
      return user;
   },
-  getAll:async(query:any) =>{
- const result = await flightRepo.find({where:query,relations:["createdBy","airLine"]});
+  getAll:async() =>{
+ const result = await flightRepo.find({relations:["createdBy","airLine"]});
+      return result;
+  },
+ getFlightByAirLine:async(airLine:any) =>{
+  const options: FindManyOptions<Flight> = {
+    where: { airLine: { id: airLine } },
+    relations: ["createdBy", "airLine", "updatedBy"]
+  };
+  const result = await flightRepo.find(options);
       return result;
   },
  getOne:async(id: any)=> {

@@ -1,4 +1,5 @@
 import { NextFunction } from 'express';
+import bcrypt from "bcrypt"
 import User from '../../entities/user';
 import {getConnection,getRepository,Equal} from 'typeorm';
 const userRepo = getRepository(User);
@@ -12,8 +13,9 @@ export enum UserRole {
   Staff = 'Staff',
 }
 class UserService {
-
   static async create(userData: User) {
+     const salt = await bcrypt.genSalt(10);
+    userData.password = await bcrypt.hash(userData.password, salt);
       const user = userRepo.create(userData);
       await userRepo.save(user);
       return user;
