@@ -32,7 +32,7 @@ class UserService {
     }
     static getAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield userRepo.find({ select: ["id", "firstName", "lastName", "email", "phone", "role"], relations: ['booth'] });
+            const result = yield userRepo.find({ select: ["id", "firstName", "lastName", "email", "phone", "role"], relations: ['booth', "airLine"] });
             return result;
         });
     }
@@ -40,13 +40,13 @@ class UserService {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield userRepo.find({ where: { role: "Air Line Manager" },
                 select: ["id", "firstName", "lastName", "email", "phone", "role"],
-                relations: ['booth'] });
+                relations: ['booth', 'airLine'] });
             return result;
         });
     }
     static getOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield userRepo.findOne({ where: { id: id }, select: ["id", "firstName", "lastName", "email", "phone", "role"], relations: ['booth'] });
+            const user = yield userRepo.findOne({ where: { id: id }, select: ["id", "firstName", "lastName", "email", "phone", "role"], relations: ['booth', 'airLine'] });
             return user;
         });
     }
@@ -60,6 +60,13 @@ class UserService {
     static delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield userRepo.delete({ id });
+            return result;
+        });
+    }
+    static isAssignedAirLine(airLine) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield userRepo.findOne({ where: { airLine: airLine } });
+            console.log(result);
             return result;
         });
     }

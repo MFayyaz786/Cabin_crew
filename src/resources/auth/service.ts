@@ -13,12 +13,13 @@ export  const service=  {
   create:async(userData: User) => {
     const salt = await bcrypt.genSalt(10);
     userData.password = await bcrypt.hash(userData.password, salt);
+    console.log("userdata",userData)
     const users =  userRepo.create(userData);
     await userRepo.save(users);
     return  users;
   },
    login: async (email:string) => {
-    let user = await userRepo.findOne({where:{ email },select:["phone","id","role","firstName","lastName","password"]});
+    let user = await userRepo.findOne({where:{ email },select:["phone","id","role","firstName","lastName","password"],relations:['airLine']});
     if (user) {
       const uuid = uuidv4();
       console.log("uuid",uuid)

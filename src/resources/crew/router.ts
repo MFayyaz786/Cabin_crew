@@ -10,8 +10,6 @@ router
   .route('/:id')
   .get(controller.getOne)
   .patch(controller.update)
-  .delete(controller.deleteBooth);
-
-
-
+  .delete(controller.deleteCrew);
+router.get("/airLine/:airLine",controller.getCrewsByAirLine)  
 export default router

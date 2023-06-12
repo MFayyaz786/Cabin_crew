@@ -4,8 +4,10 @@ import {
   Column,
   BaseEntity,
   BeforeInsert,
+  BeforeUpdate,
   Unique,
-  ManyToOne
+  ManyToOne,
+  ManyToMany
 } from 'typeorm';
 import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePhone } from 'class-validator';
 export enum UserRole {
@@ -14,6 +16,7 @@ export enum UserRole {
   Staff = 'Staff',
 }
 import Booth from './booth';
+import AirlineType from './airlineType';
 @Entity()
 @Unique(['email', 'phone'])
 class User {
@@ -22,6 +25,9 @@ class User {
   
   @ManyToOne(() =>Booth,{nullable:true,})
   booth: Booth;
+
+  @ManyToOne(() =>AirlineType,{nullable:true})
+  airLine: AirlineType;
 
   @Column({type:String,nullable:false})
   @IsNotEmpty()
@@ -59,5 +65,28 @@ class User {
 
   @Column({type:String,nullable :true,default:null})
   token:string|null
+  
+  @ManyToOne(() =>User)
+  createdBy: User;
+
+  @ManyToOne(() =>User)
+  updatedBy: User;
+
+  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  createdDate: Date
+  // and this!
+  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  updatedDate: Date
+
+  @BeforeInsert()
+  updateCreatedDate() {
+    this.createdDate = new Date();
+  }
+
+  @BeforeUpdate()
+  updateUpdatedDate() {
+    this.updatedDate = new Date();
+  }
+
 }
 export default User;
