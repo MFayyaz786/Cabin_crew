@@ -13,6 +13,8 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
   if (error) {
     return next(new AppError(error.details[0].message,400));
   }
+  console.log(req.body);
+  
   const user = await UserService.create(req.body);
   if(user){
   return res.status(201).send({msg:"Created"})

@@ -63,5 +63,12 @@ class UserService {
             return result;
         });
     }
+    static isAssignedAirLine(airLine) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield userRepo.findOne({ where: { airLine: airLine } });
+            console.log(result);
+            return result;
+        });
+    }
 }
 exports.default = UserService;

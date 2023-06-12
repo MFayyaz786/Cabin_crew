@@ -4,6 +4,7 @@ import {
   Column,
   BaseEntity,
   BeforeInsert,
+  BeforeUpdate,
   Unique,
   ManyToOne,
   ManyToMany
@@ -76,5 +77,16 @@ class User {
   // and this!
   @Column({default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
+
+  @BeforeInsert()
+  updateCreatedDate() {
+    this.createdDate = new Date();
+  }
+
+  @BeforeUpdate()
+  updateUpdatedDate() {
+    this.updatedDate = new Date();
+  }
+
 }
 export default User;

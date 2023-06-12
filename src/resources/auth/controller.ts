@@ -18,6 +18,7 @@ const create = asyncHandler(async (req:Request, res:Response, next:Function):Pro
   if(error){
     return next(new AppError(error.details[0].message,400));
   }
+  console.log(req.body);
     const result = await service.create(req.body);
     if (result) {
       const uuid = uuidv4();

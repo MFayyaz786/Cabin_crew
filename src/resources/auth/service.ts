@@ -13,6 +13,7 @@ export  const service=  {
   create:async(userData: User) => {
     const salt = await bcrypt.genSalt(10);
     userData.password = await bcrypt.hash(userData.password, salt);
+    console.log("userdata",userData)
     const users =  userRepo.create(userData);
     await userRepo.save(users);
     return  users;
