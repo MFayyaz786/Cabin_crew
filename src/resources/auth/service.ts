@@ -19,7 +19,7 @@ export  const service=  {
     return  users;
   },
    login: async (email:string) => {
-    let user = await userRepo.findOne({where:{ email },select:["phone","id","role","firstName","lastName","password"]});
+    let user = await userRepo.findOne({where:{ email },select:["phone","id","role","firstName","lastName","password"],relations:['airLine']});
     if (user) {
       const uuid = uuidv4();
       console.log("uuid",uuid)

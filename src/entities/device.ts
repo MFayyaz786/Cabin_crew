@@ -10,7 +10,7 @@ import Booth from './booth';
   @Column({ unique: true,nullable:false })
   deviceIp: string;
    
-  @Column({nullable:false})
+  @Column({nullable:false,unique:true})
   port:string
 
   @Column()
@@ -19,11 +19,11 @@ import Booth from './booth';
   @Column()
   password:string
 
-  @Column()
-  airLine:string
+//   @ManyToOne(()=>AirlineType)
+//   airLine:AirlineType
 
-  @Column()
-  booth:String
+  @ManyToOne(()=>Booth)
+  booth:Booth
 
   @Column({default:true})
   isRegisterDevice:boolean
@@ -36,7 +36,7 @@ import Booth from './booth';
 
   @Column({default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date
-  // and this!
+
   @Column({default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
 
