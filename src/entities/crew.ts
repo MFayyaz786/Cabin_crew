@@ -56,6 +56,9 @@ class Crew{
   @Column({ nullable: true, default: false })
   isVerified: boolean;
 
+  @Column({  default: false })
+  onDuty: boolean;
+
   @ManyToOne(() =>User)
   createdBy: User;
 

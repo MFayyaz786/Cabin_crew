@@ -21,10 +21,12 @@ const  service= {
   const result = await flightRepo.find(options);
       return result;
   },
- getOne:async(id: any)=> {
+ 
+  getOne:async(id: any)=> {
       const user = await flightRepo.findOne({where:{id:id},relations:["createdBy","airLine"]});
       return user;
   },
+
 update:async(id:string,userData:Flight)=>{
 const result=await flightRepo.update({id},userData);
   console.log("result is",result);

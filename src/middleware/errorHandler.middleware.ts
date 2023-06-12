@@ -2,12 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import { upperCaseFirst } from 'upper-case-first';
 import AppError from '../utils/appError'
 import { QueryFailedError } from 'typeorm';
-
-
+import { EntityMetadataNotFoundError } from 'typeorm/error/EntityMetadataNotFoundError';
 export default async (err: any, req: Request, res: Response, next: NextFunction) => {
-
   console.log('ERR CAUGHT IN GLOBAL MIDDLEWARE'.red.bold);
-
   console.error('ERROR =>',err);
   console.error('ERROR MESSAGE =>'.red.bold,err.message);
   console.error('ERROR NAME =>'.red.bold,err.name);
@@ -76,8 +73,15 @@ export default async (err: any, req: Request, res: Response, next: NextFunction)
   const handleError = (err: any):AppError => {
     return new AppError(err.message, 400, true);
   };
-  
-  if (err.code === '23505') err= handleDuplicateFieldsDB(err);
+
+   if (err instanceof EntityMetadataNotFoundError) {
+    // Handle the EntityMetadataNotFoundError
+    console.error('Metadata not found for entity:', err.message);
+    // Create an appropriate AppError instance or perform any necessary actions
+    err = new AppError('Entity metadata not found', 400, true);
+  } 
+  //else if (err instanceof QueryFailedError) {
+  else if (err.code === '23505') err= handleDuplicateFieldsDB(err);
   else if (err.code==='23503') err= invalidForeignKey(err)
   else if (err.code ==='23502') err= checkNull(err)
   else if (err.code==='22P02') err= invalidInput(err)

@@ -24,6 +24,7 @@ class UserService {
   static async getAll() {
       const result = await userRepo.find({select:["id","firstName","lastName","email","phone","role"],relations: ['booth',"airLine"]});
       return result;
+      
   }
    static async getAirLineManagers() {
       const result = await userRepo.find({where:{role: "Air Line Manager" as UserRole},
