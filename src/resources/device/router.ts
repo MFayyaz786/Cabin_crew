@@ -5,7 +5,7 @@ const router=express.Router();
 router
 .route('/')
 .get(controller.getAll)
-.post(controller.create)
+.post(controller.addNewDevice)
 router
   .route('/:id')
   .get(controller.getOne)

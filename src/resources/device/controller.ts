@@ -6,17 +6,16 @@ import AppError from "../../utils/appError";
 import validator from "./validator";
 const {addNew,updateDevice}=validator
 //* createUser
-const create = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
+const addNewDevice = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
   const { error } = addNew.validate(req.body);
   if (error) {
     return next(new AppError(error.details[0].message,400));
   }
   const booth = await service.create(req.body);
   if(booth){
-    return res.status(201).send({msg:"Device Created",data:booth})
+    return res.status(201).send({msg:"Device Added",data:booth})
   }else{
-        return res.status(400).send({msg:"Failed!"})
-
+    return res.status(400).send({msg:"Failed!"})
   }
 });
 //* getAll
@@ -24,8 +23,7 @@ const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
   const booths= await service.getAll(req.query);
   return res.status(200).send({msg:"Devices",data:booths});
 });
-
-  //* getOne
+ //* getOne
   const getOne =catchAsync(async (req: Request, res: Response):Promise<any> => {
     const booth = await service.getOne(req.params.id);
     if(booth){
@@ -63,4 +61,4 @@ const deleteDevice=asyncHandler(async(req:Request,res:Response,next:Function):Pr
  return res.status(400).send({msg:"failed"})
   }
 });
-export default {create,getAll,getOne,update,deleteDevice}
+export default {addNewDevice,getAll,getOne,update,deleteDevice}

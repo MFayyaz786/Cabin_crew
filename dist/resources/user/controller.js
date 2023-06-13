@@ -24,6 +24,7 @@ const create = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, v
     if (error) {
         return next(new appError_1.default(error.details[0].message, 400));
     }
+    console.log(req.body);
     const user = yield service_1.default.create(req.body);
     if (user) {
         return res.status(201).send({ msg: "Created" });
