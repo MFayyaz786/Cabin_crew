@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRole = void 0;
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_1 = __importDefault(require("../../entities/user"));
 const typeorm_1 = require("typeorm");
 const userRepo = (0, typeorm_1.getRepository)(user_1.default);
@@ -25,6 +26,8 @@ var UserRole;
 class UserService {
     static create(userData) {
         return __awaiter(this, void 0, void 0, function* () {
+            const salt = yield bcrypt_1.default.genSalt(10);
+            userData.password = yield bcrypt_1.default.hash(userData.password, salt);
             const user = userRepo.create(userData);
             yield userRepo.save(user);
             return user;

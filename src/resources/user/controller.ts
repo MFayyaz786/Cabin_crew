@@ -28,6 +28,7 @@ const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
   const users= await UserService.getAll();
   return res.status(200).json(users);
 });
+
 // get air manager list
 const getAirLineManagers = catchAsync(async (req: Request, res: Response):Promise<any> => {
   const users= await UserService.getAirLineManagers();

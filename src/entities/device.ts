@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column, ManyToOne,Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column, ManyToOne,Unique,JoinColumn } from 'typeorm';
 import User from "./user"
 import AirlineType from './airlineType';
 import Booth from './booth';
 @Entity()
- class Device {
+ class Devices {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -22,8 +22,12 @@ import Booth from './booth';
 //   @ManyToOne(()=>AirlineType)
 //   airLine:AirlineType
 
-  @ManyToOne(()=>Booth)
-  booth:Booth
+  // @ManyToOne(()=>Booth)
+  // booth:Booth
+
+  @ManyToOne(() => Booth, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'booth_id' })
+  booth: Booth;
 
   @Column({default:true})
   isRegisterDevice:boolean
@@ -50,4 +54,4 @@ import Booth from './booth';
     this.updatedDate = new Date();
   }
 }
-export default Device
+export default Devices
