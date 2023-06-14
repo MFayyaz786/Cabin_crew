@@ -53,6 +53,9 @@ class Crew{
   @Column({nullable:true})
   image:string
 
+  @Column({nullable:true})
+  cartNo:number
+
   @Column({nullable:true,default:'comments'})
   comments:string
    

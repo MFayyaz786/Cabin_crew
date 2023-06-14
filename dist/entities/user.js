@@ -80,15 +80,15 @@ __decorate([
 ], User.prototype, "phone", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: Number, nullable: true, default: null }),
-    __metadata("design:type", Object)
+    __metadata("design:type", Number)
 ], User.prototype, "otp", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: Date, default: null, nullable: true }),
-    __metadata("design:type", Object)
+    __metadata("design:type", Date)
 ], User.prototype, "otpExpire", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: String, nullable: true, default: null }),
-    __metadata("design:type", Object)
+    __metadata("design:type", String)
 ], User.prototype, "token", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => User_1),
