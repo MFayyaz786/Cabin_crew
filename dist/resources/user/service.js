@@ -24,7 +24,7 @@ var UserRole;
     UserRole["Air_Port_Manager"] = "Air_Port_Manager";
     UserRole["Air_Line_Manager"] = "Air_Line_Manager";
     UserRole["Staff"] = "Staff";
-})(UserRole = exports.UserRole || (exports.UserRole = {}));
+})(UserRole || (exports.UserRole = UserRole = {}));
 class UserService {
     static create(userData) {
         return __awaiter(this, void 0, void 0, function* () {
