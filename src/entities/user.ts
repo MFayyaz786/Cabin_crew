@@ -72,10 +72,10 @@ class User {
   @ManyToOne(() =>User)
   updatedBy: User;
 
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date
   // and this!
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
 
   @BeforeInsert()

@@ -7,16 +7,16 @@ import Booth from './booth';
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true,nullable:false })
+  @Column({ type:String,unique: true,nullable:false })
   deviceIp: string;
    
-  @Column({nullable:false,unique:true})
+  @Column({type:String,nullable:false,unique:true})
   port:string
 
-  @Column()
+  @Column({type:String,})
   userName:string
 
-  @Column()
+  @Column({type:String,})
   password:string
 
 //   @ManyToOne(()=>AirlineType)
@@ -29,7 +29,7 @@ import Booth from './booth';
   @JoinColumn({ name: 'booth_id' })
   booth: Booth;
 
-  @Column({default:true})
+  @Column({type:Boolean,default:true})
   isRegisterDevice:boolean
 
   @ManyToOne(() =>User)
@@ -38,10 +38,10 @@ import Booth from './booth';
   @ManyToOne(() =>User,)
   updatedBy: User;
 
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date
 
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
 
   @BeforeInsert()

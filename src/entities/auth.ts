@@ -4,10 +4,10 @@ export class Auth{
   @PrimaryGeneratedColumn("uuid")
   id:string
 
-  @Column()
+  @Column({type:String})
   userId:string
 
-  @Column()
+  @Column({type:String})
   uuid:string
 }
 export default Auth

@@ -11,16 +11,16 @@ import User from "./user"
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({unique:true})
+  @Column({type:String,unique:true})
   flightNo: string;
 
-  @Column()
+  @Column({type:String,})
   destination: string;
 
-  @Column()
+  @Column({type:String,})
   origin: string;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({type:Date, default: () => 'CURRENT_TIMESTAMP' })
   boardingTime: Date;
 
   @Column({type:String,nullable:false,enum:FlightStatus,default:'in_process'})
@@ -35,10 +35,10 @@ import User from "./user"
   @ManyToOne(() =>User)
   updatedBy: User;
 
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date
   // and this!
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
 
   @BeforeInsert()

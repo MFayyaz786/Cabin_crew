@@ -18,13 +18,13 @@ class FlightSchedule{
   @PrimaryGeneratedColumn('uuid')
   id:string
 
-  @Column()
+  @Column({type:Date})
   scheduleDate:Date
 
-  @Column({})
+  @Column({type:Date})
   departureDate:Date
 
-  @Column()
+  @Column({type:Date})
   arrivalDate:Date
 
   @ManyToOne(()=>AirlineType)
@@ -33,10 +33,10 @@ class FlightSchedule{
   @ManyToOne(()=>Flight)
   flight:Flight
 
-  @Column({default:true})
+  @Column({type:Boolean,default:true})
   isSchedule:boolean
 
-  @Column({default:false})
+  @Column({type:Boolean,default:false})
   isLand:boolean
 
   @ManyToOne(() =>User)
@@ -45,10 +45,10 @@ class FlightSchedule{
   @ManyToOne(() =>User)
   updatedBy: User;
 
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date
   // and this!
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
 
   @BeforeInsert()

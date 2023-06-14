@@ -24,7 +24,7 @@ class scheduleFlightCrew{
   @ManyToOne(()=>FlightSchedule)
   scheduleFlight:FlightSchedule
 
-  @Column({default:false})
+  @Column({type:Boolean,default:false})
   isLand:boolean
 
   @ManyToOne(() =>User)
@@ -33,10 +33,10 @@ class scheduleFlightCrew{
   @ManyToOne(() =>User)
   updatedBy: User;
 
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date
   // and this!
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
 
   @BeforeInsert()

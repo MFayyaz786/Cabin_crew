@@ -17,7 +17,7 @@ class Crew{
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({unique:true,nullable:false})
+  @Column({type:Number,unique:true,nullable:false})
   @IsNumberString()
   @Length(32)
   employId:number
@@ -29,16 +29,16 @@ class Crew{
   @IsNotEmpty()
   name: string;
   
-  @Column({nullable:false})
+  @Column({type:String,nullable:false})
   gender:string
 
-  @Column({nullable:true})
+  @Column({type:String,nullable:true})
   destination:string
 
-  @Column({nullable:true})
+  @Column({type:String,nullable:true})
   designation:string
 
-  @Column({nullable:false,unique:true})
+  @Column({type:String,nullable:false,unique:true})
   uniqueId:string
 
   @Column({type:String,nullable:false})
@@ -46,27 +46,27 @@ class Crew{
   @IsMobilePhone("en-US", {}, { message: "Please enter a valid phone number" })
   phone:string;
 
-  @Column({nullable:true})
+  @Column({type:String,nullable:true})
   deviceIp:string
 
-  @Column({nullable:true})
+  @Column({type:String,nullable:true})
   fingerPrint:string
 
-  @Column({nullable:true})
+  @Column({type:String,nullable:true})
   image:string
 
-  @Column({nullable:true})
+  @Column({type:Number,nullable:true})
    @IsNumberString()
   @Length(32)
   cardNo:number
 
-  @Column({nullable:true,default:'comments'})
+  @Column({type:String,nullable:true,default:'comments'})
   comments:string
    
-  @Column({ nullable: true, default: false })
+  @Column({type:Boolean, nullable: true, default: false })
   isVerified: boolean;
 
-  @Column({  default: false })
+  @Column({type:Boolean,  default: false })
   onDuty: boolean;
 
   @ManyToOne(() =>User)
@@ -75,10 +75,10 @@ class Crew{
   @ManyToOne(() =>User)
   updatedBy: User;
 
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date
   // and this!
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
 
   @BeforeInsert()
