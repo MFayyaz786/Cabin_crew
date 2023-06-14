@@ -15,6 +15,9 @@ class Booth {
   @Column({type:String,nullable:true})
   type:string
 
+  @Column({default:false})
+  isAssigned:boolean
+
   @ManyToOne(() =>User)
   createdBy: User;
 

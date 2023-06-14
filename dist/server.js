@@ -19,6 +19,8 @@ const router_3 = __importDefault(require("./resources/airlineType/router"));
 const router_4 = __importDefault(require("./resources/booth/router"));
 const router_5 = __importDefault(require("./resources/flight/router"));
 const router_6 = __importDefault(require("./resources/crew/router"));
+const router_7 = __importDefault(require("./resources/flightSchedule/router"));
+const router_8 = __importDefault(require("./resources/device/router"));
 const app = (0, express_1.default)();
 const corsOption = {
     origin: "*", // or specify the allowed origins
@@ -55,6 +57,8 @@ app.use('/api/v1/airline', router_3.default);
 app.use('/api/v1/booth', router_4.default);
 app.use('/api/v1/flight', router_5.default);
 app.use('/api/v1/crew', router_6.default);
+app.use('/api/v1/flightSchedule', router_7.default);
+app.use('/api/v1/device', router_8.default);
 app.use("/", (req, res) => {
     res.status(404).send({ msg: "Route not found" });
 });

@@ -11,6 +11,8 @@ router
   .get(controller.getOne)
   .patch(controller.update)
   .delete(controller.deleteBooth);
+  router.get("/assigned",controller.getAssigned)
+
 
 
 

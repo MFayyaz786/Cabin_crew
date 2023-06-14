@@ -21,10 +21,16 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
 });
 //* getAll
 const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
-  const booths= await service.getAll(req.query);
+  const booths= await service.getAll();
   return res.status(200).send({msg:"Booths",data:booths});
 });
 
+//* getAll
+const getAssigned = catchAsync(async (req: Request, res: Response):Promise<any> => {
+      console.log("assigned")
+  const booths= await service.getAssignedAll();
+  return res.status(200).json(booths);
+});
   //* getOne
   const getOne =catchAsync(async (req: Request, res: Response):Promise<any> => {
     const booth = await service.getOne(req.params.id);
@@ -63,4 +69,4 @@ const deleteBooth=asyncHandler(async(req:Request,res:Response,next:Function):Pro
  return res.status(400).send({msg:"failed"})
   }
 });
-export default {create,getAll,getOne,update,deleteBooth}
+export default {create,getAll,getOne,update,deleteBooth,getAssigned}

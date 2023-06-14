@@ -21,7 +21,7 @@ var UserRole;
     UserRole["Air_Port_Manager"] = "Air_Port_Manager";
     UserRole["Air_Line_Manager"] = "Air_Line_Manager";
     UserRole["Staff"] = "Staff";
-})(UserRole = exports.UserRole || (exports.UserRole = {}));
+})(UserRole || (exports.UserRole = UserRole = {}));
 const booth_1 = __importDefault(require("./booth"));
 const airlineType_1 = __importDefault(require("./airlineType"));
 let User = User_1 = class User {
