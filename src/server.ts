@@ -67,6 +67,7 @@ app.listen(port,()=>{
     console.log(colors.yellow.bold(`Current Environment : ${process.env.NODE_ENV}`));
     console.log(colors.yellow.bold(`--------------------------------------------------------`));
 })
+//"start": "npm run build && pm2 start ./dist/server.js --name cabin_crew",
 
 
 
