@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon ./src/server.ts",
     "build": "tsc -p .",
-    "prod": "node ./dist/server.js",
-    "typeorm": "typeorm "
+    "start": "node ./dist/server.js",
+    "typeorm": "typeorm"
   },
   "keywords": [],
   "author": "",

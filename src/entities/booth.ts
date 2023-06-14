@@ -15,7 +15,7 @@ class Booth {
   @Column({type:String,nullable:true})
   type:string
 
-  @Column({type:Boolean,default:false})
+  @Column({default:false})
   isAssigned:boolean
 
   @ManyToOne(() =>User)

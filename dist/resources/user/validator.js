@@ -59,7 +59,7 @@ const registered = Joi.object({
 const updateProfile = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
-    role: Joi.string().valid("Air Port Manager", "Air Line Manager", "Staff").optional(),
+    // role:Joi.string().valid("Air Port Manager","Air Line Manager","Staff").optional(),
     phone: Joi.string().when("name", {
         is: Joi.exist(),
         then: Joi.string()
@@ -67,16 +67,16 @@ const updateProfile = Joi.object({
             .required(),
         otherwise: Joi.string().allow("").optional(),
     }),
-    booth: Joi.when("role", {
-        is: "Staff",
-        then: Joi.string().required(),
-        otherwise: Joi.valid(null),
-    }),
-    airLine: Joi.when("role", {
-        is: "Air Line Manager",
-        then: Joi.string().required(),
-        otherwise: Joi.valid(null),
-    }),
-    updatedBy: Joi.string().required()
+    //   booth: Joi.when("role", {
+    //     is: "Staff",
+    //     then: Joi.string().required(),
+    //     otherwise: Joi.valid(null),
+    //     }),
+    //   airLine: Joi.when("role", {
+    //     is: "Air Line Manager",
+    //     then: Joi.string().required(),
+    //     otherwise: Joi.valid(null),
+    //   }),
+    //     updatedBy:Joi.string().required()
 });
 exports.default = { registered, updateProfile };

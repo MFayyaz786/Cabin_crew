@@ -27,13 +27,11 @@ delete:async(id:string)=>{
 
 
 getAssignedAll:async()=> {
-  // const booths=await boothRepo.findBy({isAssigned:true});
+   //const booths=await boothRepo.find({isAssigned:true});
   // console.log(booths)
   const result = await boothRepo
-    .createQueryBuilder('Booth')
-    .where('booth.location = :location', { location: 'entrance' })
-    .getMany();
-
+    .createQueryBuilder('booth')
+    .where('booth_isAssigned = :isAssigned', { isAssigned:false })
   return result;
 }
 }
