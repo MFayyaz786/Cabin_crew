@@ -4,7 +4,7 @@ import service from "./service"
 import catchAsync from "../../utils/catchAsync";
 import AppError from "../../utils/appError";
 import validator from "./validator";
-const {addNew,updateCrew}=validator
+const {addNew,updateCrew,registerThumb}=validator
 //* createUser
 const create = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
   const { error } = addNew.validate(req.body);
@@ -14,6 +14,19 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
   const booth = await service.create(req.body);
   if(booth){
     return res.status(200).send({msg:"Crew Added",data:booth})
+  }else{
+    return res.status(400).send({msg:"Failed!"})
+  }
+});
+//register crew thumb and face 
+const registerCrewThumb = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
+  const { error } = registerThumb.validate(req.body);
+  if (error) {
+    return next(new AppError(error.details[0].message,400));
+  }
+  const booth = await service.registerThumb(req.body);
+  if(booth){
+    return res.status(200).send({msg:"Crew thumb updated",data:booth})
   }else{
     return res.status(400).send({msg:"Failed!"})
   }
@@ -28,7 +41,6 @@ const getCrewsByAirLine = catchAsync(async (req: Request, res: Response):Promise
   const booths= await service.getCrewsByAirLine(req.params.airLine);
   return res.status(200).send({msg:"Crew List",data:booths});
 });
-
   //* getOne
   const getOne =catchAsync(async (req: Request, res: Response):Promise<any> => {
     const booth = await service.getOne(req.params.id);
@@ -67,4 +79,4 @@ const deleteCrew=asyncHandler(async(req:Request,res:Response,next:Function):Prom
  return res.status(400).send({msg:"failed"})
   }
 });
-export default {create,getAll,getOne,update,deleteCrew,getCrewsByAirLine}
+export default {create,getAll,getOne,update,deleteCrew,getCrewsByAirLine,registerCrewThumb}

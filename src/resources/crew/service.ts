@@ -90,6 +90,10 @@ update:async(id:string,crewData:Crew)=>{
 const result=await crewRepo.update({id},crewData);
 return result;
 },
+registerThumb:async(crewData:Crew)=>{
+const result=await crewRepo.update({employId:crewData.employId},crewData);
+return result;
+},
 delete:async(id:string)=>{
   const result=await crewRepo.delete({id});
   return result

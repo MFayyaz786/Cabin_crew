@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { JoinColumn } from 'typeorm';
 const addNew = Joi.object({
-  employId: Joi.string().required(),
+  employId: Joi.number().integer().required(),
   airLine:Joi.string().required(),
   name:Joi.string().required(),
   gender:Joi.string().valid('male','female'),
@@ -16,6 +16,7 @@ const addNew = Joi.object({
         "string.pattern.base":
         "please enter contact with following formate +923xxxxxxxxx",
       }),
+  cardNo:Joi.number().integer().required(),
   createdBy:Joi.string().required()     
 });
 const updateCrew = Joi.object({
@@ -32,6 +33,11 @@ const updateCrew = Joi.object({
   image:Joi.string().optional(),    
   updatedBy:Joi.string().required()     
 });
+const registerThumb = Joi.object({
+  employId:Joi.number().required(),
+  thumb:Joi.string().required(),   
+  cardNo:Joi.number().required(),
+});
 
 
-export default {addNew,updateCrew};
+export default {addNew,updateCrew,registerThumb};

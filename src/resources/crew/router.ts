@@ -6,6 +6,7 @@ router
 .route('/')
 .get(controller.getAll)
 .post(controller.create)
+router.post("/registerThumb",controller.registerCrewThumb)
 router
   .route('/:id')
   .get(controller.getOne)

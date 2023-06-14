@@ -9,7 +9,7 @@ import {
   ManyToOne,
   ManyToMany
 } from 'typeorm';
-import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePhone } from 'class-validator';
+import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber,IsNumberString, Length ,Matches,IsMobilePhone } from 'class-validator';
 import AirlineType from './airlineType';
 import User from './user';
 @Entity()
@@ -18,7 +18,9 @@ class Crew{
   id: string;
 
   @Column({unique:true,nullable:false})
-  employId:string
+  @IsNumberString()
+  @Length(32)
+  employId:number
 
   @ManyToOne(() =>AirlineType,{nullable:true})
   airLine: AirlineType;
@@ -54,7 +56,9 @@ class Crew{
   image:string
 
   @Column({nullable:true})
-  cartNo:number
+   @IsNumberString()
+  @Length(32)
+  cardNo:number
 
   @Column({nullable:true,default:'comments'})
   comments:string

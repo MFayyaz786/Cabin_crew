@@ -1,10 +1,10 @@
 {
-  "name": "airport_facilitate_system",
+  "name": "airport_cabin_crew",
   "version": "1.0.0",
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "nodemon ./src/server.ts",
+    "dev":"nodemon ./src/server.ts",
     "build": "tsc -p .",
     "start":"nodemon ./dist/server.js",
     "typeorm": "typeorm"
