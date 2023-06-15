@@ -35,9 +35,12 @@ const updateCrew = Joi.object({
 });
 const registerThumb = Joi.object({
   employId:Joi.number().required(),
-  thumb:Joi.string().required(),   
+  thumbImpression:Joi.string().required(),   
   cardNo:Joi.number().required(),
+});
+const verifyThumb = Joi.object({
+  thumbImpression:Joi.string().required(),   
 });
 
 
-export default {addNew,updateCrew,registerThumb};
+export default {addNew,updateCrew,registerThumb,verifyThumb};

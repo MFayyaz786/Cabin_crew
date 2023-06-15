@@ -12,14 +12,15 @@ import {
 import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber,IsNumberString, Length ,Matches,IsMobilePhone } from 'class-validator';
 import AirlineType from './airlineType';
 import User from './user';
+import { text } from 'stream/consumers';
 @Entity()
 class Crew{
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({type:Number,unique:true,nullable:false})
+  @Column({type:'varchar',unique:true,nullable:false})
   @IsNumberString()
-  @Length(32)
+  @Length(1,32)
   employId:number
 
   @ManyToOne(() =>AirlineType,{nullable:true})
@@ -38,8 +39,10 @@ class Crew{
   @Column({type:String,nullable:true})
   designation:string
 
-  @Column({type:String,nullable:false,unique:true})
-  uniqueId:string
+  @Column({type:'varchar',nullable:false,unique:true})
+  @IsNumberString()
+  @Length(1,32)
+  uniqueId:number
 
   @Column({type:String,nullable:false})
   @IsNotEmpty()
@@ -49,15 +52,15 @@ class Crew{
   @Column({type:String,nullable:true})
   deviceIp:string
 
-  @Column({type:String,nullable:true})
-  fingerPrint:string
+  @Column({type:'text',nullable:true})
+  thumbImpression:string
 
   @Column({type:String,nullable:true})
   image:string
 
-  @Column({type:Number,nullable:true})
-   @IsNumberString()
-  @Length(32)
+  @Column({type:'varchar',nullable:true})
+  @IsNumberString()
+  @Length(1,32)
   cardNo:number
 
   @Column({type:String,nullable:true,default:'comments'})

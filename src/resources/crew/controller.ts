@@ -4,7 +4,8 @@ import service from "./service"
 import catchAsync from "../../utils/catchAsync";
 import AppError from "../../utils/appError";
 import validator from "./validator";
-const {addNew,updateCrew,registerThumb}=validator
+import { isBase64 } from 'class-validator';
+const {addNew,updateCrew,registerThumb,verifyThumb}=validator
 //* createUser
 const create = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
   const { error } = addNew.validate(req.body);
@@ -24,9 +25,32 @@ const registerCrewThumb = catchAsync(async (req:Request, res:Response, next:Next
   if (error) {
     return next(new AppError(error.details[0].message,400));
   }
+  const isRegistered=await service.isRegistered(req.body.employId,req.body.cardNo);
+  if(isRegistered){
+    return res.status(400).send({msg:"Thumb impression already registered"})
+  }
+   if (!isBase64(req.body.thumbImpression)) {
+    return res.status(400).send({msg:"Please send thumb impression into base64 encoded!"});
+  }
   const booth = await service.registerThumb(req.body);
-  if(booth){
-    return res.status(200).send({msg:"Crew thumb updated",data:booth})
+  if(booth.affected){
+    return res.status(200).send({msg:"Crew thumb registered"})
+  }else{
+    return res.status(400).send({msg:"Failed!"})
+  }
+});
+//verify thumb impression
+const verifyThumbImpression = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
+  const { error } = verifyThumb.validate(req.body);
+  if (error) {
+    return next(new AppError(error.details[0].message,400));
+  }
+   if (!isBase64(req.body.thumbImpression)) {
+    return res.status(400).send({msg:"Please send thumb impression into base64 encoded!"});
+  }
+  const crew = await service.verifyThumbImpression(req.body.thumbImpression);
+  if(crew){
+    return res.status(200).send({msg:"Crew thumb verified"})
   }else{
     return res.status(400).send({msg:"Failed!"})
   }
@@ -79,4 +103,4 @@ const deleteCrew=asyncHandler(async(req:Request,res:Response,next:Function):Prom
  return res.status(400).send({msg:"failed"})
   }
 });
-export default {create,getAll,getOne,update,deleteCrew,getCrewsByAirLine,registerCrewThumb}
+export default {create,getAll,getOne,update,deleteCrew,getCrewsByAirLine,registerCrewThumb,verifyThumbImpression}
