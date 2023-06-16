@@ -9,16 +9,19 @@ import {
   ManyToOne,
   ManyToMany
 } from 'typeorm';
-import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePhone } from 'class-validator';
+import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber,IsNumberString, Length ,Matches,IsMobilePhone } from 'class-validator';
 import AirlineType from './airlineType';
 import User from './user';
+import { text } from 'stream/consumers';
 @Entity()
 class Crew{
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({unique:true,nullable:false})
-  employId:string
+  @Column({type:'varchar',unique:true,nullable:false})
+  @IsNumberString()
+  @Length(1,32)
+  employId:number
 
   @ManyToOne(() =>AirlineType,{nullable:true})
   airLine: AirlineType;
@@ -27,39 +30,46 @@ class Crew{
   @IsNotEmpty()
   name: string;
   
-  @Column({nullable:false})
+  @Column({type:String,nullable:false})
   gender:string
 
-  @Column({nullable:true})
+  @Column({type:String,nullable:true})
   destination:string
 
-  @Column({nullable:true})
+  @Column({type:String,nullable:true})
   designation:string
 
-  @Column({nullable:false,unique:true})
-  uniqueId:string
+  @Column({type:'varchar',nullable:false,unique:true})
+  @IsNumberString()
+  @Length(1,32)
+  uniqueId:number
 
   @Column({type:String,nullable:false})
   @IsNotEmpty()
   @IsMobilePhone("en-US", {}, { message: "Please enter a valid phone number" })
   phone:string;
 
-  @Column({nullable:true})
+  @Column({type:String,nullable:true})
   deviceIp:string
 
-  @Column({nullable:true})
-  fingerPrint:string
+  @Column({type:'text',nullable:true})
+  thumbImpression:string
 
-  @Column({nullable:true})
+  @Column({type:String,nullable:true})
   image:string
 
-  @Column({nullable:true,default:'comments'})
+  @Column({type:'varchar',nullable:true})
+  @IsNumberString()
+  @Length(1,32)
+  cardNo:number
+
+  @Column({type:String,nullable:true,default:'comments'})
   comments:string
    
-  @Column({ nullable: true, default: false })
+  @Column({type:Boolean, nullable: true, default: false })
   isVerified: boolean;
 
-  @Column({  default: false })
+  @Column({type:Boolean,  default: false })
   onDuty: boolean;
 
   @ManyToOne(() =>User)
@@ -68,10 +78,10 @@ class Crew{
   @ManyToOne(() =>User)
   updatedBy: User;
 
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date
   // and this!
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
 
   @BeforeInsert()

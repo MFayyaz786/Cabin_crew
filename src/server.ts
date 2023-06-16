@@ -5,7 +5,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import helmet from 'helmet';
+//import helmet from 'helmet';
 import path from 'path';
 import globalErrorHandler from './middleware/errorHandler.middleware';
 //* Routers
@@ -34,11 +34,11 @@ app.use((req, res, next) => {
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 // app.ts
-if (process.env.NODE_ENV === 'development') {
+//if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
-} else if (process.env.NODE_ENV === 'production') {
-  app.use(helmet());
-}
+// } else if (process.env.NODE_ENV === 'production') {
+//   app.use(helmet());
+// }
 
 //server.ts
 if (process.env.NODE_ENV === 'production') {
@@ -64,8 +64,8 @@ app.use(globalErrorHandler);
 app.listen(port,()=>{
     console.log(colors.yellow.bold(`--------------------------------------------------------`));
     console.log(colors.yellow.bold(`App is running on port : ${port}`));
-    console.log(colors.yellow.bold(`Current Environment : ${process.env.NODE_ENV}`));
-    console.log(colors.yellow.bold(`--------------------------------------------------------`));
+     console.log(colors.yellow.bold(`Current Environment : ${process.env.NODE_ENV}`));
+     console.log(colors.yellow.bold(`--------------------------------------------------------`));
 })
 //"start": "npm run build && pm2 start ./dist/server.js --name cabin_crew",
 

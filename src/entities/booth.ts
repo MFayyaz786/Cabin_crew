@@ -9,13 +9,13 @@ class Booth {
   @Column({type:String,nullable:false,unique:true})
   name: string;
 
-  @Column()
+  @Column({type:String})
   location: string;
   
   @Column({type:String,nullable:true})
   type:string
 
-  @Column({default:false})
+  @Column({type:Boolean,default:false})
   isAssigned:boolean
 
   @ManyToOne(() =>User)
@@ -24,10 +24,10 @@ class Booth {
   @ManyToMany(() =>User)
   updatedBy: User;
 
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date
   // and this!
-  @Column({default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   updatedDate: Date
 
   @BeforeInsert()
