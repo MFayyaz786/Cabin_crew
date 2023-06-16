@@ -11,6 +11,7 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
   if (error) {
     return next(new AppError(error.details[0].message,400));
   }
+  console.log("flight schedule",req.body)
   const booth = await service.create(req.body);
   if(booth){
     return res.status(200).send({msg:"Flight Schedule successfully",data:booth})

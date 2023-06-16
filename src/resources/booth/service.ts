@@ -1,5 +1,5 @@
 import Booth from '../../entities/booth';
-import {getConnection,getRepository} from 'typeorm';
+import {getConnection,getRepository,} from 'typeorm';
 const boothRepo = getRepository(Booth);
 const  service= {
   create:async(userData: Booth) =>{
@@ -27,11 +27,10 @@ delete:async(id:string)=>{
 
 
 getAssignedAll:async()=> {
-   //const booths=await boothRepo.find({isAssigned:true});
-  // console.log(booths)
-  const result = await boothRepo
-    .createQueryBuilder('booth')
-    .where('booth_isAssigned = :isAssigned', { isAssigned:false })
+  console.log("result");
+const query=`select * from booth where "isAssigned"=true`;
+  const connection=getConnection()
+  const result = await connection.query(query);
   return result;
 }
 }
