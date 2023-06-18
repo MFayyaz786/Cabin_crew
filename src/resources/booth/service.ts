@@ -24,11 +24,8 @@ delete:async(id:string)=>{
   const result=await boothRepo.delete({id});
   return result
 },
-
-
 getAssignedAll:async()=> {
-  console.log("result");
-const query=`select * from booth where "isAssigned"=true`;
+  const query=`select * from booth where "isAssigned"=true`;
   const connection=getConnection()
   const result = await connection.query(query);
   return result;

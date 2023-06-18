@@ -2,6 +2,7 @@ import express from "express"
 import controller from "./controller";
 import protect from '../../middleware/authentication.middleware'
 const router=express.Router();
+router.get("/assigned",controller.getAllAssigned)
 router
 .route('/')
 .get(controller.getAll)
@@ -11,7 +12,6 @@ router
   .get(controller.getOne)
   .patch(controller.update)
   .delete(controller.deleteBooth);
-  router.get("/assigned",controller.getAssigned)
 
 
 

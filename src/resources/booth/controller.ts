@@ -26,10 +26,9 @@ const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
 });
 
 //* getAll
-const getAssigned = catchAsync(async (req: Request, res: Response):Promise<any> => {
-      console.log("assigned")
+const getAllAssigned = catchAsync(async (req: Request, res: Response):Promise<any> => {
   const booths= await service.getAssignedAll();
-  return res.status(200).json(booths);
+  return res.status(200).send({msg:"Booths",data:booths});
 });
   //* getOne
   const getOne =catchAsync(async (req: Request, res: Response):Promise<any> => {
@@ -69,4 +68,4 @@ const deleteBooth=asyncHandler(async(req:Request,res:Response,next:Function):Pro
  return res.status(400).send({msg:"failed"})
   }
 });
-export default {create,getAll,getOne,update,deleteBooth,getAssigned}
+export default {create,getAll,getOne,update,deleteBooth,getAllAssigned}
