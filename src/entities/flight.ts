@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column,BeforeInsert,BeforeUpdate, ManyToOne, ManyToMany, OneToMany, OneToOne } from 'typeorm';
+import  { Entity, PrimaryGeneratedColumn, Column,BeforeInsert,BeforeUpdate, ManyToOne, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import AirlineType from './airlineType';
 export enum FlightStatus {
   in_process = 'in_process',

@@ -1,4 +1,4 @@
-import {
+const {
   Entity,
   PrimaryGeneratedColumn,
   Column,
@@ -8,7 +8,7 @@ import {
   Unique,
   ManyToOne,
   ManyToMany
-} from 'typeorm';
+}=require('typeorm');
 import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePhone } from 'class-validator';
 import Flight from './flight';
 import AirlineType from './airlineType';

@@ -8,7 +8,7 @@ import {
   Unique,
   ManyToOne,
   ManyToMany
-} from 'typeorm';
+}from 'typeorm';
 import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePhone } from 'class-validator';
 export enum UserRole {
   Air_Port_Manager = 'Air_Port_Manager',
@@ -24,7 +24,7 @@ class User {
   id: string;
   
   @ManyToOne(() =>Booth,{nullable:true,})
-  booth: Booth;
+  booth:typeof Booth;
 
   @ManyToOne(() =>AirlineType,{nullable:true})
   airLine: AirlineType;
@@ -39,7 +39,7 @@ class User {
 
   @Column({type:String,nullable:false,enum:UserRole})
   @IsNotEmpty()
-  role:UserRole
+  role: UserRole
 
   @Column({type:String,nullable:false,unique:true})
   @IsEmail({}, { message: "Please enter a valid email" })
@@ -67,10 +67,10 @@ class User {
   token:string|null
   
   @ManyToOne(() =>User)
-  createdBy: User;
+  createdBy:typeof User;
 
   @ManyToOne(() =>User)
-  updatedBy: User;
+  updatedBy:typeof User;
 
   @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date

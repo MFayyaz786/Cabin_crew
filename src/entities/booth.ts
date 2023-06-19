@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column,ManyToMany, ManyToOne } from 'typeorm';
 import User from './user';
-
 @Entity()
 class Booth {
   @PrimaryGeneratedColumn('uuid')
@@ -19,10 +18,10 @@ class Booth {
   isAssigned:boolean
 
   @ManyToOne(() =>User)
-  createdBy: User;
+  createdBy:typeof User;
 
   @ManyToMany(() =>User)
-  updatedBy: User;
+  updatedBy:typeof User;
 
   @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date

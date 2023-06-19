@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column, ManyToOne,Unique } from 'typeorm';
+import  {Entity, PrimaryGeneratedColumn, BeforeInsert,BeforeUpdate, Column, ManyToOne, Unique} from  'typeorm';
 import User from "./user"
 @Entity()
  class AirlineType {

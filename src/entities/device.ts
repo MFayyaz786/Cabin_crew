@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column, ManyToOne,Unique,JoinColumn } from 'typeorm';
+import  { Entity, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column, ManyToOne,Unique,JoinColumn } from 'typeorm';
 import User from "./user"
 import AirlineType from './airlineType';
 import Booth from './booth';
@@ -19,8 +19,8 @@ import Booth from './booth';
   @Column({type:String,})
   password:string
 
-//   @ManyToOne(()=>AirlineType)
-//   airLine:AirlineType
+  // @ManyToOne(()=>AirlineType)
+  // airLine:AirlineType
 
   // @ManyToOne(()=>Booth)
   // booth:Booth
