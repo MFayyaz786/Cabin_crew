@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "npx tsc nodemon ./dist/server.js",
+    "start": " nodemon ./dist/server.js",
     "dev": "nodemon ./src/server.ts",
     "tsc:watch": "tsc --watch",
     "nodemon:start": "nodemon -q dist/server.js",
