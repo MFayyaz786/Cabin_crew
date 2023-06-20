@@ -1,21 +1,15 @@
 import { Entity, PrimaryGeneratedColumn,BeforeInsert,BeforeUpdate, Column,ManyToMany, ManyToOne } from 'typeorm';
 import User from './user';
 @Entity()
-class Booth {
+class Statuses {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({type:String,nullable:false,unique:true})
+  @Column({type:String,nullable:false,unique:true,enum:["On-Time","Arrived","Delayed","Expected","Canceled","Check-In","Check-In-Closed","Departed"]})
   name: string;
 
-  @Column({type:String})
-  location: string;
-  
-  @Column({type:String,nullable:true})
-  type:string
-
-  @Column({type:Boolean,default:false})
-  isAssigned:boolean
+  @Column({type:Boolean,default:true})
+  active:boolean
 
   @Column({type:Boolean,default:false})
   deleted:boolean
@@ -42,4 +36,4 @@ class Booth {
     this.updatedDate = new Date();
   }
 }
-export default Booth;
+export default Statuses;

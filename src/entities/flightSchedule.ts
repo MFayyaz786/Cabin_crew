@@ -13,19 +13,8 @@ import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePho
 import Flight from './flight';
 import AirlineType from './airlineType';
 import User from './user';
-export enum FlightStatus {
-  delayed="Delayed",
-  advanced="Advanced",
-  expected="Expected",
-  on_Time="On-Time",
-  arrived="Arrived",
-  canceled="Canceled",
-  departed="Departed",
-  check_in="Check-In",
-  check_out="Check-Out",
-  check_in_closed="Check-In-Closed",
-  check_out_closed="Check-Out-Closed"
-}
+import Statuses from './flightStatus';
+import { OneToOne } from 'typeorm';
 @Entity()
 class FlightSchedule{
   @PrimaryGeneratedColumn('uuid')
@@ -52,8 +41,11 @@ class FlightSchedule{
   @Column({type:Boolean,default:false})
   isLand:boolean
 
-  @Column({type:String,enum:FlightStatus,nullable:true,default:FlightStatus.expected})
-  flightStatus:FlightStatus
+  @OneToOne(()=>Statuses)
+  flightStatus:Statuses
+
+  @Column({enum:["arrival","departure"],default:"departure"})
+  scheduleType:string
 
   @Column({type:Boolean,default:false})
   deleted:boolean

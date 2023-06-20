@@ -6,6 +6,7 @@ const addNew = Joi.object({
   arrivalDate:Joi.date().iso().required(),
   airLine:Joi.string().required(),
   flight:Joi.string().required(),
+  scheduleType:Joi.string().required().valid("arrival","departure"),
   createdBy:Joi.string().required()
 });
 const updateFlight = Joi.object({

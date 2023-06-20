@@ -1,5 +1,7 @@
 import { getRepository } from "typeorm";
 import AirlineType from "../../entities/airlineType";
+import Statuses from "../../entities/flightStatus";
+const statusRepo=getRepository(Statuses)
 const AirlineTypeRepo=getRepository(AirlineType)
 export const  service={
  getAll:async ()=>{
