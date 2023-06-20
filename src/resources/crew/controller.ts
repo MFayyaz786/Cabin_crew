@@ -92,15 +92,15 @@ const update = asyncHandler(async (req:Request, res:Response, next:Function):Pro
 const deleteCrew=asyncHandler(async(req:Request,res:Response,next:Function):Promise<any>=>{
 //const isAssigned=await 
   const result =await service.delete(String(req.params.id));
-  if(result.affected===0){
-   return res.status(404).send({msg:"Not Found!"})
-  }
-  if(result){
+  // if(result.affected===0){
+  //  return res.status(404).send({msg:"Not Found!"})
+  // }
+  if(result.affected){
    return res.status(200).send({
       msg:"deleted"
     })
   }else{
- return res.status(400).send({msg:"failed"})
+ return res.status(400).send({msg:"failed!"})
   }
 });
 export default {create,getAll,getOne,update,deleteCrew,getCrewsByAirLine,registerCrewThumb,verifyThumbImpression}

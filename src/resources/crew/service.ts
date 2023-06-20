@@ -25,12 +25,12 @@ const  service= {
      return user;
   },
   getAll:async() =>{
- const result = await crewRepo.find({relations:["createdBy","airLine","updatedBy"]});
+ const result = await crewRepo.find({where:{deleted:false},relations:["createdBy","airLine","updatedBy"]});
       return result;
   },
   getCrewsByAirLine:async(airLine:any) =>{
   const options: FindManyOptions<Crew> = {
-    where: { airLine: { id: airLine } },
+    where: { airLine: { id: airLine },deleted:false },
     relations: ["createdBy", "airLine", "updatedBy"]
   };
   const result = await crewRepo.find(options);
@@ -75,7 +75,7 @@ const result=await crewRepo.update({employId:crewData.employId,cardNo:crewData.c
 return result;
 },
 delete:async(id:string)=>{
-  const result=await crewRepo.delete({id});
+  const result=await crewRepo.update({id},{deleted:true});
   return result
 }
 

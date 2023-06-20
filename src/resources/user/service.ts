@@ -29,12 +29,12 @@ class UserService {
   }
 
   static async getAll() {
-      const result = await userRepo.find({select:["id","firstName","lastName","email","phone","role"],relations: ['booth',"airLine"]});
+      const result = await userRepo.find({where:{deleted:false},select:["id","firstName","lastName","email","phone","role"],relations: ['booth',"airLine"]});
       return result;
       
   }
    static async getAirLineManagers() {
-      const result = await userRepo.find({where:{role: "Air Line Manager" as UserRole},
+      const result = await userRepo.find({where:{role: "Air Line Manager" as UserRole,deleted:false},
       select:["id","firstName","lastName","email","phone","role"],
       relations: ['booth','airLine']});
       return result;
@@ -53,7 +53,7 @@ return result;
 }
 
   static async delete(id:string){
-  const result=await userRepo.delete({id});
+  const result=await userRepo.update({id},{deleted:true});
   
   return result
 }

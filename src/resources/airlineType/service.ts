@@ -3,8 +3,7 @@ import AirlineType from "../../entities/airlineType";
 const AirlineTypeRepo=getRepository(AirlineType)
 export const  service={
  getAll:async ()=>{
-    const result=await AirlineTypeRepo.find({});
-    //,relations:["role"]});
+    const result=await AirlineTypeRepo.find({where:{deleted:false}});
     return result
   },
 getOne: async (id: string) => {
@@ -22,7 +21,7 @@ update:async(id:string,body:AirlineType)=>{
     return result
 },
 delete:async(id:string)=>{
-  const result=await AirlineTypeRepo.delete({id});
+  const result=await AirlineTypeRepo.update({id},{deleted:true});
   return result
 }
 }

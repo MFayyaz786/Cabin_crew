@@ -12,7 +12,7 @@ const  service= {
      return user;
   },
   getAll:async(query:any) =>{
- const result = await flightScheduleRepo.find({where:query,relations:["createdBy","airLine"]});
+ const result = await flightScheduleRepo.find({where:{deleted:false},relations:["createdBy","airLine"]});
       return result;
   },
  getOne:async(id: any)=> {
@@ -30,7 +30,7 @@ const result=await flightScheduleRepo.update({id},userData);
 return result;
 },
 delete:async(id:string)=>{
-  const result=await flightScheduleRepo.delete({id});
+  const result=await flightScheduleRepo.update({id},{deleted:true});
   return result
 }
 

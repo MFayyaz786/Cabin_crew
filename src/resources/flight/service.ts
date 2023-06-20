@@ -10,12 +10,12 @@ const  service= {
      return user;
   },
   getAll:async() =>{
- const result = await flightRepo.find({relations:["createdBy","airLine"]});
+ const result = await flightRepo.find({where:{deleted:false},relations:["createdBy","airLine"]});
       return result;
   },
  getFlightByAirLine:async(airLine:any) =>{
   const options: FindManyOptions<Flight> = {
-    where: { airLine: { id: airLine } },
+    where: { airLine: { id: airLine },deleted:false },
     relations: ["createdBy", "airLine", "updatedBy"]
   };
   const result = await flightRepo.find(options);
@@ -38,9 +38,8 @@ const result=await flightRepo.update({id},userData);
 return result;
 },
 delete:async(id:string)=>{
-  const result=await flightRepo.delete({id});
+  const result=await flightRepo.update({id},{deleted:true});
   return result
 }
-
 }
 export default service

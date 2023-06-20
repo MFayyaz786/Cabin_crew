@@ -8,7 +8,7 @@ const  service= {
       return user;
   },
   getAll:async() =>{
-      const result = await boothRepo.find();
+      const result = await boothRepo.find({where:{deleted:false}});
       return result;
   },
  getOne:async(id: any)=> {
@@ -21,11 +21,11 @@ const result=await boothRepo.update({id},userData);
 return result;
 },
 delete:async(id:string)=>{
-  const result=await boothRepo.delete({id});
+  const result=await boothRepo.update({id},{deleted:true});
   return result
 },
 getAssignedAll:async()=> {
-  const query=`select * from booth where "isAssigned"=true`;
+  const query=`select * from booth where "isAssigned"=true AND "deleted"=false`;
   const connection=getConnection()
   const result = await connection.query(query);
   return result;

@@ -29,6 +29,9 @@ import User from "./user"
   @ManyToOne(() =>AirlineType)
   airLine: AirlineType;
 
+  @Column({type:Boolean,default:false})
+  deleted:boolean
+
   @ManyToOne(() =>User)
   createdBy: User;
 

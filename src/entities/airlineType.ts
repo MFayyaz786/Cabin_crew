@@ -7,11 +7,14 @@ import User from "./user"
 
   @Column({type:String, unique: true })
   name: string;
+
+  @Column({type:Boolean,default:false})
+  deleted:boolean
    
   @ManyToOne(() =>User)
   createdBy: User;
 
-  @ManyToOne(() =>User,)
+  @ManyToOne(() =>User)
   updatedBy: User;
 
   @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})

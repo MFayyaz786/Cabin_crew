@@ -32,6 +32,9 @@ import Booth from './booth';
   @Column({type:Boolean,default:true})
   isRegisterDevice:boolean
 
+  @Column({type:Boolean,default:false})
+  deleted:boolean
+
   @ManyToOne(() =>User)
   createdBy: User;
 

@@ -50,10 +50,10 @@ const update = asyncHandler(async (req:Request, res:Response, next:Function):Pro
 const deleteDevice=asyncHandler(async(req:Request,res:Response,next:Function):Promise<any>=>{
 //const isAssigned=await 
   const result =await service.delete(String(req.params.id));
-  if(result.affected===0){
-   return res.status(404).send({msg:"Not Found!"})
-  }
-  if(result){
+  // if(result.affected===0){
+  //  return res.status(404).send({msg:"Not Found!"})
+  // }
+  if(result.affected){
    return res.status(200).send({
       msg:"deleted"
     })

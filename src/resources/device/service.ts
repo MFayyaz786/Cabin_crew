@@ -11,7 +11,7 @@ const  service= {
       return user;
   },
   getAll:async(query:any) =>{
-      const result = await deviceRepo.find({where:query});
+      const result = await deviceRepo.find({where:{deleted:false}});
       return result;
   },
  getOne:async(id: any)=> {
@@ -24,7 +24,7 @@ const result=await deviceRepo.update({id},deviceData);
 return result;
 },
 delete:async(id:string)=>{
-  const result=await deviceRepo.delete({id});
+  const result=await deviceRepo.update({id},{deleted:true});
   return result
 }
 

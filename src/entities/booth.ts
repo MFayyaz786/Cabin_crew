@@ -17,6 +17,9 @@ class Booth {
   @Column({type:Boolean,default:false})
   isAssigned:boolean
 
+  @Column({type:Boolean,default:false})
+  deleted:boolean
+
   @ManyToOne(() =>User)
   createdBy:typeof User;
 

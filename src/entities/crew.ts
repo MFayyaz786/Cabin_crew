@@ -72,6 +72,9 @@ class Crew{
   @Column({type:Boolean,  default: false })
   onDuty: boolean;
 
+  @Column({type:Boolean,default:false})
+  deleted:boolean
+
   @ManyToOne(() =>User)
   createdBy: User;
 

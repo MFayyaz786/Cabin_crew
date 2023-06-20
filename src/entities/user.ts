@@ -57,6 +57,9 @@ class User {
   @IsMobilePhone("en-US", {}, { message: "Please enter a valid phone number" })
   phone:string;
 
+  @Column({type:Boolean,default:false})
+  deleted:boolean
+
   @Column({type:Number ,nullable:true ,default:null}) 
   otp:number | null
   
