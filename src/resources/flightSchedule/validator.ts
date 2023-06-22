@@ -19,7 +19,8 @@ const updateFlight = Joi.object({
   updatedBy:Joi.string().optional()
 });
 const updateFlightStatus = Joi.object({
-  status:Joi.string().valid('in_process','not_initiated','closed').required(),
+  //flightNo:Joi.string().required(),
+  flightStatus:Joi.string().required(),
 });
 
 export default {addNew,updateFlight,updateFlightStatus};

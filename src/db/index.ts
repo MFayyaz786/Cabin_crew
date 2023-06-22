@@ -22,8 +22,6 @@ export default createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   entities: [User,AirlineType,Booth,Devices,Crew,Flight,FlightSchedule,scheduleFlightCrew,Auth,Statuses],
-  migrations:["src/migrations/*{.ts,.js}"],
-  subscribers:["src/subscribers/*{.ts,.js}"],
   synchronize: true,
   logging: false,
 }).then(connection => {

@@ -87,6 +87,12 @@ export default async (err: any, req: Request, res: Response, next: NextFunction)
   else if (err.code==='22P02') err= invalidInput(err)
   else if (err.name==='validationError') err = handleValidationError(err)
   else if (err.name==='Error') err = handleError(err)
+  else if (err instanceof TypeError && err.message.includes("Cannot read properties of undefined (reading 'joinColumns')")) {
+    // Handle the specific TypeError
+    console.error('TypeError: Cannot read properties of undefined (reading \'joinColumns\')');
+    // Create an appropriate AppError instance or perform any necessary actions
+    err = new AppError('Cannot read properties of undefined (reading \'joinColumns\')', 400, true);
+  }
   else  err = new AppError(err.message, err.statusCode, false);
 
   if (process.env.NODE_ENV === 'development') {

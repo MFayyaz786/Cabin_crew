@@ -7,6 +7,7 @@ const {
   BeforeUpdate,
   Unique,
   ManyToOne,
+  JoinColumn,
   ManyToMany
 }=require('typeorm');
 import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePhone, isNotEmpty } from 'class-validator';
@@ -42,6 +43,7 @@ class FlightSchedule{
   isLand:boolean
 
   @OneToOne(()=>Statuses)
+  @JoinColumn()
   flightStatus:Statuses
 
   @Column({enum:["arrival","departure"],default:"departure"})

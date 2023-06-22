@@ -6,7 +6,7 @@ class Statuses {
   id: string;
 
   @Column({type:String,nullable:false,unique:true,enum:["On-Time","Arrived","Delayed","Expected","Canceled","Check-In","Check-In-Closed","Departed"]})
-  name: string;
+  status: string;
 
   @Column({type:Boolean,default:true})
   active:boolean

@@ -1,6 +1,7 @@
+import  flightStatusService  from '../flightStatus/service';
 import { Request,Response ,NextFunction} from "express";
-import asyncHandler from "express-async-handler"
-import service from "./service"
+import asyncHandler from "express-async-handler";
+import service from "./service";
 import catchAsync from "../../utils/catchAsync";
 import AppError from "../../utils/appError";
 import validator from "./validator";
@@ -11,7 +12,24 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
   if (error) {
     return next(new AppError(error.details[0].message,400));
   }
-  console.log("flight schedule",req.body)
+  const flight=await service.getScheduleFlight(req.body.flight);
+  console.log("flight",flight);
+  if(flight && flight.isLand===false){
+    const flightStatus=await flightStatusService.getOne(flight.flightStatus);
+    if((flight.scheduleType==="arrival" && flightStatus.status!=="Arrived")||(flight.scheduleType==="departure" && flightStatus.status!=="departed")){
+   return res.status(400).send({msg:"You can schedule flight after landing"})
+    }
+  }
+  if(flight && flight.isLand===true){
+    if (
+  (flight.scheduleType === "arrival" && req.body.scheduleType !== "departure") ||
+  (flight.scheduleType === "departure" && req.body.scheduleType !== "arrival")
+) {
+  return res.status(400).send({
+    msg: "You can only schedule a flight for the opposite type of the previous schedule. For example, if the previous schedule was an arrival, you can schedule a departure. If the previous schedule was a departure, you can schedule an arrival."
+  });
+}
+  }
   const booth = await service.create(req.body);
   if(booth){
     return res.status(200).send({msg:"Flight Schedule successfully",data:booth})
@@ -22,6 +40,11 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
 //* getAll
 const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
   const booths= await service.getAll(req.query);
+  return res.status(200).send({msg:"Flights",data:booths});
+});
+//*recent schedule flights getAll
+const recentScheduled = catchAsync(async (req: Request, res: Response):Promise<any> => {
+  const booths= await service.recentScheduled();
   return res.status(200).send({msg:"Flights",data:booths});
 });
 
@@ -54,9 +77,10 @@ const updateStatus = asyncHandler(async (req:Request, res:Response, next:Functio
   if (error) {
     return next(new AppError(error.details[0].message,400));
   }
+  //const flightStatus=await flightStatusService.getOne(req.body.flightStatus);
     const result = await service.updateFlightStatus(String(req.params.id),req.body);
     if (result.affected) {
-       return  res.status(200).send({ msg: "Flight Updated" })
+       return  res.status(200).send({ msg: "Flight Status Updated" })
     } else {
       return  res.status(400).send({ msg: "Failed!" })
     }
@@ -75,4 +99,4 @@ const deleteFlight=asyncHandler(async(req:Request,res:Response,next:Function):Pr
  return res.status(400).send({msg:"failed"})
   }
 });
-export default {create,getAll,getOne,update,deleteFlight,updateStatus}
+export default {create,getAll,getOne,update,deleteFlight,updateStatus,recentScheduled}

@@ -12,12 +12,16 @@ const  service= {
       return result;
   },
  getOne:async(id: any)=> {
-      const user = await statusRepo.findOneBy({id});
-      return user;
+      const status = await statusRepo.findOneBy({id});
+      return status;
+  },
+  getByStatus:async()=> {
+      const status = await statusRepo.findOne({where:{status:"On-Time"}});
+      console.log( status)
+      return status;
   },
 update:async(id:string,statusDate:Statuses)=>{
 const result=await statusRepo.update({id},statusDate);
-  console.log("result is",result);
 return result;
 },
 delete:async(id:string)=>{

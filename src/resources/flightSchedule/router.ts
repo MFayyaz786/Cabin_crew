@@ -2,6 +2,7 @@ import express from "express"
 import controller from "./controller";
 import protect from '../../middleware/authentication.middleware'
 const router=express.Router();
+router.get("/scheduled",controller.recentScheduled)
 router
 .route('/')
 .get(controller.getAll)
