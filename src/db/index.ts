@@ -12,6 +12,7 @@ import Crew from "../entities/crew";
 import FlightSchedule from "../entities/flightSchedule";
 import scheduleFlightCrew from "../entities/scheduleFlightCrew";
 import Statuses from "../entities/flightStatus";
+import DeviceAPILog from "../entities/deviceAPILog";
 
 
 export default createConnection({
@@ -21,7 +22,7 @@ export default createConnection({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [User,AirlineType,Booth,Devices,Crew,Flight,FlightSchedule,scheduleFlightCrew,Auth,Statuses],
+  entities: [User,AirlineType,Booth,Devices,Crew,Flight,FlightSchedule,scheduleFlightCrew,Auth,Statuses,DeviceAPILog],
   synchronize: true,
   logging: false,
 }).then(connection => {

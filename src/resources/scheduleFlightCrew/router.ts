@@ -2,6 +2,7 @@ import express from "express"
 import controller from "./controller";
 import protect from '../../middleware/authentication.middleware'
 const router=express.Router();
+router.get("/scheduled",controller.recentScheduled)
 router
 .route('/')
 .get(controller.getAll)
@@ -12,7 +13,4 @@ router
   .patch(controller.update)
   .delete(controller.deleteFlight);
 router.patch("/updateStatus/:id",controller.updateStatus)
-router.get("/getByAirLine/:id",controller.getAllByAirLine);
-
-
 export default router

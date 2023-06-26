@@ -39,7 +39,6 @@ WHERE "flightId" ='${flightId}'
 ORDER BY "createdDate" DESC
 LIMIT 1;
 `);
-
 return flight[0]
   },
 update:async(id:string,flightScheduleData:FlightSchedule)=>{

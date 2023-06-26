@@ -5,6 +5,7 @@ import AirlineType from '../../entities/airlineType';
 import uploadFile from '../../utils/uploadFile';
 import fs from "fs";
 import { promisify } from "util";
+import deviceAPIService from "../deviceAPIs/service"
 const writeFile = promisify(fs.writeFile);
 const  service= {
   create:async(crewData:Crew) =>{
@@ -22,11 +23,22 @@ const  service= {
 };
       const user = crewRepo.create(crewData);
       await crewRepo.save(user);
+      //  if(user){
+      //   await deviceAPIService.pushRegisterCrew(user.cardNo,user.employId,user.name,user.image)
+      // }
      return user;
   },
   getAll:async() =>{
  const result = await crewRepo.find({where:{deleted:false},relations:["createdBy","airLine","updatedBy"]});
       return result;
+  },
+  getAllVerified:async(airLine:any) =>{
+    const crews=await crewRepo.query(`select id,name,designation,gender,phone,"employId","uniqueId","cardNo" from crew 
+where deleted=false AND "isVerified"=true
+AND
+"airLineId"='${airLine}'`)
+ const result = await crewRepo.find({where:{deleted:false,isVerified:true},relations:["createdBy","airLine","updatedBy"]});
+      return crews;
   },
   getCrewsByAirLine:async(airLine:any) =>{
   const options: FindManyOptions<Crew> = {

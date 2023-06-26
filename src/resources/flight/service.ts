@@ -6,7 +6,7 @@ const flightRepo = getRepository(Flight);
 const  service= {
   create:async(userDate:Flight) =>{
       const user = flightRepo.create(userDate);
-      await flightRepo.save(user);
+      await flightRepo.save(user);      
      return user;
   },
   getAll:async() =>{

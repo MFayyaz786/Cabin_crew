@@ -92,6 +92,16 @@ export default async (err: any, req: Request, res: Response, next: NextFunction)
     console.error('TypeError: Cannot read properties of undefined (reading \'joinColumns\')');
     // Create an appropriate AppError instance or perform any necessary actions
     err = new AppError('Cannot read properties of undefined (reading \'joinColumns\')', 400, true);
+  }else if (err.message === 'Request failed with status code 401') {
+    // Handle the specific error message
+    console.error('Request failed with status code 401');
+    // Create an appropriate AppError instance or perform any necessary actions
+    err = new AppError('Unauthorized', 401, true);
+  }else if (err.name === 'UpdateValuesMissingError') {
+    // Handle the specific error name
+    console.error('UpdateValuesMissingError: Cannot perform update query because update values are not defined');
+    // Create an appropriate AppError instance or perform any necessary actions
+    err = new AppError('Cannot perform update query because update values are not defined', 400, true);
   }
   else  err = new AppError(err.message, err.statusCode, false);
 

@@ -13,16 +13,20 @@ import { IsDate, IsEmail, IsNotEmpty, IsPhoneNumber, Length ,Matches,IsMobilePho
 import Crew from './crew';
 import User from './user';
 import FlightSchedule from './flightSchedule';
+import AirlineType from './airlineType';
 @Entity()
 class scheduleFlightCrew{
   @PrimaryGeneratedColumn('uuid')
   id:string
 
   @ManyToOne(()=>Crew)
-  crew:Crew
-
+  crews:Crew[]
+ 
   @ManyToOne(()=>FlightSchedule)
-  scheduleFlight:FlightSchedule
+  scheduledFlight:FlightSchedule
+
+  @ManyToOne(()=>AirlineType)
+  airLine:AirlineType
 
   @Column({type:Boolean,default:false})
   isLand:boolean

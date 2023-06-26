@@ -2,6 +2,7 @@ import express from "express"
 import controller from "./controller";
 import protect from '../../middleware/authentication.middleware'
 const router=express.Router();
+router.get("/verified/:airLine",controller.getAllVerified)
 router
 .route('/')
 .get(controller.getAll)

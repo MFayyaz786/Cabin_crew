@@ -5,6 +5,7 @@ import catchAsync from "../../utils/catchAsync";
 import AppError from "../../utils/appError";
 import validator from "./validator";
 import { isBase64 } from 'class-validator';
+import deviceAPIService from "../deviceAPIs/service"
 const {addNew,updateCrew,registerThumb,verifyThumb}=validator
 //* createUser
 const create = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
@@ -14,7 +15,12 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
   }
   const booth = await service.create(req.body);
   if(booth){
+    const isSend=await deviceAPIService.pushRegisterCrew(booth.cardNo,booth.employId,booth.name,booth.image)
+    if(isSend.Status===true){
     return res.status(200).send({msg:"Crew Added",data:booth})
+    }else{
+    return res.status(400).send({msg:"Failed!"}) 
+    }
   }else{
     return res.status(400).send({msg:"Failed!"})
   }
@@ -60,6 +66,11 @@ const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
   const booths= await service.getAll();
   return res.status(200).send({msg:"Crew List",data:booths});
 });
+//* getAll verified
+const getAllVerified = catchAsync(async (req: Request, res: Response):Promise<any> => {
+  const booths= await service.getAllVerified(req.params.airLine);
+  return res.status(200).send({msg:"Crew List",data:booths});
+});
 //get list by airline
 const getCrewsByAirLine = catchAsync(async (req: Request, res: Response):Promise<any> => {
   const booths= await service.getCrewsByAirLine(req.params.airLine);
@@ -103,4 +114,4 @@ const deleteCrew=asyncHandler(async(req:Request,res:Response,next:Function):Prom
  return res.status(400).send({msg:"failed!"})
   }
 });
-export default {create,getAll,getOne,update,deleteCrew,getCrewsByAirLine,registerCrewThumb,verifyThumbImpression}
+export default {create,getAll,getOne,update,deleteCrew,getCrewsByAirLine,registerCrewThumb,verifyThumbImpression,getAllVerified}
