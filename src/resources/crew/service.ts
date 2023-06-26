@@ -26,7 +26,7 @@ const  service= {
       //  if(user){
       //   await deviceAPIService.pushRegisterCrew(user.cardNo,user.employId,user.name,user.image)
       // }
-     return user;
+      return user;
   },
   getAll:async() =>{
  const result = await crewRepo.find({where:{deleted:false},relations:["createdBy","airLine","updatedBy"]});
@@ -82,8 +82,8 @@ update:async(id:string,crewData:Crew)=>{
 const result=await crewRepo.update({id},crewData);
 return result;
 },
-registerThumb:async(crewData:Crew)=>{
-const result=await crewRepo.update({employId:crewData.employId,cardNo:crewData.cardNo},{thumbImpression:crewData.thumbImpression,isVerified:true});
+registerThumb:async(cardNo:any,thumbImpression:any)=>{
+const result=await crewRepo.update({cardNo},{thumbImpression:thumbImpression,isVerified:true});
 return result;
 },
 delete:async(id:string)=>{

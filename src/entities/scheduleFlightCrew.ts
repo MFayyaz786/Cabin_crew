@@ -19,7 +19,7 @@ class scheduleFlightCrew{
   @PrimaryGeneratedColumn('uuid')
   id:string
 
-  @ManyToOne(()=>Crew)
+  @ManyToMany(()=>Crew)
   crews:Crew[]
  
   @ManyToOne(()=>FlightSchedule)

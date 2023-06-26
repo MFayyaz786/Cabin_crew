@@ -1,14 +1,18 @@
 import scheduleFlightCrew from '../../entities/scheduleFlightCrew';
 import { QueryBuilder, createQueryBuilder, getRepository, getConnection } from 'typeorm';
 import Statuses from '../../entities/flightStatus';
+import Crew from '../../entities/crew';
+const crewRepo=getRepository(Crew);
 const scheduleFlightCrewRepo=getRepository(scheduleFlightCrew)
 const  service= {
   create:async(scheduleFlightData:scheduleFlightCrew) =>{
-    console.log(scheduleFlightData);
-    const newCrew = scheduleFlightCrewRepo.create(scheduleFlightData);
-    //  newCrew.crews.forEach((crew, index) => {
-    //   newCrew.crews[index] = { id: crew };
-    // });
+    const crewIds = scheduleFlightData.crews || [];
+    const crews = await Promise.all(crewIds.map((id) => crewRepo.findOneBy({id:id.toString()})));
+    const newCrew = scheduleFlightCrewRepo.create({...scheduleFlightData,crews:crews||[]});
+    console.log(newCrew);
+  //    newCrew.crews.forEach((crew, index) => {
+  //   newCrew.crews[index] = crew;
+  // });
     await scheduleFlightCrewRepo.save(newCrew);
     return newCrew;
   },

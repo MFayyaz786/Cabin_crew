@@ -1,7 +1,7 @@
 import { FlightStatus } from '../../entities/flight';
 import * as Joi from 'joi';
 const addNew = Joi.object({
-  crews: Joi.string().required(),
+  crews: Joi.array().min(1).required(),
   scheduledFlight:Joi.string().required(),
   airLine:Joi.string().required(),
   createdBy:Joi.string().required()

@@ -1,58 +1,79 @@
+import { DeviceAPILog } from './../../entities/deviceAPILog';
 import axios from "axios";
 import logServices from "./logService"
+import errorHandlerMiddleware from "../../middleware/errorHandler.middleware";
 const service={
     pushRegisterCrew:async( CardNo:any,EmployeeNo:any,Name:any,Image:any)=>{
     const body = {
-      CardNo,
-      EmployeeNo,
-      Name,
-      Image,
+    CardNo,
+    EmployeeNo,
+    Name,
+    Image
     };
+    console.log(body)
     let log;
     try {
       log =await logServices.new("pushCrewDate", body);
     } catch (e) {
       console.log(e);
     }
-    console.log(log)
    let url = `${process.env.DEVICEAPIURL}API/MobileApi/Registeration`;
     const options = {
       headers: { "ContentType":"Application/json" },
     };
-    const data = await axios.post(url, JSON.stringify(body), options);
+    const response = await axios.post(url, body, options);
      try {
-       await logServices.updateResponse(log.id, data.data);
+       await logServices.updateResponse(log.id, response.data);
       } catch (e) {
-        console.log(e);
       }
-      console.log("data",data.data);
-      
-    return data.data;
+    return response.data;
     },
-    fetchLogs:async( StartDate:any,EndDate:any)=>{
-    const body = {
-      StartDate,
-      EndDate,
-    };
-     let log;
+    registerThumbImpression:async( CardNo:any)=>{
+    const body = {CardNo};
+    let log;
     try {
-      log =await logServices.new("fetchLogs", body);
+      log =await logServices.new("registerThumbImpression", body);
     } catch (e) {
       console.log(e);
     }
-   let url = `${process.env.DEVICEAPIURL}api/mobileapi/GetDeviceLog`;
+    console.log(log)
+   let url = `${process.env.DEVICEAPIURL}api/mobileapi/GetUserDetail`;
     const options = {
       headers: { "ContentType":"Application/json" },
     };
-    const data = await axios.post(url, JSON.stringify(body), options);
-     try {
-       await logServices.updateResponse(log.id, data.data);
-      } catch (e) {
-        console.log(e);
-      }
-    console.log(data.data);
-    return data.data;
+    const data = await axios.post(url, body, options);
+    console.log("data",data.data); 
+    try{
+      await logServices.updateResponse(log.id, data.data);
+    }catch(error){
+      console.log(error);
     }
+    return data.data;
+    },
+  //   fetchLogs:async( StartDate:any,EndDate:any)=>{
+  //   const body = {
+  //     StartDate,
+  //     EndDate,
+  //   };
+  //    let log;
+  //   try {
+  //     log =await logServices.new("fetchLogs", body);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  //  let url = `${process.env.DEVICEAPIURL}api/mobileapi/GetDeviceLog`;
+  //   const options = {
+  //     headers: { "ContentType":"Application/json" },
+  //   };
+  //   const data = await axios.post(url, JSON.stringify(body), options);
+  //    try {
+  //      await logServices.updateResponse(log.id, data.data);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   console.log(data.data);
+  //   return data.data;
+  //   }
 
 
 }

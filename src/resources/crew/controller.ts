@@ -13,11 +13,11 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
   if (error) {
     return next(new AppError(error.details[0].message,400));
   }
-  const booth = await service.create(req.body);
-  if(booth){
-    const isSend=await deviceAPIService.pushRegisterCrew(booth.cardNo,booth.employId,booth.name,booth.image)
+  const crew = await service.create(req.body);
+ if(crew){
+    const isSend=await deviceAPIService.pushRegisterCrew(crew.cardNo,crew.employId,crew.name,crew.image)
     if(isSend.Status===true){
-    return res.status(200).send({msg:"Crew Added",data:booth})
+    return res.status(200).send({msg:"Crew Added"})
     }else{
     return res.status(400).send({msg:"Failed!"}) 
     }
@@ -31,19 +31,23 @@ const registerCrewThumb = catchAsync(async (req:Request, res:Response, next:Next
   if (error) {
     return next(new AppError(error.details[0].message,400));
   }
-  const isRegistered=await service.isRegistered(req.body.employId,req.body.cardNo);
-  if(isRegistered){
-    return res.status(400).send({msg:"Thumb impression already registered"})
-  }
-   if (!isBase64(req.body.thumbImpression)) {
-    return res.status(400).send({msg:"Please send thumb impression into base64 encoded!"});
-  }
-  const booth = await service.registerThumb(req.body);
-  if(booth.affected){
-    return res.status(200).send({msg:"Crew thumb registered"})
-  }else{
-    return res.status(400).send({msg:"Failed!"})
-  }
+  // const thumbImpression=await deviceAPIService.registerThumbImpression(req.body.cardNo)
+  // if(thumbImpression.Status===true){
+  // // const isRegistered=await service.isRegistered(req.body.employId,req.body.cardNo);
+  // // if(isRegistered){
+  // //   return res.status(400).send({msg:"Thumb impression already registered"})
+  // // }
+  // //  if (!isBase64(thumbImpression.Data.FPData)) {
+  // //   return res.status(400).send({msg:"Please send thumb impression into base64 encoded!"});
+  // // }
+  // const crew = await service.registerThumb(req.body.cardNo,thumbImpression.Data.FPData);
+  // if(crew.affected){
+  //   return res.status(200).send({msg:"Crew thumb registered"})
+  // }else{
+  //   return res.status(400).send({msg:"Failed!"})
+  // }}else{
+  //  return res.status(400).send({msg:"Failed!"})
+  // }
 });
 //verify thumb impression
 const verifyThumbImpression = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
@@ -63,24 +67,24 @@ const verifyThumbImpression = catchAsync(async (req:Request, res:Response, next:
 });
 //* getAll
 const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
-  const booths= await service.getAll();
-  return res.status(200).send({msg:"Crew List",data:booths});
+  const crews= await service.getAll();
+  return res.status(200).send({msg:"Crew List",data:crews});
 });
 //* getAll verified
 const getAllVerified = catchAsync(async (req: Request, res: Response):Promise<any> => {
-  const booths= await service.getAllVerified(req.params.airLine);
-  return res.status(200).send({msg:"Crew List",data:booths});
+  const crews= await service.getAllVerified(req.params.airLine);
+  return res.status(200).send({msg:"Crew List",data:crews});
 });
 //get list by airline
 const getCrewsByAirLine = catchAsync(async (req: Request, res: Response):Promise<any> => {
-  const booths= await service.getCrewsByAirLine(req.params.airLine);
-  return res.status(200).send({msg:"Crew List",data:booths});
+  const crews= await service.getCrewsByAirLine(req.params.airLine);
+  return res.status(200).send({msg:"Crew List",data:crews});
 });
   //* getOne
   const getOne =catchAsync(async (req: Request, res: Response):Promise<any> => {
-    const booth = await service.getOne(req.params.id);
-    if(booth){
-        return res.status(200).send({msg:"Crew",data:booth});
+    const crew = await service.getOne(req.params.id);
+    if(crew){
+        return res.status(200).send({msg:"Crew",data:crew});
     }else{
         return res.status(404).send({msg:"Not Found!"});
     }

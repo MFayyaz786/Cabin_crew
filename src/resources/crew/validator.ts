@@ -35,7 +35,6 @@ const updateCrew = Joi.object({
 });
 const registerThumb = Joi.object({
   employId:Joi.number().required(),
-  thumbImpression:Joi.string().required(),   
   cardNo:Joi.number().required(),
 });
 const verifyThumb = Joi.object({
