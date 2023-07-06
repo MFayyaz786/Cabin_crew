@@ -13,12 +13,11 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
     return next(new AppError(error.details[0].message,400));
   }
   const flight=await service.getScheduleFlight(req.body.flight);
-  console.log("flight",flight);
   if(flight && flight.isLand===false){
-    const flightStatus=await flightStatusService.getOne(flight.flightStatus);
-    if((flight.scheduleType==="arrival" && flightStatus.status!=="Arrived")||(flight.scheduleType==="departure" && flightStatus.status!=="departed")){
-   return res.status(400).send({msg:"You can schedule flight after landing"})
-    }
+   // const flightStatus=await flightStatusService.getOne(flight.flightStatus);
+    //if((flight.scheduleType==="arrival" && flightStatus.status!=="Arrived")||(flight.scheduleType==="departure" && flightStatus.status!=="departed")){
+    return res.status(400).send({msg:"You can schedule flight after landing"})
+   // }
   }
   if(flight && flight.isLand===true){
     if (
