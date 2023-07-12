@@ -71,6 +71,9 @@ class Crew{
 
   @Column({type:Boolean,  default: false })
   onDuty: boolean;
+  
+  @Column({type:Boolean,default:false})
+  isDeliveredToDevice:boolean
 
   @Column({type:Boolean,default:false})
   deleted:boolean

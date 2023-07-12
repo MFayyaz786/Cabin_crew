@@ -6,7 +6,7 @@ import AppError from "../../utils/appError";
 import validator from "./validator";
 import { isBase64 } from 'class-validator';
 import deviceAPIService from "../deviceAPIs/service"
-const {addNew,updateCrew,registerThumb,verifyThumb}=validator
+const {addNew,updateCrew,registerThumb,verifyThumb,pushCrewDetails}=validator
 //* createUser
 const create = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
   const { error } = addNew.validate(req.body);
@@ -17,37 +17,53 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
  if(crew){
     const isSend=await deviceAPIService.pushRegisterCrew(crew.cardNo,crew.employId,crew.name,crew.image)
     if(isSend.Status===true){
+    await service.updateDeliveredStatus(String(crew.id))
     return res.status(200).send({msg:"Crew Added"})
-    }else{
-    return res.status(400).send({msg:"Failed!"}) 
+  }else{
+    return res.status(200).send({msg:"Crew Added"})
     }
   }else{
     return res.status(400).send({msg:"Failed!"})
   }
 });
-//register crew thumb and face 
+//push crew to device
+const pushCrewData = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
+  const { error } = pushCrewDetails.validate(req.body);
+  if (error) {
+    return next(new AppError(error.details[0].message,400));
+  }
+  const isSend=await deviceAPIService.pushRegisterCrew(req.body.cardNo,req.body.employeeId,req.body.name,req.body.image)
+    if(isSend.Status===true){
+    await service.updateDeliveredStatus(String(req.body.crewId))
+    return res.status(200).send({msg:"Success"})
+  }else{
+    return res.status(400).send({msg:"Failed!"})
+    }
+});
+//register crew thumb 
 const registerCrewThumb = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
   const { error } = registerThumb.validate(req.body);
   if (error) {
     return next(new AppError(error.details[0].message,400));
   }
-  // const thumbImpression=await deviceAPIService.registerThumbImpression(req.body.cardNo)
-  // if(thumbImpression.Status===true){
-  // // const isRegistered=await service.isRegistered(req.body.employId,req.body.cardNo);
-  // // if(isRegistered){
-  // //   return res.status(400).send({msg:"Thumb impression already registered"})
-  // // }
-  // //  if (!isBase64(thumbImpression.Data.FPData)) {
-  // //   return res.status(400).send({msg:"Please send thumb impression into base64 encoded!"});
-  // // }
-  // const crew = await service.registerThumb(req.body.cardNo,thumbImpression.Data.FPData);
-  // if(crew.affected){
-  //   return res.status(200).send({msg:"Crew thumb registered"})
-  // }else{
-  //   return res.status(400).send({msg:"Failed!"})
-  // }}else{
-  //  return res.status(400).send({msg:"Failed!"})
+  const thumbImpression=await deviceAPIService.registerThumbImpression(req.body.cardNo)
+  if(thumbImpression.Status===true && thumbImpression.Data.FPData!==null){
+  // const isRegistered=await service.isRegistered(req.body.employId,req.body.cardNo);
+  // if(isRegistered){
+  //   return res.status(400).send({msg:"Thumb impression already registered"})
   // }
+  //  if (!isBase64(thumbImpression.Data.FPData)) {
+  //   return res.status(400).send({msg:"Please send thumb impression into base64 encoded!"});
+  // }
+  const crew = await service.registerThumb(req.body.cardNo,thumbImpression.Data.FPData);
+  if(crew===1){
+    return res.status(200).send({msg:"Crew thumb registered"})
+  }else{
+    return res.status(400).send({msg:"Failed!"})
+  }
+}else{
+   return res.status(400).send({msg:"Crew thumb impression does't exist on device!"})
+  }
 });
 //verify thumb impression
 const verifyThumbImpression = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
@@ -118,4 +134,4 @@ const deleteCrew=asyncHandler(async(req:Request,res:Response,next:Function):Prom
  return res.status(400).send({msg:"failed!"})
   }
 });
-export default {create,getAll,getOne,update,deleteCrew,getCrewsByAirLine,registerCrewThumb,verifyThumbImpression,getAllVerified}
+export default {create,getAll,getOne,update,deleteCrew,getCrewsByAirLine,registerCrewThumb,verifyThumbImpression,getAllVerified,pushCrewData}

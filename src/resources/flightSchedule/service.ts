@@ -4,6 +4,8 @@ import FlightSchedule from '../../entities/flightSchedule';
 const flightScheduleRepo = getRepository(FlightSchedule);
 import Statuses from '../../entities/flightStatus';
 import flightStatusService from "../flightStatus/service"
+import scheduleFlightCrewServices from "../scheduleFlightCrew/service"
+import crewService from "../crew/service"
 const flightStatusRepo=getRepository(Statuses)
 const  service= {
   create:async(flightScheduleData:FlightSchedule) =>{
@@ -14,10 +16,11 @@ const  service= {
     return user;
   },
   getAll:async(query:any) =>{
- const result = await flightScheduleRepo.find({where:{deleted:false},relations:["airLine","flightStatus"]});
+ const result = await flightScheduleRepo.find({where:{deleted:false},relations:["airLine","flightStatus","flight"]});
       return result;
   },
  getOne:async(id: any)=> {
+  console.log("id",id)
       const flight = await flightScheduleRepo.findOne({where:{id:id},relations:["flightStatus","airLine"]});
       return flight;
   },
@@ -50,7 +53,9 @@ const result=await  flightScheduleRepo.createQueryBuilder().update(flightSchedul
 if(result.affected){
   const status=await flightStatusService.getOne(result.raw[0].flightStatusId);
   if(status.status==="Arrived"||status.status==="Departed"){
-   await flightScheduleRepo.update({id},{isLand:true,isSchedule:false})
+  const crews=await scheduleFlightCrewServices.getFlightScheduleCrews(result.raw[0].id);
+  await crewService.updateCrewDutyStatus1(crews,false);
+  await flightScheduleRepo.update({id},{isLand:true,isSchedule:false})
   }
 }
 return result;

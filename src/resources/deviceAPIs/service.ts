@@ -10,7 +10,7 @@ const service={
     Name,
     Image
     };
-    console.log(body)
+    console.log("body",body)
     let log;
     try {
       log =await logServices.new("pushCrewDate", body);
@@ -36,13 +36,11 @@ const service={
     } catch (e) {
       console.log(e);
     }
-    console.log(log)
    let url = `${process.env.DEVICEAPIURL}api/mobileapi/GetUserDetail`;
     const options = {
       headers: { "ContentType":"Application/json" },
     };
     const data = await axios.post(url, body, options);
-    console.log("data",data.data); 
     try{
       await logServices.updateResponse(log.id, data.data);
     }catch(error){

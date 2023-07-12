@@ -13,7 +13,7 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
   }
   const booth = await service.create(req.body);
   if(booth){
-    return res.status(201).send({msg:"Booth Created",data:booth})
+    return res.status(201).send({msg:"Status Created",data:booth})
   }else{
         return res.status(400).send({msg:"Failed!"})
 
@@ -22,13 +22,13 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
 //* getAll
 const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
   const booths= await service.getAll();
-  return res.status(200).send({msg:"Booths",data:booths});
+  return res.status(200).send({msg:"Statuses",data:booths});
 });
   //* getOne
   const getOne =catchAsync(async (req: Request, res: Response):Promise<any> => {
     const booth = await service.getOne(req.params.id);
     if(booth){
-        return res.status(200).send({msg:"Booth",data:booth});
+        return res.status(200).send({msg:"Status",data:booth});
     }else{
         return res.status(404).send({msg:"Not Found!"});
     }
@@ -43,7 +43,7 @@ const update = asyncHandler(async (req:Request, res:Response, next:Function):Pro
   }
     const result = await service.update(String(req.params.id),req.body);
     if (result.affected) {
-       return  res.status(200).send({ msg: "Booth Updated" })
+       return  res.status(200).send({ msg: "Status Updated" })
     } else {
       return  res.status(400).send({ msg: "Failed!" })
     }

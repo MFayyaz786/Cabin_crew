@@ -19,6 +19,13 @@ const addNew = Joi.object({
   cardNo:Joi.number().integer().required(),
   createdBy:Joi.string().required()     
 });
+const pushCrewDetails = Joi.object({
+  crewId:Joi.string().required(),
+  cardNo:Joi.number().integer().required(),
+  employeeId: Joi.number().integer().required(),
+  name:Joi.string().required(),
+  image:Joi.string().required(),
+});
 const updateCrew = Joi.object({
   name:Joi.string().optional(),
   gender:Joi.string().valid('male','female').optional(),
@@ -34,7 +41,7 @@ const updateCrew = Joi.object({
   updatedBy:Joi.string().required()     
 });
 const registerThumb = Joi.object({
-  employId:Joi.number().required(),
+  // employId:Joi.number().required(),
   cardNo:Joi.number().required(),
 });
 const verifyThumb = Joi.object({
@@ -42,4 +49,4 @@ const verifyThumb = Joi.object({
 });
 
 
-export default {addNew,updateCrew,registerThumb,verifyThumb};
+export default {addNew,updateCrew,registerThumb,verifyThumb,pushCrewDetails};

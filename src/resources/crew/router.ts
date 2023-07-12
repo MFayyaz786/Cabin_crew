@@ -9,6 +9,7 @@ router
 .post(controller.create)
 router.post("/registerThumb",controller.registerCrewThumb);
 router.post("/verifyThumb",controller.verifyThumbImpression)
+router.post("/pushCrewDetails",controller.pushCrewData)
 router
   .route('/:id')
   .get(controller.getOne)

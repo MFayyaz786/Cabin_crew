@@ -66,6 +66,10 @@ return result;
   const result=await crewRepo.findOne({where:{thumbImpression:thumbImpression}});
   return result;
   },
+updateDeliveredStatus:async(id:string)=>{
+const result=await crewRepo.update({id},{isDeliveredToDevice:true});
+return result
+},
 update:async(id:string,crewData:Crew)=>{
    if (crewData.image) {
         const match = crewData.image.match(/^data:(.+);base64,(.+)$/);
@@ -82,9 +86,32 @@ update:async(id:string,crewData:Crew)=>{
 const result=await crewRepo.update({id},crewData);
 return result;
 },
-registerThumb:async(cardNo:any,thumbImpression:any)=>{
-const result=await crewRepo.update({cardNo},{thumbImpression:thumbImpression,isVerified:true});
-return result;
+registerThumb:async(cardNo:number,thumbImpression:any)=>{
+  const result=await crewRepo.query(`UPDATE crew
+SET "thumbImpression" = '${thumbImpression}',
+    "isVerified" = true
+WHERE "cardNo" = '${cardNo}'
+`)
+  //update({cardNo},{thumbImpression:thumbImpression,isVerified:true});
+  console.log("result",result[1])
+return result[1];
+},
+updateCrewDutyStatus:async(ids:any,onDuty:any)=>{
+  console.log(ids)
+ const results = [];
+  for (const id of ids) {
+    const result = await crewRepo.update({ id:id.id }, { onDuty });
+    results.push(result);
+  }
+  return results;
+},
+updateCrewDutyStatus1:async(ids:any,onDuty:any)=>{
+ const results = [];
+  for (const id of ids) {
+    const result = await crewRepo.update({ id:id.crewId }, { onDuty });
+    results.push(result);
+  }
+  return results;
 },
 delete:async(id:string)=>{
   const result=await crewRepo.update({id},{deleted:true});

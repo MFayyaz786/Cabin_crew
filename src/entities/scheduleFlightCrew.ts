@@ -14,16 +14,22 @@ import Crew from './crew';
 import User from './user';
 import FlightSchedule from './flightSchedule';
 import AirlineType from './airlineType';
+import { JoinColumn, JoinTable } from 'typeorm';
+import Flight from './flight';
 @Entity()
 class scheduleFlightCrew{
   @PrimaryGeneratedColumn('uuid')
   id:string
 
   @ManyToMany(()=>Crew)
+  @JoinTable()
   crews:Crew[]
  
   @ManyToOne(()=>FlightSchedule)
   scheduledFlight:FlightSchedule
+
+  @ManyToOne(()=>Flight)
+  flight:Flight
 
   @ManyToOne(()=>AirlineType)
   airLine:AirlineType
