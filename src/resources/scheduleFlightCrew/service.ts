@@ -1,4 +1,5 @@
 import scheduleFlightCrew from '../../entities/scheduleFlightCrew';
+import scheduleCrews from '../../entities/scheduleCrews';
 import { QueryBuilder, createQueryBuilder, getRepository, getConnection } from 'typeorm';
 import Statuses from '../../entities/flightStatus';
 import Crew from '../../entities/crew';
@@ -6,42 +7,44 @@ const crewRepo=getRepository(Crew);
 import FlightSchedule from '../../entities/flightSchedule';
 const flightScheduleRepo=getRepository(FlightSchedule)
 const scheduleFlightCrewRepo=getRepository(scheduleFlightCrew)
+const scheduleCrewsRepo=getRepository(scheduleCrews)
 const  service= {
-  create:async(scheduleFlightData:scheduleFlightCrew) =>{
-    const crewIds = scheduleFlightData.crews || [];
-    const crews = await Promise.all(crewIds.map((id) => crewRepo.findOneBy({id:id.toString()})));
-    const newCrew = scheduleFlightCrewRepo.create({...scheduleFlightData,crews:crews||[]});
-    await scheduleFlightCrewRepo.save(newCrew);
-    return newCrew;
+  create:async(flight:any,scheduledFlight:any,crews:any,airLine:any,createdBy:any) =>{
+    let crewsList=[];
+      for(let i=0;i<crews.length; i++){
+        const newCrew = scheduleFlightCrewRepo.create({flight,scheduledFlight,crew:crews[i],airLine,createdBy});
+        await scheduleFlightCrewRepo.save(newCrew);
+        crewsList.push(newCrew)
+      }
+    return crewsList;
   },
   getAll:async(query:any) =>{
- const result = await scheduleFlightCrewRepo.find({where:{deleted:false},relations:["crews","airLine","scheduledFlight"]})
+ const result = await scheduleFlightCrewRepo.find({where:{deleted:false},relations:["crew","airLine","scheduledFlight"]})
  //.query(`SELECT * FROM schedule_flight_crew where "deleted" = false `);
  console.log(result);
  
       return result;
   },
-  getBySchedule:async(scheduleFlightId:any) =>{
+getBySchedule:async(scheduleFlightId:any) =>{
  const result = await scheduleFlightCrewRepo.query(
-  `SELECT sfc.id, sfccc."crewId",c."name",c."gender",c."designation",c."cardNo" ,sfc."scheduledFlightId"
-  FROM schedule_flight_crew sfc JOIN schedule_flight_crew_crews_crew sfccc 
-  ON sfccc."scheduleFlightCrewId" = sfc.id JOIN crew c ON sfccc."crewId"= c.id WHERE sfc."scheduledFlightId"='${scheduleFlightId}'`);
+  `SELECT sfc.id, sfc."crewId",c."name",c."gender",c."designation",c."cardNo" ,sfc."scheduledFlightId"
+  FROM schedule_flight_crew sfc JOIN crew c ON sfc."crewId"= c.id WHERE sfc."scheduledFlightId"='${scheduleFlightId}' AND "deleted"=false`)
+  // JOIN schedule_flight_crew_crews_crew sfccc 
+  // ON sfccc."scheduleFlightCrewId" = sfc.id JOIN crew c ON sfccc."crewId"= c.id WHERE sfc."scheduledFlightId"='${scheduleFlightId}'`);
  //find({where:{deleted:false},relations:["crews","airLine","scheduledFlight"]})
  //.query(`SELECT * FROM schedule_flight_crew where "deleted" = false `);
  console.log(result);
- 
       return result;
   },
  getOne:async(id: any)=> {
-      const flight = await scheduleFlightCrewRepo.findOne({where:{id:id},relations:["crews","airLine","scheduledFlight"]});
+      const flight = await scheduleFlightCrewRepo.findOne({where:{id:id,deleted:false},relations:["crew","airLine","scheduledFlight"]});
       return flight;
   },
 getFlightScheduleCrews:async(id: any)=> {
-      const flight = await scheduleFlightCrewRepo.query(`SELECT sfc.id, sfccc."crewId"
-FROM schedule_flight_crew sfc
-JOIN schedule_flight_crew_crews_crew sfccc ON sfccc."scheduleFlightCrewId" = sfc.id
-WHERE sfc."scheduledFlightId" = '${id}';
+  console.log("hello",id)
+      const flight = await scheduleFlightCrewRepo.query(`SELECT sfc.id, sfc."crewId" FROM schedule_flight_crew sfc WHERE sfc."scheduledFlightId" = '${id} AND "deleted"=false';
 `)
+//JOIN schedule_flight_crew_crews_crew sfccc ON sfccc."scheduleFlightCrewId" = sfc.id
       //findOneBy({  scheduledFlightId:id ,
   // relations: ["crews", "airLine", "scheduleFlight"], // Updated relation name
 //});
@@ -57,13 +60,16 @@ LIMIT 1;
 
 return flight[0]
   },
-assignNewCrew:async(body:any)=>{
-const result=await scheduleFlightCrewRepo.query(`UPDATE schedule_flight_crew
-SET "crews" = array_append(crews, '${body.crew}'), "updatedBy"='${body.updatedBy}'
-WHERE "scheduledFlightId" = '${body.scheduledFlight}'
-`);
-return result;
+assignNewCrew:async(scheduleFlightData:scheduleFlightCrew)=>{
+   const newCrew = scheduleFlightCrewRepo.create(scheduleFlightData);
+   await scheduleFlightCrewRepo.save(newCrew);
+   return newCrew;
 },
-
+removeCrew:async(scheduledFlight:any,crew:any)=>{
+   console.log(scheduledFlight,crew)
+   const result =await scheduleFlightCrewRepo.
+   query(`UPDATE schedule_flight_crew SET "deleted" = true where "scheduledFlightId" = '${scheduledFlight}' AND "crewId" = '${crew}'`);
+   return result[1];
+},
 }
 export default service

@@ -3,6 +3,8 @@ import controller from "./controller";
 import protect from '../../middleware/authentication.middleware'
 const router=express.Router();
 router.get("/getByScheduleId/:id",controller.getBySchedule)
+router.delete("/remove/:id",controller.removeCrew)
+
 
 router
 .route('/')

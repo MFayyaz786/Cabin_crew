@@ -6,6 +6,7 @@ import uploadFile from '../../utils/uploadFile';
 import fs from "fs";
 import { promisify } from "util";
 import deviceAPIService from "../deviceAPIs/service"
+import { array } from 'joi';
 const writeFile = promisify(fs.writeFile);
 const  service= {
   create:async(crewData:Crew) =>{
@@ -97,13 +98,17 @@ WHERE "cardNo" = '${cardNo}'
 return result[1];
 },
 updateCrewDutyStatus:async(ids:any,onDuty:any)=>{
-  console.log(ids)
+  console.log("ids",ids)
  const results = [];
   for (const id of ids) {
-    const result = await crewRepo.update({ id:id.id }, { onDuty });
+    const result = await crewRepo.update({ id:id }, { onDuty });
     results.push(result);
   }
   return results;
+},
+updateNewCrewDutyStatus:async(id:any,onDuty:any)=>{
+    const result = await crewRepo.update({ id:id }, { onDuty });
+  return result;
 },
 updateCrewDutyStatus1:async(ids:any,onDuty:any)=>{
  const results = [];

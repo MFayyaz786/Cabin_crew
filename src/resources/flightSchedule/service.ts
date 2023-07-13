@@ -20,13 +20,12 @@ const  service= {
       return result;
   },
  getOne:async(id: any)=> {
-  console.log("id",id)
       const flight = await flightScheduleRepo.findOne({where:{id:id},relations:["flightStatus","airLine"]});
       return flight;
   },
 recentScheduled:async()=>{
 const currentDate=new Date().toLocaleDateString();
-const flights=await flightScheduleRepo.query(`SELECT fs.id, fs."scheduleDate" ,fs."departureDate",fs."arrivalDate",
+const flights=await flightScheduleRepo.query(`SELECT fs.id, fs."scheduleDate" ,fs."departureDate",fs."arrivalDate",fs."scheduleType",
 at.name as airLine,
 f."flightNo",f."origin",f."destination",s."status"
 FROM flight_schedule AS fs

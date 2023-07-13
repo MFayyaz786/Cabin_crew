@@ -10,6 +10,8 @@ const addNew = Joi.object({
 const addNewCrew = Joi.object({
   crew: Joi.string().required(),
   scheduledFlight:Joi.string().required(),
+  flight:Joi.string().required(),
+  airLine:Joi.string().required(),
   updatedBy:Joi.string().required()
 });
 const updateFlight = Joi.object({

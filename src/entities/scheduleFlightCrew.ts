@@ -20,13 +20,12 @@ import Flight from './flight';
 class scheduleFlightCrew{
   @PrimaryGeneratedColumn('uuid')
   id:string
-
-  @ManyToMany(()=>Crew)
-  @JoinTable()
-  crews:Crew[]
  
   @ManyToOne(()=>FlightSchedule)
   scheduledFlight:FlightSchedule
+
+  @ManyToOne(()=>Crew)
+  crew:Crew
 
   @ManyToOne(()=>Flight)
   flight:Flight
