@@ -56,7 +56,7 @@ const updateProfile = Joi.object({
 //     then: Joi.string().required(),
 //     otherwise: Joi.valid(null),
 //   }),
-//     updatedBy:Joi.string().required()
+     updatedBy:Joi.string().required()
 
  });
 

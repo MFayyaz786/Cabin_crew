@@ -42,8 +42,7 @@ class FlightSchedule{
   @Column({type:Boolean,default:false})
   isLand:boolean
 
-  @OneToOne(()=>Statuses)
-  @JoinColumn()
+  @ManyToOne(()=>Statuses)
   flightStatus:Statuses
 
   @Column({enum:["arrival","departure"],default:"departure"})

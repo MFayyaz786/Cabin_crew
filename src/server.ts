@@ -19,6 +19,10 @@ import flightSchedule from "./resources/flightSchedule/router";
 import deviceRouter from "./resources/device/router";
 import statusRouter from "./resources/flightStatus/router"
 import scheduleFlightCrewRouter from "./resources/scheduleFlightCrew/router"
+import dashboardRouter from "./resources/dashboard/router"
+import notificationRouter from "./resources/notification/router"
+
+
 
 const app = express();
 const corsOption={
@@ -60,6 +64,10 @@ app.use('/api/v1/flightSchedule', flightSchedule);
 app.use('/api/v1/device', deviceRouter);
 app.use('/api/v1/status', statusRouter);
 app.use('/api/v1/flightCrew', scheduleFlightCrewRouter);
+app.use('/api/v1/dashboard', dashboardRouter);
+app.use('/api/v1/notification', notificationRouter);
+
+
 
 
 app.use("/",(req,res)=>{

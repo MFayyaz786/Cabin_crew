@@ -28,7 +28,7 @@ const  service= {
 getBySchedule:async(scheduleFlightId:any) =>{
  const result = await scheduleFlightCrewRepo.query(
   `SELECT sfc.id, sfc."crewId",c."name",c."gender",c."designation",c."cardNo" ,sfc."scheduledFlightId"
-  FROM schedule_flight_crew sfc JOIN crew c ON sfc."crewId"= c.id WHERE sfc."scheduledFlightId"='${scheduleFlightId}' AND "deleted"=false`)
+  FROM schedule_flight_crew sfc JOIN crew c ON sfc."crewId"= c.id WHERE sfc."scheduledFlightId"='${scheduleFlightId}' AND sfc."deleted"=false`)
   // JOIN schedule_flight_crew_crews_crew sfccc 
   // ON sfccc."scheduleFlightCrewId" = sfc.id JOIN crew c ON sfccc."crewId"= c.id WHERE sfc."scheduledFlightId"='${scheduleFlightId}'`);
  //find({where:{deleted:false},relations:["crews","airLine","scheduledFlight"]})
@@ -42,7 +42,7 @@ getBySchedule:async(scheduleFlightId:any) =>{
   },
 getFlightScheduleCrews:async(id: any)=> {
   console.log("hello",id)
-      const flight = await scheduleFlightCrewRepo.query(`SELECT sfc.id, sfc."crewId" FROM schedule_flight_crew sfc WHERE sfc."scheduledFlightId" = '${id} AND "deleted"=false';
+      const flight = await scheduleFlightCrewRepo.query(`SELECT sfc.id, sfc."crewId" FROM schedule_flight_crew sfc WHERE sfc."scheduledFlightId" = '${id} AND sfc."deleted"=false';
 `)
 //JOIN schedule_flight_crew_crews_crew sfccc ON sfccc."scheduleFlightCrewId" = sfc.id
       //findOneBy({  scheduledFlightId:id ,
