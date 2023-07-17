@@ -29,6 +29,9 @@ status:string
 @Column({type:Boolean,default:false})
 deleted:boolean
 
+@Column({type:String})
+deliverTo:[string]
+
 @ManyToOne(() =>User)
 createdBy: User
 

@@ -62,10 +62,10 @@ const updateNotificationById = asyncHandler(async (req:Request, res:Response,nex
 const deleteNotificationById =asyncHandler( async (req:Request, res:Response):Promise<any> => {
   try {
     const notification = await service.deleteNotificationById(req.params.id);
-    if (!notification) {
+    if (!notification.affected) {
       return res.status(404).json({ msg: 'Notification not found' });
     }
-    res.sendStatus(204);
+    res.json({msg:"Deleted"});
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
