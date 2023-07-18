@@ -15,7 +15,7 @@ const service={
   toDate = moment(toDate).endOf('day').format("YYYY-MM-DD HH:mm:ss");
   console.log("date",toDate)
   const notificationRepo=getRepository(Notification)
-  return await notificationRepo.query(`SELECT id,"notification","intensity","status","createdDate"
+  return await notificationRepo.query(`SELECT id,"notification","intensity","status","createdDate","isSent","deliverTo"
 FROM notification
 WHERE "createdDate" >= '${fromDate}'
 AND "createdDate" <= '${toDate}' AND "deleted" = false;

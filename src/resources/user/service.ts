@@ -33,6 +33,19 @@ class UserService {
       return result;
       
   }
+static async sendToList(deliverTo:any) {
+const jsonString = deliverTo.replace(/[{}"]/g, ''); // Remove curly braces and double quotes
+const rolesArray = jsonString.split(',').map((role) => role.trim());
+const formattedRoles = rolesArray.map((role) => {
+  // Replace underscores with spaces and capitalize the first letter of each word
+  const formattedRole = role.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  return `'${formattedRole}'`;
+});
+const rolesList = `(${formattedRoles.join(',')})`;
+console.log(rolesList);
+const users=await userRepo.query(`SELECT id, "firstName", "lastName", email, phone FROM "user" WHERE "role" in ${rolesList} AND "deleted" = false`)
+return users;  
+}
    static async getAirLineManagers() {
       const result = await userRepo.find({where:{role: "Air Line Manager" as UserRole,deleted:false},
       select:["id","firstName","lastName","email","phone","role"],

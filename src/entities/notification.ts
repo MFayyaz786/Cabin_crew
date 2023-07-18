@@ -32,6 +32,9 @@ deleted:boolean
 @Column({type:String})
 deliverTo:[string]
 
+@Column({type:Boolean,default:false})
+isSent:boolean
+
 @ManyToOne(() =>User)
 createdBy: User
 

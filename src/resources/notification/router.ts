@@ -8,6 +8,9 @@ router.post('/', notificationController.createNotification);
 // Get all notifications
 router.get('/', notificationController.getAllNotifications);
 
+// send notification
+router.get('/send/:id', notificationController.sendNotification);
+
 // Get a single notification by ID
 router.get('/:id', notificationController.getNotificationById);
 

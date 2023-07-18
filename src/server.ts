@@ -8,6 +8,8 @@ import morgan from 'morgan';
 //import helmet from 'helmet';
 import path from 'path';
 import globalErrorHandler from './middleware/errorHandler.middleware';
+import { Request, Response, NextFunction } from 'express';
+import { createConnection } from 'typeorm';
 //* Routers
 import userRouter from './resources/user/router';
 import authRouter from './resources/auth/router';
@@ -66,9 +68,6 @@ app.use('/api/v1/status', statusRouter);
 app.use('/api/v1/flightCrew', scheduleFlightCrewRouter);
 app.use('/api/v1/dashboard', dashboardRouter);
 app.use('/api/v1/notification', notificationRouter);
-
-
-
 
 app.use("/",(req,res)=>{
   res.status(404).send({msg:"Route not found"})

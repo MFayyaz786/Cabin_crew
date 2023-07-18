@@ -89,8 +89,25 @@ export default async (
   const handleError = (err: any): AppError => {
     return new AppError(err.message, 400, true);
   };
-
-  if (err instanceof EntityMetadataNotFoundError) {
+  // Default error object to return
+  const errorResponse = {
+    message: 'Internal Server Error',
+  };
+// Handle specific error types if needed
+  if (err instanceof CustomError) {
+    errorResponse.message = err.message;
+    err=new AppError(errorResponse.message,500,true)
+    // You can also set a specific status code for this type of error if needed
+    // res.status(400);
+  }
+  // Handle TypeORM database errors (you can add more specific error checks if needed)
+ else if (err.name === 'QueryFailedError' || err.name === 'EntityNotFoundError') {
+    errorResponse.message = 'Database Error';
+    err=new AppError(errorResponse.message,500,true)
+    // You can also set a specific status code for database errors if needed
+    // res.status(500);
+  }
+ else if (err instanceof EntityMetadataNotFoundError) {
     console.error('Metadata not found for entity:', err.message);
     err = new AppError('Entity metadata not found', 400, true);
   } else if (err instanceof QueryFailedError) {
@@ -139,7 +156,12 @@ export default async (
   return res.status(err.statusCode).json(responsePayload);
 };
 
-
+export class CustomError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'CustomError';
+  }
+}
 
 // import { NextFunction, Request, Response } from 'express';
 // import { upperCaseFirst } from 'upper-case-first';

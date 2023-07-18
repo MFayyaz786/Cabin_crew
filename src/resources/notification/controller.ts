@@ -1,8 +1,11 @@
+import { Length } from 'class-validator';
 import { Request,Response ,NextFunction} from "express";
 import asyncHandler from "express-async-handler"
 import service from "./service"
 import AppError from "../../utils/appError";
 import validator from "./validator";
+import userService from "../user/service";
+import sendMailNotification from "../../utils/sendNotification"; 
 const {addNew,update}=validator
 // Create a new notification
 const createNotification =asyncHandler( async (req:Request, res:Response,next:Function):Promise<any> => {
@@ -27,7 +30,26 @@ const getAllNotifications =asyncHandler( async (req:Request, res:Response):Promi
     res.status(500).json({ msg:error.message });
   }
 });
-
+// send notification
+const sendNotification =asyncHandler( async (req:Request, res:Response):Promise<any> => {
+  try {
+    const notifications = await service.getNotificationById(req.params.id);
+    if(notifications.isSent){
+      return res.status(400).send({msg:"Already Sent"});
+    }
+    const sendUser=await userService.sendToList(notifications.deliverTo);
+    if(sendUser.length===0){
+      return res.status(400).send({msg:"User list empty"})
+    }
+    const isSent=await sendMailNotification(notifications.notification,sendUser.deliverTo)
+    if(!isSent){
+   return res.status(400).send({msg:"Failed!"})
+    }
+    res.json({msg:"Notification Sent"});
+  } catch (error) {
+    res.status(500).json({ msg:error.message });
+  }
+});
 // Get a single notification by ID
 const getNotificationById = asyncHandler(async (req:Request, res:Response,next:Function):Promise<any> => {
   try {
@@ -77,4 +99,5 @@ export default  {
   getNotificationById,
   updateNotificationById,
   deleteNotificationById,
+  sendNotification
 };
