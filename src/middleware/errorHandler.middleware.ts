@@ -93,21 +93,8 @@ export default async (
   const errorResponse = {
     message: 'Internal Server Error',
   };
-// Handle specific error types if needed
-  if (err instanceof CustomError) {
-    errorResponse.message = err.message;
-    err=new AppError(errorResponse.message,500,true)
-    // You can also set a specific status code for this type of error if needed
-    // res.status(400);
-  }
-  // Handle TypeORM database errors (you can add more specific error checks if needed)
- else if (err.name === 'QueryFailedError' || err.name === 'EntityNotFoundError') {
-    errorResponse.message = 'Database Error';
-    err=new AppError(errorResponse.message,500,true)
-    // You can also set a specific status code for database errors if needed
-    // res.status(500);
-  }
- else if (err instanceof EntityMetadataNotFoundError) {
+
+ if (err instanceof EntityMetadataNotFoundError) {
     console.error('Metadata not found for entity:', err.message);
     err = new AppError('Entity metadata not found', 400, true);
   } else if (err instanceof QueryFailedError) {
@@ -140,10 +127,23 @@ export default async (
   } else if (err.name === 'UpdateValuesMissingError') {
     console.error('UpdateValuesMissingError: Cannot perform update query because update values are not defined');
     err = new AppError('Cannot perform update query because update values are not defined', 400, true);
-  } else {
+  } else if (err instanceof CustomError) {
+   // Handle specific error types if needed
+    errorResponse.message = err.message;
+    err=new AppError(errorResponse.message,500,true)
+    // You can also set a specific status code for this type of error if needed
+    // res.status(400);
+  }
+  // Handle TypeORM database errors (you can add more specific error checks if needed)
+ else if(err.name === 'QueryFailedError' || err.name === 'EntityNotFoundError') {
+    errorResponse.message = 'Database Error';
+    err=new AppError(errorResponse.message,500,true)
+    // You can also set a specific status code for database errors if needed
+    // res.status(500);
+  }
+  else{
     err = new AppError(err.message, err.statusCode, false);
   }
-
   const responsePayload = {
     status: 'error',
     message: err.message,
