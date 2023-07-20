@@ -161,7 +161,6 @@ const deleteUser=asyncHandler(async(req:Request,res:Response,next:Function):Prom
   }else{
  return res.status(400).send({msg:"failed"})
   }
-  //return next()
 });
 
 const refreshToken= asyncHandler(async (req, res) => {

@@ -4,8 +4,8 @@ import protect from '../../middleware/authentication.middleware'
 const router=express.Router();
 router.get("/getByScheduleId/:id",controller.getBySchedule)
 router.delete("/remove/:id",controller.removeCrew)
-
-
+router.post("/pushToDevice/:id",controller.pushDateToDevice);
+router.post("/logs",controller.getDeviceLogs);
 router
 .route('/')
 .get(controller.getAll)

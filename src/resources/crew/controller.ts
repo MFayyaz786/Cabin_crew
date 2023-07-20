@@ -4,7 +4,7 @@ import service from "./service"
 import catchAsync from "../../utils/catchAsync";
 import AppError from "../../utils/appError";
 import validator from "./validator";
-import { isBase64 } from 'class-validator';
+import { isBase64, Length } from 'class-validator';
 import deviceAPIService from "../deviceAPIs/service"
 const {addNew,updateCrew,registerThumb,verifyThumb,pushCrewDetails}=validator
 //* createUser

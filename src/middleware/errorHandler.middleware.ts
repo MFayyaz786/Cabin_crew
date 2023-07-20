@@ -2,8 +2,13 @@ import { NextFunction, Request, Response } from 'express';
 import { upperCaseFirst } from 'upper-case-first';
 import AppError from '../utils/appError';
 import { QueryFailedError } from 'typeorm';
+import { AxiosError } from 'axios';
 import { EntityMetadataNotFoundError } from 'typeorm/error/EntityMetadataNotFoundError';
-
+class ApiError extends Error {
+  constructor(message: string, public statusCode: number) {
+    super(message);
+  }
+}
 export default async (
   err: any,
   req: Request,
@@ -140,8 +145,14 @@ export default async (
     err=new AppError(errorResponse.message,500,true)
     // You can also set a specific status code for database errors if needed
     // res.status(500);
-  }
-  else{
+  }else if (err instanceof ApiError) {
+    // Handle custom AppError (e.g., validation errors, business logic errors)
+    err=new AppError( err.message,err.statusCode);
+  } else if (err.isAxiosError) {
+    // Handle AxiosError (e.g., HTTP request errors)
+    const axiosError = err as AxiosError;
+   err=new AppError( 'Request failed.',axiosError.response?.status || 500);
+  }else{
     err = new AppError(err.message, err.statusCode, false);
   }
   const responsePayload = {

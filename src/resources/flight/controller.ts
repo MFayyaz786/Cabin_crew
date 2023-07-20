@@ -24,7 +24,7 @@ const getAll = catchAsync(async (req: Request, res: Response):Promise<any> => {
   return res.status(200).send({msg:"Flights",data:flights});
 });
 const getAllByAirLine = catchAsync(async (req: Request, res: Response):Promise<any> => {
-  const flights= await service.getFlightByAirLine(req.params.airLine);
+  const flights= await service.getFlightByAirLine(req.params.id);
   return res.status(200).send({msg:"Flights",data:flights});
 });
   //* getOne

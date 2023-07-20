@@ -14,6 +14,7 @@ const  service= {
       return result;
   },
  getFlightByAirLine:async(airLine:any) =>{
+  console.log(airLine)
   const options: FindManyOptions<Flight> = {
     where: { airLine: { id: airLine },deleted:false },
     relations: ["createdBy", "airLine", "updatedBy"]

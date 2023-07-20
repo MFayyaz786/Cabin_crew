@@ -73,6 +73,47 @@ const service={
   //   return data.data;
   //   }
 
-
+pushDateToDevice:async( crews:any)=>{
+    let log;
+    try {
+      log =await logServices.new("pushDateToDevice", crews);
+    } catch (e) {
+      console.log(e);
+    }
+   let url = `${process.env.DEVICEAPIURL}api/mobileapi/pushDataToDevice`;
+    const options = {
+      headers: { "ContentType":"Application/json" },
+    };
+    const data = await axios.post(url, crews, options);
+    try{
+      await logServices.updateResponse(log.id, data.data);
+    }catch(error){
+      console.log(error);
+    }
+    return data.data;
+    },
+ getLogs:async( StartDate:any,EndDate:any)=>{
+  const body={
+    StartDate,
+    EndDate
+  }
+    let log;
+    try {
+      log =await logServices.new("getDeviceLogs", body);
+    } catch (e) {
+      console.log(e);
+    }
+   let url = `${process.env.DEVICEAPIURL}api/mobileapi/GetDeviceLog`;
+    const options = {
+      headers: { "ContentType":"Application/json" },
+    };
+    const data = await axios.post(url, body, options);
+    try{
+      await logServices.updateResponse(log.id, data.data);
+    }catch(error){
+      console.log(error);
+    }
+    return data.data;
+    },
 }
 export default service

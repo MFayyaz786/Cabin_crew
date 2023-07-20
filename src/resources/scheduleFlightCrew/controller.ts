@@ -7,6 +7,8 @@ import catchAsync from "../../utils/catchAsync";
 import AppError from "../../utils/appError";
 import validator from "./validator";
 import flightScheduleService from "../flightSchedule/service"
+import deviceAPIService from "../deviceAPIs/service";
+import saveLogService from "../../utils/saveLogsService"
 import { QueryBuilder, createQueryBuilder, getRepository, getConnection } from 'typeorm';
 import Crew from '../../entities/crew';
 const crewRepo=getRepository(Crew)
@@ -119,4 +121,30 @@ if(onDuty.length!==0){
     return res.status(400).send({msg:"Failed!"})
   }
 });
-export default {create,getAll,getOne,addCrew,getBySchedule,removeCrew}
+//push date to device
+const pushDateToDevice = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
+  const crews=await service.getAllVerifiedPushToDevice(req.params.id);
+  if(crews.length!==0){
+ const isSend=await deviceAPIService.pushDateToDevice(crews)
+    if(isSend.Status===true){
+    return res.status(200).send({msg:"Success",date:crews})
+  }else{
+    return res.status(400).send({msg:"Failed!"})
+    }
+ }
+    else{
+        return res.status(400).send({msg:"Failed!"})
+  }
+ 
+});
+//push date to device
+const getDeviceLogs = catchAsync(async (req:Request, res:Response, next:NextFunction):Promise<any> => {
+ const isSend=await deviceAPIService.getLogs(req.body.startDate,req.body.endDate)
+    if(isSend.Status===true){
+      await saveLogService(isSend.Date)
+    return res.status(200).send({msg:"Success",data:isSend})
+  }else{
+    return res.status(400).send({msg:"Failed!"})
+    }
+});
+export default {create,getAll,getOne,addCrew,getBySchedule,removeCrew,pushDateToDevice,getDeviceLogs}

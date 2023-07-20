@@ -71,5 +71,17 @@ removeCrew:async(scheduledFlight:any,crew:any)=>{
    query(`UPDATE schedule_flight_crew SET "deleted" = true where "scheduledFlightId" = '${scheduledFlight}' AND "crewId" = '${crew}'`);
    return result[1];
 },
+getAllVerifiedPushToDevice:async(flightScheduledId:any) =>{
+//     const crews=await crewRepo.query(`select name as "Name","employId" as "EmpNo","cardNo" as "CardNo","image" as "ImageDate","thumbImpression" as "FPData" from crew 
+// where deleted=false AND "isVerified"=true
+// AND
+// "airLineId"='${airLine}'`)
+const crews=await scheduleFlightCrewRepo.query(` SELECT c."name" as "Name",c."employId" as "EmpNo",c."cardNo" as "CardNo",c."image" as "ImageDate",c."thumbImpression" as "FPData"
+ FROM schedule_flight_crew
+ AS sfc 
+ JOIN crew AS c ON sfc."crewId" = c.id 
+ WHERE c."isVerified" =true AND sfc."scheduledFlightId" = '${flightScheduledId}'`)
+      return crews;
+  },
 }
 export default service

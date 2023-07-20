@@ -38,7 +38,7 @@ const  service= {
 where deleted=false AND "isVerified"=true
 AND
 "airLineId"='${airLine}'`)
- const result = await crewRepo.find({where:{deleted:false,isVerified:true},relations:["createdBy","airLine","updatedBy"]});
+ //const result = await crewRepo.find({where:{deleted:false,isVerified:true},relations:["createdBy","airLine","updatedBy"]});
       return crews;
   },
   getCrewsByAirLine:async(airLine:any) =>{
