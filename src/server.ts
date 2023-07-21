@@ -23,6 +23,9 @@ import statusRouter from "./resources/flightStatus/router"
 import scheduleFlightCrewRouter from "./resources/scheduleFlightCrew/router"
 import dashboardRouter from "./resources/dashboard/router"
 import notificationRouter from "./resources/notification/router"
+import deviceLogsRouter from "./resources/deviceAPIs/router"
+
+import errorHandler from "./middleware/errorHandler";
 
 
 
@@ -68,11 +71,17 @@ app.use('/api/v1/status', statusRouter);
 app.use('/api/v1/flightCrew', scheduleFlightCrewRouter);
 app.use('/api/v1/dashboard', dashboardRouter);
 app.use('/api/v1/notification', notificationRouter);
+app.use('/api/v1/logs', deviceLogsRouter);
+
 
 app.use("/",(req,res)=>{
   res.status(404).send({msg:"Route not found"})
 })
 const port=process.env.PORT|| 6001;
+// Error handling middleware
+// app.use(
+//   (err: any, req: Request, res: Response, next: NextFunction) => errorHandler(err, req, res, next)
+// );
 // error handling middleware
 app.use(globalErrorHandler); 
 app.listen(port,()=>{

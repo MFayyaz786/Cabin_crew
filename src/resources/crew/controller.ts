@@ -20,7 +20,7 @@ const create = catchAsync(async (req:Request, res:Response, next:NextFunction):P
     await service.updateDeliveredStatus(String(crew.id))
     return res.status(200).send({msg:"Crew Added"})
   }else{
-    return res.status(200).send({msg:"Crew Added"})
+    return res.status(200).send({msg:isSend.msg})
     }
   }else{
     return res.status(400).send({msg:"Failed!"})

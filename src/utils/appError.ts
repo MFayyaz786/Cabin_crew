@@ -9,8 +9,8 @@ class AppError extends Error {
   public errors?: Array<{ message: string }>;
 
   constructor(
-    message: string,
-    statusCode: number,
+    message: any,
+    statusCode: any,
     isOperational = false,
     stack = ''
   ) {

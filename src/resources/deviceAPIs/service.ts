@@ -1,4 +1,6 @@
+import { getRepository } from 'typeorm';
 import { DeviceAPILog } from './../../entities/deviceAPILog';
+const deviceLogsRepo=getRepository(DeviceAPILog)
 import axios from "axios";
 import logServices from "./logService"
 import errorHandlerMiddleware from "../../middleware/errorHandler.middleware";
@@ -115,5 +117,24 @@ pushDateToDevice:async( crews:any)=>{
     }
     return data.data;
     },
+    getAllLogs:async(startDate:any,toDate:any)=>{
+      const result=await deviceLogsRepo.query(`SELECT
+  dl."LogNo",
+  dl."LogTime",
+  dl."MinorType",
+  c."cardNo",
+  c."employId",
+  c."name",
+  c."designation"
+FROM
+  device_logs AS dl
+JOIN
+  crew AS c ON dl."CardNo" = c."cardNo"
+WHERE
+  Date(dl."createdDate") >= '${startDate}'::date
+  AND Date(dl."createdDate") <= '${toDate}'::date;
+`);
+       return result;
+    }
 }
 export default service
