@@ -31,6 +31,9 @@ import User from "./user"
 
   @Column({type:Boolean,default:false})
   deleted:boolean
+  
+  @Column({type:Boolean,default:true})
+  isActive:boolean
 
   @ManyToOne(() =>User)
   createdBy: User;

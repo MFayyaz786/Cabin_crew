@@ -10,13 +10,13 @@ const  service= {
      return user;
   },
   getAll:async() =>{
- const result = await flightRepo.find({where:{deleted:false},relations:["createdBy","airLine"]});
+ const result = await flightRepo.find({where:{deleted:false,isActive:true},relations:["createdBy","airLine"]});
       return result;
   },
  getFlightByAirLine:async(airLine:any) =>{
   console.log(airLine)
   const options: FindManyOptions<Flight> = {
-    where: { airLine: { id: airLine },deleted:false },
+    where: { airLine: { id: airLine },deleted:false,isActive:true },
     relations: ["createdBy", "airLine", "updatedBy"]
   };
   const result = await flightRepo.find(options);

@@ -21,18 +21,30 @@ import flightSchedule from "./resources/flightSchedule/router";
 import deviceRouter from "./resources/device/router";
 import statusRouter from "./resources/flightStatus/router"
 import scheduleFlightCrewRouter from "./resources/scheduleFlightCrew/router"
+import http from "http";
+import  {Server as socket} from "socket.io";
 import dashboardRouter from "./resources/dashboard/router"
 import notificationRouter from "./resources/notification/router"
 import deviceLogsRouter from "./resources/deviceAPIs/router"
-
 import errorHandler from "./middleware/errorHandler";
-
-
-
+import socketIds from "./utils/userSocketIds"
+const {addUser,deleteUser}=socketIds
 const app = express();
+const server = http.createServer(app); // Create an http server using the Express app
+const io:socket =new socket(server); // Create a socket.io instance using the http server
+app.set("socket",io)
 const corsOption={
  origin: "*", // or specify the allowed origins
 }
+io.on("connection",(socket)=>{
+  const userId=socket.handshake.query.userId;
+  const socketId=socket.id
+  addUser(userId,socketId)
+  socket.on("disconnect", () => { 
+    deleteUser(socket.id)
+    console.log("disconnected");
+  })
+})
  app.use(cors(corsOption));
 app.use(express.json());
 app.use(morgan('dev'));
@@ -84,7 +96,7 @@ const port=process.env.PORT|| 6001;
 // );
 // error handling middleware
 app.use(globalErrorHandler); 
-app.listen(port,()=>{
+server.listen(port,()=>{
     console.log(colors.yellow.bold(`--------------------------------------------------------`));
     console.log(colors.yellow.bold(`App is running on port : ${port}`));
      console.log(colors.yellow.bold(`Current Environment : ${process.env.NODE_ENV}`));

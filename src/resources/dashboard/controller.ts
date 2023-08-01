@@ -15,9 +15,7 @@ const getStaffStates = catchAsync(async (req: Request, res: Response):Promise<an
 });
   //* air line states
   const getAirLineStates =catchAsync(async (req: Request, res: Response):Promise<any> => {
-    const flight = await service.getAirLineStates();
+    const flight = await service.getAirLineStates(req.params.id);
     return res.status(200).send({msg:"States",data:flight});
   });
-
-
 export default {getStates,getAirLineStates,getStaffStates}

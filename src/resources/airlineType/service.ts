@@ -5,7 +5,7 @@ const statusRepo=getRepository(Statuses)
 const AirlineTypeRepo=getRepository(AirlineType)
 export const  service={
  getAll:async ()=>{
-    const result=await AirlineTypeRepo.find({where:{deleted:false}});
+    const result=await AirlineTypeRepo.find({where:{deleted:false,isActive:true}});
     return result
   },
 getOne: async (id: string) => {

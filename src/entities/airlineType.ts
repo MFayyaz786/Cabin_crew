@@ -17,6 +17,9 @@ import User from "./user"
   @ManyToOne(() =>User)
   updatedBy: User;
 
+  @Column({type:Boolean,default:true})
+  isActive:boolean
+
   @Column({type:Date,default: () => 'CURRENT_TIMESTAMP'})
   createdDate: Date
   // and this!

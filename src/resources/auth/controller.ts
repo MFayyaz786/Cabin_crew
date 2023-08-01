@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import authIdService from "../auth/service"
 import { JwtPayload } from "jsonwebtoken";
 import smsServices from "../../utils/smsService";
+import airLineService from "../airlineType/service"
 const {registered, updateProfile,requestOtp,verifyOtpBody,resetPasswordBody ,forgotPasswordBody}=validator
 const create = asyncHandler(async (req:Request, res:Response, next:Function):Promise<any>=> {
   try {
@@ -45,6 +46,12 @@ const login=  asyncHandler(async (req:Request, res:Response,next:Function):Promi
     }
     const user = await service.login(email);
     if (user) {
+      if(user.role!=='Air_Port_Manager'){
+      const isActiveAirLine=await airLineService.getOne(String(user.airLine.id))
+      if(!isActiveAirLine.isActive){
+        return res.status(400).send({msg:"Air Line currently inActive!"})
+      }
+    }
       const validatePassword = await service.validatePassword(
         password,
         user.password

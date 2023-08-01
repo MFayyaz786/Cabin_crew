@@ -125,7 +125,8 @@ pushDateToDevice:async( crews:any)=>{
   c."cardNo",
   c."employId",
   c."name",
-  c."designation"
+  c."designation",
+  c."onDuty"
 FROM
   device_logs AS dl
 JOIN
