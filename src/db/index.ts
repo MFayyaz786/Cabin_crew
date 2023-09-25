@@ -15,7 +15,9 @@ import Statuses from "../entities/flightStatus";
 import DeviceAPILog from "../entities/deviceAPILog";
 import Notification from "../entities/notification";
 import DeviceLogs from "../entities/deviceLogs";
-
+import MainMenuEntity from "../entities/mainMenuModel";
+import { UserSessionEntity } from "../entities/userSessionMode";
+import { LevelOneMenuEntity } from "../entities/levelOneMenuModel";
 
 export default createConnection({
   type: "postgres",
@@ -24,7 +26,7 @@ export default createConnection({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [User,AirlineType,Booth,Devices,Crew,Flight,FlightSchedule,scheduleFlightCrew,Auth,Statuses,DeviceAPILog,Notification,DeviceLogs],
+  entities: [User,AirlineType,Booth,Devices,Crew,Flight,FlightSchedule,scheduleFlightCrew,Auth,Statuses,DeviceAPILog,Notification,DeviceLogs,MainMenuEntity,LevelOneMenuEntity,UserSessionEntity],
   migrations:[],
   synchronize: true,
   logging: false,

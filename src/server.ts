@@ -31,7 +31,7 @@ import deviceLogsRouter from "./resources/deviceAPIs/router"
 import errorHandler from "./middleware/errorHandler";
 import socketIds from "./utils/userSocketIds"
 import "./utils/generateRSAKeyPare"
-import encryptionService from "../src/utils/encryptionService";
+import encryptionService from "./utils/encryptionService";
 import encryptionMiddleware from "./middleware/encryption.middleware";
 import whatsAppBotRouter from "./resources/whatsAppBot/router";
 
