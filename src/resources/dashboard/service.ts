@@ -1,6 +1,7 @@
-import { getRepository,FindManyOptions } from 'typeorm';
+import { getRepository,FindManyOptions, Long } from 'typeorm';
 import Flight from '../../entities/flight';
 import Crew from '../../entities/crew';
+import { log } from 'console';
 const flightRepo = getRepository(Flight);
 const crewRepo = getRepository(Crew);
 const  service= {
@@ -16,6 +17,7 @@ const combinedResult = {
   totalAuthorizedStaff: crewState[0].totalauthorized,
   cleared: crewState[0].cleared,
   uncleared: crewState[0].uncleared
+
 };
 
 console.log(combinedResult); 
@@ -33,7 +35,9 @@ console.log(combinedResult);
     totalCrewMember:crewState[0].totalcrews,
     OnDuty:crewState[0].onduty,
     OffDuty:crewState[0].offduty
-  }
+  } 
+
+
   return combinedResult;
   },
   getAirLineStates:async(id:any)=> {
@@ -46,7 +50,7 @@ console.log(combinedResult);
   COUNT(CASE WHEN "isDeliveredToDevice" = false THEN 1 ELSE NULL END) AS pending
   FROM crew where "airLineId" = '${id}'`);
 
-console.log(crewState)
+console.log("crewState: ", crewState);
   const combinedResult={
     totalFlights:result[0].totalflights,
     totalAuthorizedStaff:crewState[0].totalauthorized,

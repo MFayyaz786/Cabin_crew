@@ -8,6 +8,8 @@ import morgan from 'morgan';
 //import helmet from 'helmet';
 import path from 'path';
 import globalErrorHandler from './middleware/errorHandler.middleware';
+import asyncHandler from "express-async-handler"
+
 import { Request, Response, NextFunction } from 'express';
 import { createConnection } from 'typeorm';
 //* Routers
@@ -28,6 +30,12 @@ import notificationRouter from "./resources/notification/router"
 import deviceLogsRouter from "./resources/deviceAPIs/router"
 import errorHandler from "./middleware/errorHandler";
 import socketIds from "./utils/userSocketIds"
+import "./utils/generateRSAKeyPare"
+import encryptionService from "../src/utils/encryptionService";
+import encryptionMiddleware from "./middleware/encryption.middleware";
+import whatsAppBotRouter from "./resources/whatsAppBot/router";
+
+const { decryptObject, encryptObject }=encryptionService
 const {addUser,deleteUser}=socketIds
 const app = express();
 const server = http.createServer(app); // Create an http server using the Express app
@@ -70,6 +78,21 @@ if (process.env.NODE_ENV === 'production') {
   console.error = () => {};
   console.warn = () => {};
 }
+
+app.post(
+  "/encrypt",
+  asyncHandler(async (req, res) => {
+    res.status(200).send(encryptObject(req.body));
+  })
+);
+
+app.post(
+  "/decrypt",
+  asyncHandler(async (req, res) => {
+    res.status(200).send(decryptObject(req?.body?.cipher));
+  })
+);
+//app.use(encryptionMiddleware)
 //* Routing 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
@@ -84,6 +107,8 @@ app.use('/api/v1/flightCrew', scheduleFlightCrewRouter);
 app.use('/api/v1/dashboard', dashboardRouter);
 app.use('/api/v1/notification', notificationRouter);
 app.use('/api/v1/logs', deviceLogsRouter);
+app.use('/api/v1/whatsAppBot', whatsAppBotRouter);
+
 
 
 app.use("/",(req,res)=>{

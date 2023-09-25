@@ -60,7 +60,6 @@ export default  catchAsync(async (req: Request, res: Response, next: NextFunctio
   if (!token) {
     return next(new AppError('you are not login ', 401));
   }
-
   // Validate the token
   let payload: any = null;
   try {
@@ -68,7 +67,6 @@ export default  catchAsync(async (req: Request, res: Response, next: NextFunctio
   } catch (err) {
     return next(new AppError('Invalid token!', 401));
   }
-
   // Check if user exists
   const currentUser = await userRepo.findOne(payload.id);
   if (!currentUser) {
@@ -76,7 +74,6 @@ export default  catchAsync(async (req: Request, res: Response, next: NextFunctio
       new AppError('User belong to this token does not exists ', 401)
     );
   }
-
   req.user = currentUser;
   next();
 });
