@@ -1,0 +1,7 @@
+
+- Authentication , authorization
+- users management 
+- role/permission management
+
+
+- if userid is not found set global error handler for that
